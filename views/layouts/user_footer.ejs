@@ -4,7 +4,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-sm-2">
-                    <p>Versión 1.0</p>
+                    <p>Versión 1.1</p>
                 </div>
 
                 <div class="col-sm-8 text-center offset">
@@ -39,6 +39,18 @@
 <script>
     $.material.init();
     $('body').materialScrollTop();
+
+    function upd_main(esto){
+        console.log("Hola");
+        console.log($(esto).data('url'));
+        $.ajax({
+            type:'GET',
+            url: $(esto).data('url'),
+            success: function(data){
+                $("#mainframe").html(data);
+            }
+        });
+    }
 </script>
 
 </body>
