@@ -14,7 +14,7 @@ router.use(
     },'pool')
 );
 /*
-  Los materiales (contribuciones) tienen tipo, el cual es un INT correspondiente a:
+  Los recursos (contribuciones) tienen tipo, el cual es un INT correspondiente a:
 
   0 = Archivo
   1 = Imagen
@@ -23,14 +23,21 @@ router.use(
 
   */
 //Función Para verificar si el usuario que pide la información puede acceder a ella.
+//¿¿ Esto no deberia ser de usuario ??
 function validar(){
     //TODO
     return true;
 }
 // Esta ruta consigue los últimos materiales subidos
 router.get('/', function(req, res, next) {
-    res.render('material/ver_todos');
+    res.render('resource/show_resources');
 });
+
+router.get('/:idresource', function(req, res, next){
+    //Obtener material idresource
+    res.render('resource/show_a_resource');
+});
+
 // Esta ruta consigue la info de UN material,
 router.get('/mostrar/:idmaterial', function(req, res, next) {
     if(validar()){

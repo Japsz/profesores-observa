@@ -1,12 +1,33 @@
 <%- include layouts/header.ejs %>
+
 <div class="container blog-content">
-
+<!--class="visible-xs-block"    para el responsive  -->
     <div class="row">
-        <div class="col-sm-8 blog-main" id="mainframe">
+        <div class="col-sm-3 blog-sidebar ">
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h4> Bienvenido MyFriend </h4>
+                        <img src="img/fashion/unsplash-4.jpg" class="img-responsive img-circle" style="">
+                        <div class="btn-group-vertical" role="group" style="width: 100%">
+                            <button class="btn btn-default">Mis recursos</button>
+                            <button class="btn btn-default">Mis eventos</button>
+                            <button class="btn btn-default">Mis revisiones</button>
+                            <button class="btn btn-default">Mis comentarios</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        </div><!-- /.blog-main -->
-        <div class="col-sm-3 col-sm-offset-1 blog-sidebar">
+        <div class="col-sm-6" >
+            <div class="blog-main" id="mainframe">
 
+            </div>
+            <!-- Insertamos aca todos los materiales -->
+        </div>
+
+        <div class="col-sm-3 blog-sidebar">
             <div class="sidebar-module">
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Buscar">
@@ -53,14 +74,6 @@
 
 <script type="text/javascript">
     // Cargar ultimos materiales subidos en #mainframe
-    $(function(){
-        $.ajax({
-            type: 'get',
-            url: "/material",
-            success: function (html) {
-                $("#mainframe").append(html);
-            }
-        });
-    });
+
 </script>
 <%- include layouts/user_footer.ejs %>
