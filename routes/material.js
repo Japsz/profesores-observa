@@ -62,4 +62,7 @@ router.post('/search_query', function(req, res, next) {
 router.post('/add', function(req, res, next) {
     res.send('Creado!');
 });
+
+
+
 module.exports = router;
