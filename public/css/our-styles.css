@@ -1,4 +1,4 @@
-/* Necesario para los comentarios, no es responsive aun */
+/* Necesario para los comentarios, NO ES RESPONSIVE*/
 .thumbnail {
     padding:0px;
 }
@@ -22,6 +22,9 @@
     border-right-color:#f7f7f7;
     margin-top:1px;
     margin-left:2px;
+}
+.panel>.panel-heading{
+    background-color: #EDEDED;
 }
 .panel>.panel-heading:before{
     border-right-color:#ddd;
@@ -48,4 +51,22 @@
     background-color: lightgray;
 }
 
+.panel-footer:before {
+    border-left: 5px black;
+}
+
 /*---*/
+.modal-header{
+    border-bottom: 1px solid grey !important;
+    padding-top: 20px !important;
+    padding-bottom: 5px !important;
+}
+.modal-title{
+    display: inline;
+}
+
+/* Estilos para mostrar la fila de botones con acciones que puedo realizar a MIS recursos. */
+.resource-buttons{
+    display: block;
+    padding: 5px 5px;
+}

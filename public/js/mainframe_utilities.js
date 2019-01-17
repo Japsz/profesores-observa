@@ -22,8 +22,11 @@ function show_a_resource(idresource) {
     });
 }
 
+//Abrir modal crear nuevo recurso
+function new_resource() {
+    $('#modal_new_resource').modal('toggle');
+}
+
 //onready
 $(document).ready(show_resources);
-
-
 

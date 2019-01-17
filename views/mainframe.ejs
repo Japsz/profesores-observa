@@ -1,14 +1,20 @@
 <%- include layouts/header.ejs %>
 
+<!-- Esta es la vista principal donde se renderiza todo, contiene las 2 columnas laterales
+y la columna central mainframe -->
+
 <div class="container blog-content">
-<!--class="visible-xs-block"    para el responsive  -->
+<!-- class="visible-xs-block" para el responsive, permite hacer que una clase no se vea en cierto tamaño de display.  -->
     <div class="row">
-        <div class="col-sm-3 blog-sidebar ">
+        <!-- Columna de la izquierda -->
+        <div id="leftframe" class="col-sm-3 blog-sidebar ">
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h4> Bienvenido MyFriend </h4>
-                        <img src="img/fashion/unsplash-4.jpg" class="img-responsive img-circle" style="">
+                        <a class="thumbnail" style="width: 100%; height: 100%">
+                            <img src="img/fashion/unsplash-4.jpg" class="img-responsive">
+                        </a>
                         <div class="btn-group-vertical" role="group" style="width: 100%">
                             <button class="btn btn-default">Mis recursos</button>
                             <button class="btn btn-default">Mis eventos</button>
@@ -20,13 +26,15 @@
             </div>
         </div>
 
+        <!-- Columna del medio -->
         <div class="col-sm-6" >
             <div class="blog-main" id="mainframe">
-
+                <!-- Insertamos aca todos los materiales -->
             </div>
-            <!-- Insertamos aca todos los materiales -->
         </div>
 
+
+        <!-- Columna derecha -->
         <div class="col-sm-3 blog-sidebar">
             <div class="sidebar-module">
                 <div class="form-group">
@@ -37,8 +45,7 @@
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h4>Nosotros</h4>
-                        <p>Portal de apoyo docente</p>
+                        <button class="btn btn-primary" onclick="new_resource()"><i class="material-icons md-24">note_add</i>Recurso</button>
                     </div>
                 </div>
             </div><!-- /.sidebar-module -->

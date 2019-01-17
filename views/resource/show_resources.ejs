@@ -10,7 +10,18 @@
         <!-- for(){} el numero de contribuciones que deseemos mostrar -->
         <section class="blog-post">
             <div class="panel panel-default">
-                <img src="img/music/unsplash-2.jpg" class="img-responsive" />
+                <div class="panel-heading">
+                    <h2 class="blog-post-title" style="display: inline">Like a little drop of ink</h2>
+                </div>
+                <div>
+                    <img src="img/music/unsplash-2.jpg" class="img-responsive" />
+                    <p class="bs-component btn-group-sm" style="float: right">
+                        <!-- Los ultimos 2 botones solo aparecen si eres autor del recurso -->
+                        <a href="#" class="btn btn-success btn-fab"><i class="material-icons">thumb_up_alt</i></a>
+                        <a href="#" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
+                        <a href="#" class="btn btn-danger btn-fab"><i class="material-icons">block</i></a>
+                    </p>
+                </div>
                 <div class="panel-body">
                     <!-- Acá van los tags, ojalá sean clickeables para redireccionar a "buscar por tag" -->
                     <div class="blog-post-meta">
@@ -19,9 +30,7 @@
                     </div>
                     <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                     <div class="blog-post-content">
-                        <a href="#">
-                            <h2 class="blog-post-title">Like a little drop of ink</h2>
-                        </a>
+
                         <p>Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem.</p>
 
                         <!-- El param del onclick debe ser el iddelmat -->
@@ -40,15 +49,19 @@
         <!-- Otra mas -->
         <section class="blog-post">
             <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h2 class="blog-post-title" style="display: inline">Cinderella through the room</h2>
+                </div>
+                <p class="bs-component btn-group-sm" style="float: right">
+                    <a href="#" class="btn btn-success btn-fab"><i class="material-icons">thumb_up_alt</i></a>
+                </p>
+
                 <div class="panel-body">
                     <div class="blog-post-meta">
                         <span class="label label-light label-primary">Studio</span>
                         <p class="blog-post-date pull-right">February 5, 2016</p>
                     </div>
                     <div class="blog-post-content">
-                        <a href="#">
-                            <h2 class="blog-post-title">Cinderella through the room</h2>
-                        </a>
                         <p>Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem.</p>
                         <a class="btn btn-info" onclick="upd_main(this)" data-url="/material/mostrar/2">Read more</a>
                         <a class="blog-post-share pull-right" href="#">
