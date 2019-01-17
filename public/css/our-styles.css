@@ -1,0 +1,72 @@
+/* Necesario para los comentarios, NO ES RESPONSIVE*/
+.thumbnail {
+    padding:0px;
+}
+.panel {
+    position:relative;
+}
+.panel>.panel-heading:after,.panel>.panel-heading:before{
+    position:absolute;
+    top:11px;left:-16px;
+    right:100%;
+    width:0;
+    height:0;
+    display:block;
+    content:" ";
+    border-color:transparent;
+    border-style:solid solid outset;
+    pointer-events:none;
+}
+.panel>.panel-heading:after{
+    border-width:7px;
+    border-right-color:#f7f7f7;
+    margin-top:1px;
+    margin-left:2px;
+}
+.panel>.panel-heading{
+    background-color: #EDEDED;
+}
+.panel>.panel-heading:before{
+    border-right-color:#ddd;
+    border-width:8px;
+}
+
+/*---*/
+/* Estilos para mostrar los resources que son hijos de otro */
+.resource-row{
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+.resource-head{
+    padding: 2px 8px;
+    display: block;
+    border-bottom: 1px solid #EDEDED;
+}
+
+.panel-footer{
+    padding: 2px 8px;
+    display: block;
+    border-top: 1px solid #EDEDED;
+    background-color: lightgray;
+}
+
+.panel-footer:before {
+    border-left: 5px black;
+}
+
+/*---*/
+.modal-header{
+    border-bottom: 1px solid grey !important;
+    padding-top: 20px !important;
+    padding-bottom: 5px !important;
+}
+.modal-title{
+    display: inline;
+}
+
+/* Estilos para mostrar la fila de botones con acciones que puedo realizar a MIS recursos. */
+.resource-buttons{
+    display: block;
+    padding: 5px 5px;
+}

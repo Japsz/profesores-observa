@@ -9,7 +9,7 @@ var http = require('http');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
-var material = require('./routes/material');
+var resource = require('./routes/resource');
 var reseña = require('./routes/reseña');
 
 var app = express();
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/users', users);
-app.use('/material', material);
+app.use('/resource', resource);
 app.use('/review', reseña);
 
 // catch 404 and forward to error handler
