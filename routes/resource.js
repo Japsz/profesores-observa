@@ -66,6 +66,15 @@ router.post('/search_query', function(req, res, next) {
 });
 // Esta ruta añade un nuevo material
 router.post('/add', function(req, res, next) {
+    req.files.myfile.mv(__dirname+'/'+req.files.myfile.name , function(err) {
+        if (err) {
+            console.log(err);
+        } else {
+            console.log("uploaded");
+        }
+    });
+    console.log(req.files);
     res.send('Creado!');
 });
+
 module.exports = router;
