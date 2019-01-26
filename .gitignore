@@ -5,6 +5,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
+#Directorio archivos servidor
+uploaded-files
+
 # Runtime data
 pids
 *.pid

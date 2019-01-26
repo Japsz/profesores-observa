@@ -1,0 +1,109 @@
+<!-- Informacion necesaria para crear un recurso base. -->
+<div id="modal_new_resource" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <button type="button" class="close" data-dismiss="modal" style="padding: 5px 5px">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div class="modal-header ">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 class="modal-title">Formulario agregar nuevo Recurso</h3>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="progress">
+                            <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <form id="resource1_form" class="form-horizontal style-form">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6" style="padding-right: 3px">
+                            <div class="form-group">
+                                <label for="title">Titulo</label>
+                                <input name="title" type="text" class="form-control"
+                                       placeholder="¿Cual es el titulo del recurso?">
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="author">Autor</label>
+                                <input name="author" type="text" class="form-control"
+                                       placeholder="Si el campo esta vacio, supondremos que tu lo eres.">
+                            </div>
+                        </div>
+                        <div class="form-group col-sm-12">
+                            <label for="description">Descripcion</label>
+                            <textarea name="description" class="form-control" rows="3" maxlength="255"
+                                      placeholder="Descripcion breve de tu Recurso. (Max. 255 caracteres)"></textarea>
+                        </div>
+                        <div class="col-sm-12">
+                            <label for="description">Texto de Columna</label>
+                            <textarea name="text" class="form-control" rows="5"
+                                      placeholder="¡Aca puedes explayarte cuanto quieras sobre tu aporte!"></textarea>
+                        </div>
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <label>Subir Anexos</label>
+                            <input name="file1" type="file">
+                        </div>
+                        <div class="row col-sm-8 col-sm-offset-2">
+                            <label>Subir Anexos 2</label>
+                            <input name="file2" type="file">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary btn-raised">Continuar</button>
+                    <button type="button" class="btn btn-secondary btn-raised" data-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+
+            <!-- File charge
+            <form id="testform" enctype="multipart/form-data">
+                <input type="file" name="myfile"><br>
+                <div class="progress">
+                    <div id="mybar" class="progress-bar"></div >
+                </div>
+                <div id="status"></div>
+                <input type="submit">
+            </form>
+            -->
+        </div>
+    </div>
+</div>
+
+<script>
+    $('#resource1_form').submit(function(e) {
+        e.preventDefault();
+        $(this).ajaxSubmit({
+            url: '/resource/add',
+            type: 'POST',
+            data: '' //Hay que pasar idteacher
+        });
+        $('#modal_new_resource_1').modal('hide');
+        return false;
+    });
+
+    $(function() {
+        options = {
+            url: '/resource/add',
+            type: 'POST',
+            beforeSend: function() {
+                var percentVal = '0%';
+                bar.width(percentVal);
+            },
+            uploadProgress: function(event, position, total, percentComplete) {
+                var percentVal = percentComplete + '%';
+                bar.width(percentVal);
+            },
+            complete: function(xhr) {
+                console.log(xhr);
+            }
+        };
+    });
+</script>

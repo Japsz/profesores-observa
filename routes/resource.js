@@ -7,7 +7,7 @@ router.use(
     connection(mysql,{
         host: '127.0.0.1',
         user: 'root',
-        password : '1234',
+        password : '',
         port : 3306,
         database:'profesapp'
     },'pool')
@@ -23,7 +23,7 @@ router.use(
   */
 //Función Para verificar si el usuario que pide la información puede acceder a ella.
 //¿¿ Esto no deberia ser de usuario ??
-function validar(){
+function validate(){
     //TODO
     return true;
 }
@@ -39,7 +39,7 @@ router.get('/:idresource', function(req, res, next){
 
 // Esta ruta consigue la info de UN material,
 router.get('/mostrar/:idmaterial', function(req, res, next) {
-    if(validar()){
+    if(validate()){
         req.getConnection(function(err,connection){
             if(err) console.log("ERROR DE CONEXIÓN A BDD: %s",err);
             connection.query("SELECT material.*,profesor.username AS usn_creador FROM material" +
@@ -65,15 +65,34 @@ router.post('/search_query', function(req, res, next) {
     res.render('material/ver_todos');
 });
 // Esta ruta añade un nuevo material
-router.post('/add', function(req, res, next) {
-    req.files.myfile.mv(__dirname+'/'+req.files.myfile.name , function(err) {
-        if (err) {
-            console.log(err);
-        } else {
-            console.log("uploaded");
-        }
-    });
-    console.log(req.files);
+router.post('/add', function(req, res) {
+    //Formato direccion de guardado 'public/uploaded-files/<idteacher>/<filename>.<ext>'
+    if(validate()){ //TODO El idteacher deberia guardarse en una variable de sesion. Para tratar todo lo del usuario.
+        req.getConnection(function (err,connection) {
+            let body = req.body;
+            //Creamos un recurso.
+            connection.query('INSERT INTO resource (idteacher, title, author, description, text) VALUES (?)',
+                [[1, body.title, body.author, body.description, body.text]],    //TODO Cambiar idteacher
+                function (err, result) {
+                    if (err) {console.log(err);}
+                    let idresource = result.insertId;   //Sacamos idresource de lo que insertamos.
+                    console.log('Se ha insertado '+idresource);
+                    //Si hay archivos, los guardamos en el servidor y el nombre en la BD.
+                    if (req.files){
+                        for (let key in req.files) {
+                            let filename = req.files[key].name;
+                            req.files[key].mv('public/uploaded-files/1/'+filename); //TODO Ese 1 debe ser idteacher.
+                            connection.query('INSERT INTO files (idresource, filename) VALUES (?)',
+                                [[idresource,filename]],
+                                function (err, result) {
+                                    if (err) {console.log(err);}
+                                    console.log('Se ha insertado un file.');
+                                });
+                        }
+                    }
+            });
+        });
+    }
     res.send('Creado!');
 });
 

@@ -1,60 +1,60 @@
-<footer class="blog-footer">
+    <footer class="blog-footer">
 
-    <div id="links">
-        <div class="container">
-            <div class="row">
-                <div class="col-sm-2">
-                    <p>Versión 1.1</p>
-                </div>
+        <div id="links">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <p>Versión 1.1</p>
+                    </div>
 
-                <div class="col-sm-8 text-center offset">
-                    <ul class="list-inline">
-                        <li><a href="#">Inicio</a></li>
-                        <li><a href="#">Nosotros</a></li>
-                        <li><a href="#">Contacto</a></li>
-                    </ul>
-                </div>
+                    <div class="col-sm-8 text-center offset">
+                        <ul class="list-inline">
+                            <li><a href="#">Inicio</a></li>
+                            <li><a href="#">Nosotros</a></li>
+                            <li><a href="#">Contacto</a></li>
+                        </ul>
+                    </div>
 
-                <div class="col-md-2 text-right offset">
-                    <ul class="list-inline">
-                        <li><a href="#"><i class="fa fa-facebook"></i></a></li>
-                        <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter"></i></a></li>
-                    </ul>
+                    <div class="col-md-2 text-right offset">
+                        <ul class="list-inline">
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</footer>
-<!-- Modal mainframe -->
-<%- include ../resource/modal/new_resource.ejs %>
+    </footer>
+    <!-- Modal mainframe -->
+    <%- include ../resource/modal/new_resource_1.ejs %>
+    <%- include ../resource/modal/new_resource_2.ejs %>
 
-<button class="material-scrolltop inverse" type="button"></button>
+    <button class="material-scrolltop inverse" type="button"></button>
 
-<script src="js/bootstrap.min.js"></script>
-<script src="js/ripples.min.js"></script>
-<script src="js/material.min.js"></script>
-<script src="js/material-scrolltop.js"></script>
-<script src="js/main.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/ripples.min.js"></script>
+    <script src="js/material.min.js"></script>
+    <script src="js/material-scrolltop.js"></script>
+    <script src="js/main.js"></script>
 
-<script>
-    $.material.init();
-    $('body').materialScrollTop();
+    <script>
+        $.material.init();
+        $('body').materialScrollTop();
 
-    function upd_main(esto){
-        console.log("Hola");
-        console.log($(esto).data('url'));
-        $.ajax({
-            type:'GET',
-            url: $(esto).data('url'),
-            success: function(data){
-                $("#mainframe").html(data);
-            }
-        });
-    }
-</script>
+        function upd_main(esto){
+            console.log("Hola");
+            console.log($(esto).data('url'));
+            $.ajax({
+                type:'GET',
+                url: $(esto).data('url'),
+                success: function(data){
+                    $("#mainframe").html(data);
+                }
+            });
+        }
+    </script>
 
-
-</body>
+    </body>
 </html>

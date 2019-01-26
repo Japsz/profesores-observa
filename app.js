@@ -4,7 +4,7 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-var expressFU = require('express-fileupload');
+var expressFU = require('express-fileupload'); //https://www.npmjs.com/package/express-fileupload
 var http = require('http');
 
 var index = require('./routes/index');
@@ -26,8 +26,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressFU({
-    preserveExtension: true,
-    safeFileNames: true
+    preserveExtension: true,    //Se mantiene extension
+    safeFileNames: true,        //Se borraran caracteres no alfanumericos
+    createParentPath: true,      //Se crea el directorio si no existe
+    tempFileDir: 'public/tmpfiles/'
 }));
 
 app.use('/', index);
