@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <form id="resource1_form" class="form-horizontal style-form">
+            <form id="resource_form" class="form-horizontal style-form">
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-sm-6" style="padding-right: 3px">
@@ -47,12 +47,12 @@
                                       placeholder="¡Aca puedes explayarte cuanto quieras sobre tu aporte!"></textarea>
                         </div>
                         <div class="col-sm-8 col-sm-offset-2">
-                            <label>Subir Anexos</label>
-                            <input name="file1" type="file">
+                            <label>Subir Anexos, esta imagen sera la portada del recurso.</label>
+                            <input name="frontfile" type="file">
                         </div>
                         <div class="row col-sm-8 col-sm-offset-2">
                             <label>Subir Anexos 2</label>
-                            <input name="file2" type="file">
+                            <input name="file1" type="file">
                         </div>
                     </div>
 
@@ -78,14 +78,17 @@
 </div>
 
 <script>
-    $('#resource1_form').submit(function(e) {
+    $('#resource_form').submit(function(e) {
         e.preventDefault();
         $(this).ajaxSubmit({
             url: '/resource/add',
             type: 'POST',
-            data: '' //Hay que pasar idteacher
+            data: {idteacher : 1}, //TODO Hay que pasar idteacher o quizas no.
+            complete: function (xhr) {
+                $('#modal_new_resource').modal('hide');
+                console.log(xhr);
+            }
         });
-        $('#modal_new_resource_1').modal('hide');
         return false;
     });
 

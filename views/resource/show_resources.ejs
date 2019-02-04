@@ -8,43 +8,46 @@
     <div class="col-xs-12 col-sm-12">
         <!-- Corresponde a una contribución -->
         <!-- for(){} el numero de contribuciones que deseemos mostrar -->
-        <section class="blog-post">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h2 class="blog-post-title" style="display: inline">Like a little drop of ink</h2>
-                </div>
-                <div>
-                    <img src="img/music/unsplash-2.jpg" class="img-responsive" />
-                    <p class="bs-component btn-group-sm" style="float: right">
-                        <!-- Los ultimos 2 botones deberian solo aparecer si eres autor del recurso -->
-                        <a href="#" class="btn btn-success btn-fab"><i class="material-icons">thumb_up_alt</i></a>
-                        <a href="#" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
-                        <a href="#" class="btn btn-danger btn-fab"><i class="material-icons">block</i></a>
-                    </p>
-                </div>
-                <div class="panel-body">
-                    <!-- Acá van los tags, ojalá sean clickeables para redireccionar a "buscar por tag" -->
-                    <div class="blog-post-meta">
-                        <span class="label label-light label-warning">Live</span>
-                        <p class="blog-post-date pull-right">February 16, 2016</p>
+        <%results.forEach(function (resource) { %>
+            <section class="blog-post">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h2 class="blog-post-title" style="display: inline"><%=resource.title%></h2>
                     </div>
-                    <!-- Acá va el contenido de la contribución (sólo vista previa) -->
-                    <div class="blog-post-content">
+                    <div>
+                        <img src="img/music/unsplash-2.jpg" class="img-responsive" />
+                        <p class="bs-component btn-group-sm" style="float: right">
+                            <!-- TODO Los ultimos 2 botones deberian solo aparecer si eres autor del recurso -->
+                            <a href="#" class="btn btn-success btn-fab"><i class="material-icons">thumb_up_alt</i></a>
+                            <a href="#" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
+                            <a href="#" class="btn btn-danger btn-fab"><i class="material-icons">block</i></a>
+                        </p>
+                    </div>
+                    <div class="panel-body">
+                        <!-- TODO Acá van los tags, ojalá sean clickeables para redireccionar a "buscar por tag" -->
+                        <div class="blog-post-meta">
+                            <span class="label label-light label-warning">Live</span>
+                            <p class="blog-post-date pull-right">February 16, 2016</p>
+                        </div>
+                        <!-- Acá va el contenido de la contribución (sólo vista previa) -->
+                        <div class="blog-post-content">
 
-                        <p>Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem.</p>
+                            <p><%=resource.description%></p>
 
-                        <!-- El param del onclick debe ser el iddelmat -->
-                        <a class="btn btn-info" onclick="show_a_resource(1)">
-                            Leer más
-                        </a>
-                        <!-- Boton redes sociales -->
-                        <a class="blog-post-share pull-right" href="#">
-                            <i class="material-icons">&#xE80D;</i>
-                        </a>
+                            <!-- El param del onclick debe ser el iddelmat -->
+                            <a class="btn btn-info" onclick="show_a_resource(<%=resource.idresource%>)">
+                                Leer más
+                            </a>
+                            <!-- Boton redes sociales -->
+                            <a class="blog-post-share pull-right" href="#">
+                                <i class="material-icons">&#xE80D;</i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        <%});%>
         <!-- Aca se deberia cerrar el for(){} -->
+
     </div>
 </div>

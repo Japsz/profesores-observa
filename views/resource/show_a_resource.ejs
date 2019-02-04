@@ -12,11 +12,9 @@
                     </div>
                     <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                     <div class="blog-post-content">
-                        <h2 class="blog-post-title">Like a little drop of ink</h2>
-
-                        <p>Donec ut libero sed arcu vehicula ultricies a non tortor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean ut gravida lorem.</p>
-                        <p>Aca deberia ir toda la informacion descriptiva del recurso</p>
-
+                        <h2 class="blog-post-title"><%=title%></h2>
+                        <p><%=description%></p>
+                        <p><%=text%></p>
                     </div>
 
                 </div>
@@ -56,45 +54,48 @@
                 </div>
             </div>
         </section>
-
-        <!-- Aca van todos los comentarios. -->
-        <!-- Un comentario -->
         <div class="row">
-            <div class="col-sm-2">
-                <div class="thumbnail">
-                    <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                </div><!-- /thumbnail -->
-            </div>
-            <div class="col-sm-10">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong>myusername</strong> <span class="text-muted">commented 5 days ago</span>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div><!-- /panel-body -->
-                </div>
+            <div class="col-sm-12">
+                <h5>¡Agrega tu comentario!</h5>
+                <form id="comment_form" data-idresource="<%=idresource%>">
+                    <textarea name="comment" rows="3" maxlength="1000" style="width: 100%"></textarea>
+                <button class="btn btn-success" style="float:right;">Comentar</button>
+                </form>
             </div>
         </div>
-
-        <!-- Otro comentario -->
-        <div class="row">
-            <div class="col-sm-2">
-                <div class="thumbnail">
-                    <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
-                </div><!-- /thumbnail -->
-            </div><!-- /col-sm-1 -->
-
-            <div class="col-sm-10">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <strong>myusername</strong> <span class="text-muted">commented 5 days ago</span>
-                    </div>
-                    <div class="panel-body">
-                        Panel content
-                    </div><!-- /panel-body -->
-                </div><!-- /panel panel-default -->
-            </div><!-- /col-sm-5 -->
+        <div id="comments_frame">
+            <!-- Aca van todos los comentarios. -->
         </div>
     </div>
 </div>
+
+<script>
+    function update_comments(){
+        $.ajax({
+            type: 'GET',
+            url: '/resource/show_comments/'+<%=idresource%>,
+            success: function (html) {
+                $('#comments_frame').empty();
+                $('#comments_frame').append(html);
+            }
+        });
+    }
+
+    $('#comment_form').submit(function(e) {
+        e.preventDefault();
+        $(this).ajaxSubmit({
+            url: '/resource/add_comment',
+            type: 'POST',
+            data: {idresource: $(this).data('idresource')},
+            complete: function (xhr) {
+                //TODO actualizar los comentarios o insertar comentario nuevo
+                update_comments();
+                console.log(xhr);
+            }
+        });
+        return false;
+    });
+
+    update_comments();
+
+</script>

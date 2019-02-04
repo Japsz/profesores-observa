@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(expressFU({
-    preserveExtension: true,    //Se mantiene extension
+    preserveExtension: 5,    //Se mantiene extension
     safeFileNames: true,        //Se borraran caracteres no alfanumericos
     createParentPath: true,      //Se crea el directorio si no existe
     tempFileDir: 'public/tmpfiles/'

@@ -29,7 +29,6 @@
     </footer>
     <!-- Modal mainframe -->
     <%- include ../resource/modal/new_resource_1.ejs %>
-    <%- include ../resource/modal/new_resource_2.ejs %>
 
     <button class="material-scrolltop inverse" type="button"></button>
 
@@ -42,18 +41,6 @@
     <script>
         $.material.init();
         $('body').materialScrollTop();
-
-        function upd_main(esto){
-            console.log("Hola");
-            console.log($(esto).data('url'));
-            $.ajax({
-                type:'GET',
-                url: $(esto).data('url'),
-                success: function(data){
-                    $("#mainframe").html(data);
-                }
-            });
-        }
     </script>
 
     </body>
