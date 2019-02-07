@@ -41,7 +41,7 @@ router.get('/show_comments/:idresource', function (req, res) {
        	+ " LEFT JOIN teacher ON resource_comment.idteacher = teacher.idteacher"
        	+ " WHERE resource_comment.idresource = ?"
        	+ " ORDER BY resource_comment.date DESC", [req.session.teacherData.idteacher ,req.params.idresource] , function (err, data) {
-       		console.log(data);
+       		// console.log(data);
            	res.render('comment/show_comments', {data: data, teacher: req.session.teacherData});
        });
    });
