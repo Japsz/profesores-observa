@@ -7,8 +7,8 @@ var resource_model = require('../models/resource_model');
 router.use(
     connection(mysql,{
         host: '127.0.0.1',
-        user: 'root',
-        password : '',
+        user: 'prof',
+        password : 'belita123',
         port : 3306,
         database:'profesapp'
     },'pool')
@@ -65,8 +65,8 @@ router.post('/add', function(req, res) {
         req.getConnection(function (err,connection) {
             let body = req.body;
             //Creamos un recurso.
-            connection.query('INSERT INTO resource (idteacher, title, author, description, text) VALUES (?)',
-                [[body.idteacher, body.title, body.author, body.description, body.text]],    //TODO Cambiar idteacher
+            connection.query('INSERT INTO resource (idteacher, title, description, text) VALUES (?)',
+                [[body.idteacher, body.title, body.description, body.text]],    //TODO Cambiar idteacher
                 function (err, result) {
                     if (err) {console.log(err);}
                     let idresource = result.insertId;   //Sacamos idresource de lo que insertamos.
@@ -78,7 +78,7 @@ router.post('/add', function(req, res) {
                         for (let key in req.files) {
                             let filename = req.files[key].name;
                             req.files[key].mv('public/uploaded-files/1/'+idresource+'/'+filename);//TODO Ese 1 debe ser idteacher.
-                            connection.query('INSERT INTO files (idresource, filename) VALUES (?)',
+                            connection.query('INSERT INTO file (idresource, filename) VALUES (?)',
                                 [[idresource,filename]],
                                 function (err, result) {
                                     if (err) {console.log(err);}
@@ -92,36 +92,6 @@ router.post('/add', function(req, res) {
         });
     }
     res.send('Creado!');
-});
-
-router.post('/add_comment', function (req, res) { //TODO Agregar idteacher
-    if (validate()){
-        req.getConnection(function (err, connection) {
-            if (err) {console.log(err);}
-            connection.query('INSERT INTO resource_comment (idteacher, idresource, comment) VALUES (?)',
-                [[1, req.body.idresource, req.body.comment]], function (err, results) {
-                if (err) {console.log(err);}
-                    res.send('Comentado!');
-            });
-        });
-    }
-});
-
-router.get('/show_comments/:idresource', function (req, res) {
-   req.getConnection(function (err, connection) {
-       if (err){console.log(err);}
-       var query =  'SELECT * FROM resource_comment ' +
-                    'LEFT JOIN teacher ON resource_comment.idteacher = teacher.idteacher ' +
-                    'WHERE resource_comment.idresource = ? ' +
-                    'ORDER BY resource_comment.date DESC';
-       connection.query(query, [req.params.idresource] , function (err, results) {
-           console.log(results);
-           if (results){
-               results = JSON.parse(JSON.stringify(results));   //Para quitar el RowDataPacket
-           }
-           res.render('resource/show_comments', {results: results});
-       });
-   })
 });
 
 

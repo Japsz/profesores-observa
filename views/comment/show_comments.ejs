@@ -1,0 +1,98 @@
+
+<%data.forEach(function (comment){%>
+    <div class="row" id="<%=comment.idcomment%>">
+        <div class="col-sm-2">
+            <div class="thumbnail">
+                <img class="img-responsive user-photo" src="https://ssl.gstatic.com/accounts/ui/avatar_2x.png">
+            </div><!-- /thumbnail -->
+        </div>
+        <div class="col-sm-10">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <strong><%=comment.name%></strong> <span class="text-muted"><%=comment.date%></span>
+                        </div>
+                        <div class="col-sm-2" style="margin-left: 6%">
+                            <%if(comment.point_teacher){
+                                if(comment.point_teacher > 0){
+                                    <!-- Define si el profesor presiono el boton arrow_up -->
+                                    var state = 1;
+                                    var arrow_up = "btn-info";
+                                    var arrow_down = "btn-default";
+                                } else{
+                                    var state = -1;
+                                    var arrow_up = "btn-default";
+                                    var arrow_down = "btn-danger";
+                                }
+                            } else{ 
+                                var state = 0;
+                                var arrow_up = "btn-default";
+                                var arrow_down = "btn-default";
+                            } %>
+                            <button class="btn <%=arrow_up%> btn-md" data-idcomment="<%=comment.idcomment%>" data-state="<%=state%>" data-type="1" onclick="comment_point(this)" style="margin: 0; padding: 0; position: relative;">
+                                <span class="glyphicon glyphicon-arrow-up"></span>
+                            </button>
+                            <button class="btn <%=arrow_down%> btn-md" data-idcomment="<%=comment.idcomment%>" data-state="<%=state%>" data-type="-1" onclick="comment_point(this)" style="margin: 0; padding: 0; position: relative; top: 20px; left: -17px">
+                                <span class="glyphicon glyphicon-arrow-down"></span>
+                            </button>
+                            <h5 id="points<%=comment.idcomment%>" style="margin: 0; position: relative; top: -10px; left: 17px"><%=comment.points%></h5>
+                        </div>
+                        <div class="col-sm-1">
+                            <%if(comment.idteacher == teacher.idteacher){%>
+                                <button class="btn btn-danger btn-md" data-idcomment="<%=comment.idcomment%>" onclick="remove_comment(this)" style="margin: 0; padding: 0;">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            <%}%>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <%=comment.comment%>
+                </div><!-- /panel-body -->
+            </div>
+        </div>
+    </div>
+<%});%>
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+
+    });
+
+    // Al puntuar comentario
+    function comment_point(yo){
+        if($(yo).data("state") == 1 || $(yo).data("state") == -1){
+            return;
+        } else{
+            var point = parseInt($(yo).data("type"));
+            $.ajax({
+                type: 'POST',
+                data: { idcomment: $(yo).data("idcomment"), point: point },
+                url: '/comment/comment_point',
+                success: function(data){
+                    if(data == "ok"){
+                        update_comment(); //Esta funcion se encuentra en view_comment
+                    }
+                }
+            });
+        }
+    }    
+
+    // Eliminar un comentario
+    function remove_comment(yo){
+        if(confirm("¿Esta seguro/a de eliminar?")){
+            $.ajax({
+                type: 'POST',
+                data: { idcomment: $(yo).data("idcomment") },
+                url: '/comment/remove',
+                success: function(data){
+                    if(data == "ok"){
+                        update_comment();
+                    }
+                }
+            });            
+        }
+    }
+</script>

@@ -6,15 +6,22 @@ var mysql = require('mysql');
 router.use(
     connection(mysql,{
         host: '127.0.0.1',
-        user: 'root',
-        password : '1234',
+        user: 'prof',
+        password : 'belita123',
         port : 3306,
         database:'profesapp'
     },'pool')
 );
 /* GET users listing. */
 router.get('/', function(req, res, next) {
-    res.send('respond with a resource');
+    req.session.isteacherLogged = true;
+    req.session.teacherData = {
+        idteacher: 1,
+        name: "alf",
+        password: 123
+    };
+    // console.log(req.session.teacherData);
+    res.render('mainframe', { title: 'Express' });
 });
 
 router.post('/handler', function(req, res, next) {

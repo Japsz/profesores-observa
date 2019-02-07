@@ -54,48 +54,21 @@
                 </div>
             </div>
         </section>
-        <div class="row">
-            <div class="col-sm-12">
-                <h5>¡Agrega tu comentario!</h5>
-                <form id="comment_form" data-idresource="<%=idresource%>">
-                    <textarea name="comment" rows="3" maxlength="1000" style="width: 100%"></textarea>
-                <button class="btn btn-success" style="float:right;">Comentar</button>
-                </form>
-            </div>
-        </div>
-        <div id="comments_frame">
-            <!-- Aca van todos los comentarios. -->
+        <!-- Aca va insertar comentario y los comentarios existentes del recurso. -->
+        <div id="view_comment">
+            <!-- Todo sobre comentarios. -->
         </div>
     </div>
 </div>
 
-<script>
-    function update_comments(){
+<script type="text/javascript">
+    $(document).ready(function(){
         $.ajax({
             type: 'GET',
-            url: '/resource/show_comments/'+<%=idresource%>,
+            url: '/comment/view_comment/'+<%=idresource%>,
             success: function (html) {
-                $('#comments_frame').empty();
-                $('#comments_frame').append(html);
+                $('#view_comment').append(html);
             }
         });
-    }
-
-    $('#comment_form').submit(function(e) {
-        e.preventDefault();
-        $(this).ajaxSubmit({
-            url: '/resource/add_comment',
-            type: 'POST',
-            data: {idresource: $(this).data('idresource')},
-            complete: function (xhr) {
-                //TODO actualizar los comentarios o insertar comentario nuevo
-                update_comments();
-                console.log(xhr);
-            }
-        });
-        return false;
     });
-
-    update_comments();
-
 </script>

@@ -3,14 +3,10 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var cookieSession = require('cookie-session');
 var bodyParser = require('body-parser');
 var expressFU = require('express-fileupload'); //https://www.npmjs.com/package/express-fileupload
 var http = require('http');
-
-var index = require('./routes/index');
-var users = require('./routes/users');
-var resource = require('./routes/resource');
-var reseña = require('./routes/reseña');
 
 var app = express();
 
@@ -31,10 +27,23 @@ app.use(expressFU({
     createParentPath: true,      //Se crea el directorio si no existe
     tempFileDir: 'public/tmpfiles/'
 }));
+app.use(cookieSession({
+    name: 'session',
+    keys: ['teacher666']
+}));
 
+// Controladores
+var index = require('./routes/index');
+var teacher = require('./routes/teacher');
+var resource = require('./routes/resource');
+var comment = require('./routes/comment');
+var reseña = require('./routes/reseña');
+
+// Rutas
 app.use('/', index);
-app.use('/users', users);
+app.use('/teacher', teacher);
 app.use('/resource', resource);
+app.use('/comment', comment);
 app.use('/review', reseña);
 
 // catch 404 and forward to error handler
