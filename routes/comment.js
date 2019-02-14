@@ -1,7 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var connection  = require('express-myconnection');
-var mysql = require('mysql');
 var comment_model = require('../models/comment_model');
 
 // Agrega un comentario
