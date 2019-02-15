@@ -62,11 +62,20 @@ router.get('/logout', function(req, res, next) {
     if(req.session.isteacherLogged == true){
         req.session.isteacherLogged = false;
         req.session.teacherData = {};
-        res.redirect('/');
-    } else{
-        res.redirect('/');
     }
+    res.redirect('/');
 });
 
+/* Renderiza la vista informacion con los datos del usuario */
+router.get('/info_teacher', function(req, res, next) {
+    res.render('teacher/info_teacher', {data: req.session.teacherData});
+});
+
+/* Actualiza la información del usuario */
+router.post('/update_teacher', function(req, res, next) {
+    var input = JSON.parse(JSON.stringify(req.body));
+    var data = [input.username, input.password];
+    // HACER UPDATE
+});
 
 module.exports = router;

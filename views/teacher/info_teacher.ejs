@@ -1,0 +1,81 @@
+<%- include ../layouts/header.ejs %>
+
+    <div class="container blog-content">
+        <div class="row">
+            <div id="leftframe" class="col-md-6 col-md-offset-3 blog-sidebar">
+                <div class="sidebar-module">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Información de Usuario</h3>
+                        </div>
+                        <div class="panel-body">
+                            <form id="form_update_teacher">
+                                <div class="form-group">
+                                    <label>Nombre</label>
+                                    <input class="form-control" id="name" type="text" value="<%= data.name%>" required autofocus>
+                                </div>
+                                <div class="form-group">
+                                    <label>Nombre de Usuario</label>
+                                    <input class="form-control" id="username" type="text" value="<%= data.username%>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Mail</label>
+                                    <input class="form-control" id="mail" type="text" value="<%= data.mail%>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Contraseña</label>
+                                    <input class="form-control" id="password" type="password" value="<%= data.password%>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Repita su Contraseña</label>
+                                    <input class="form-control" id="password2" type="password" value="<%= data.password%>" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Dirección</label>
+                                    <input class="form-control" id="address" type="text" value="<%= data.address%>" required>
+                                </div>
+                                <button type="submit" class="btn btn-lg btn-success btn-block">Actualizar información <i class="glyphicon glyphicon-pencil"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><!-- /.container -->
+
+<script type="text/javascript">
+
+    $(document).ready(function(){
+        $.ajax({
+            type: 'POST',
+            url: '/teacher/is_login',
+            success: function(data){
+                $("#is_login").html(data);
+            }
+        });
+    });
+
+    $("#form_update_teacher").on('submit',function(e){
+        e.preventDefault();
+        if($("#password").val() != $("#password2").val()){
+            alert("Las contraseñas no coinciden, intente nuevamente.");
+            return;
+        } else {
+            $.ajax({
+                type: 'POST',
+                data: {username: $("#username").val(), password: $("#password").val() },
+                url: '/teacher/update_teacher',
+                success: function(data){
+                    if(data == "ok"){
+                        window.location.href = "/teacher/info_teacher";
+                    } else{
+                        alert("Datos de usuario incorrectos, intente nuevamente.");
+                    }
+                }
+            });            
+        }
+    });
+</script>
+
+</body>
+</html>
