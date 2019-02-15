@@ -1,0 +1,62 @@
+<!-- Logout Modal-->
+<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Listo para salir?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">Selecciona "Salir" en la parte inferior para cerrar la sesión.</div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                <a class="btn btn-danger" onclick="ajax_send(this,'/administrador','relocate')" data-url="/administrador/logout">Salir</a>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Crear profesor modal-->
+<div class="modal fade" id="modalNewTeacher" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <form id="newTeacherForm" data-url="/teacher/checkEmail">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Añadir un profesor</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="newTeacherEmail">Correo</label>
+                        <div class="input-group">
+                            <input type="email" id="newTeacherEmail" class="form-control" name="mail" placeholder="node@quantum.cl" required>
+                            <div class="invalid-feedback">
+                                Correo no válido o ya usado
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="newTeacherUsername">Nombre de Usuario</label>
+                                <input type="text" minlength="3" maxlength="12" id="newTeacherUsername" name="username" class="form-control" placeholder="NodoQuantico" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="newTeacherPass">Contraseña</label>
+                                <input type="password" id="newTeacherPass" class="form-control" name="password" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" type="submit">+ Crear</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

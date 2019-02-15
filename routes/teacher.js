@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var teacher_model = require('../models/teacher_model');
+var teacherModel = require("../models/teacher_model");
 
 /* Inicializa variables session y renderiza mainframe */
 router.get('/', function(req, res, next) {
@@ -16,7 +16,7 @@ router.get('/', function(req, res, next) {
 router.post('/is_login', function(req, res, next) {
     console.log(req.session.teacherData.idteacher);
     if(req.session.isteacherLogged == true){
-        teacher_model.show_teacher(req.session.teacherData.idteacher, function(err, data) {
+        teacherModel.show_teacher(req.session.teacherData.idteacher, function(err, data) {
             if(err){
                 console.log(err.message);
             }else{
@@ -41,7 +41,7 @@ router.get('/login_teacher', function(req, res, next) {
 router.post('/login_teacher_confirm', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
     var data = [input.username, input.password];
-    teacher_model.show_teacher_by_name(data, function(err, data) {
+    teacheModel.show_teacher_by_name(data, function(err, data) {
         if(err){
             console.log(err.message);
         }else{
@@ -56,7 +56,16 @@ router.post('/login_teacher_confirm', function(req, res, next) {
         }
     });
 });
-
+router.post('/checkEmail', function(req, res, next) {
+    var input = req.body;
+    teacherModel.check_email(input.email, function (err, iduser) {
+        if (err) {
+            res.send({err: true, errMsg: iduser});
+        } else {
+            res.send({err: false, value: iduser});
+        }
+    });
+});
 /* Renderiza la vista mainframe y cierra sesion */
 router.get('/logout', function(req, res, next) {
     if(req.session.isteacherLogged == true){

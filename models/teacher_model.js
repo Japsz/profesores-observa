@@ -38,6 +38,36 @@ teacher_model.show_teacher_by_name = function(data, callback){
         });
     }
 };
+teacher_model.create = function(data,callback){
+  if(connection){
+      connection.query("INSERT INTO teacher SET ?",data,function(err,rows){
+         if(err){
+             console.log("Error al insertar MYSQL: %s",err);
+             callback(true,err);
+         }
+          callback(null,rows);
+      });
+  } else {
+      callback(true,"");
+  }
+};
+teacher_model.check_email = function(email,callback){
+    if(connection){
+        connection.query("SELECT idteacher FROM teacher WHERE mail = ?",[email],function(err,rows){
+            if(err){
+                console.log("Error Select MYSQL: %s",err);
+                callback(true,"Error al buscar MYSQL");
+            } else {
+                if(rows.length){
+                    callback(null,true);
+                } else callback(null,false);
+            }
+        });
+    } else {
+        callback(true,"");
+    }
+};
 
 //exportamos el objeto para tenerlo disponible en la zona de rutas
 module.exports = teacher_model;
+
