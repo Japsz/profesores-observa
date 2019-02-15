@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var teacherModel = require("../models/teacher_model");
+var send = require('../public/js/sendmail'); //Importar la funcion para enviar mail
 
 /* Inicializa variables session y renderiza mainframe */
 router.get('/', function(req, res, next) {
@@ -40,8 +41,8 @@ router.get('/login_teacher', function(req, res, next) {
 /* Verifica el usuario y redirecciona a mainframe si logra iniciar sesion */
 router.post('/login_teacher_confirm', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
-    var data = [input.username, input.password];
-    teacheModel.show_teacher_by_name(data, function(err, data) {
+    var data = [input.username, input.username, input.password];
+    teacherModel.show_teacher_by_name(data, function(err, data) {
         if(err){
             console.log(err.message);
         }else{
@@ -56,6 +57,7 @@ router.post('/login_teacher_confirm', function(req, res, next) {
         }
     });
 });
+
 router.post('/checkEmail', function(req, res, next) {
     var input = req.body;
     teacherModel.check_email(input.email, function (err, iduser) {
@@ -83,8 +85,53 @@ router.get('/info_teacher', function(req, res, next) {
 /* Actualiza la información del usuario */
 router.post('/update_teacher', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
-    var data = [input.username, input.password];
-    // HACER UPDATE
+    var data = {
+        name: input.name, 
+        username: input.username, 
+        mail: input.mail,
+        password: input.password,
+        address: input.address
+    };
+    req.session.teacherData = data;
+    teacherModel.update_teacher(data, function (err, result) {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log(result);
+            res.send("ok");
+        }
+    });
+});
+
+/* Envia mail a usuario con los datos de su cuenta */
+router.post('/recover_password', function(req, res, next) {
+    var input = JSON.parse(JSON.stringify(req.body));
+    teacherModel.show_teacher_by_mail(input.mail, function (err, result) {
+        if (err) {
+            console.log(err.message);
+        } else {
+            if(result.length > 0){
+                //Variables para envio de correo, data_mail debe tener las mismas variables
+                var data = new Array(result[0].username, result[0].password );
+                console.log(data);
+                var mails = new Array(result[0].mail); //Debe ser array!
+                var subj = "Estimado usuario de Observa Ciudadanía";
+                var data_mail = {
+                    view: "views\\teacher\\mail_recover_password.ejs", //Path
+                    subject: subj, //Asunto del mensaje
+                    data: data, //Array con informacion necesaria
+                    mails: result[0].mail}; //Array de los correos
+                send.send_mail(data_mail,function(err) {
+                    if(err){
+                        console.log(err.message);
+                    }
+                });
+                res.send("ok");
+            } else {
+                res.send("error");
+            }
+        }
+    });
 });
 
 module.exports = router;

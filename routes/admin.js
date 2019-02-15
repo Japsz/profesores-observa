@@ -15,6 +15,7 @@ router.use(
 
 var adminRoutes = require('../models/admin_model');
 var teacherRoutes = require('../models/teacher_model');
+
 /* GET users listing. */
 router.get('/', function(req, res) {
     // console.log(req.session.teacherData);
@@ -46,7 +47,7 @@ router.post('/newTeacher', function(req, res, next) {
             }
         });
     } else {
-        res.send({err:true,errMsg: "MALDITO JACKER TE ESTOY SIGUIENDO CHUCHETUMARE"});
+        res.send({err:true,errMsg: "MALDITO JACKER TE ESTOY SIGUIENDO"});
     }
 });
 //Renderizar login
@@ -85,6 +86,7 @@ router.get('/index', function(req, res, next) {
         res.send("Maldito jacker");
     }
 });
+
 //Handler para loguearse como administrador
 router.post('/handler', function(req, res, next) {
     var input = req.body;

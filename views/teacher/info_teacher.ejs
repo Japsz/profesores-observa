@@ -63,11 +63,17 @@
         } else {
             $.ajax({
                 type: 'POST',
-                data: {username: $("#username").val(), password: $("#password").val() },
+                data: { 
+                    name: $("#name").val(), 
+                    username: $("#username").val(), 
+                    mail: $("#mail").val(),
+                    password: $("#password").val(),
+                    address: $("#address").val()
+                },
                 url: '/teacher/update_teacher',
                 success: function(data){
                     if(data == "ok"){
-                        window.location.href = "/teacher/info_teacher";
+                        alert("Se han actualizado los datos correctamente.");
                     } else{
                         alert("Datos de usuario incorrectos, intente nuevamente.");
                     }
