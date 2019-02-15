@@ -44,7 +44,7 @@ $("#newTeacherForm").on('submit',function(e){
                 success: function(data){
                     if(!data.err){
                         alert("Usuario Creado!");
-
+                        $("#modalNewTeacher").modal('toggle');
                     } else alert(data.errMsg);
                 }
             })

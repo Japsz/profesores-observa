@@ -38,9 +38,20 @@
     <script src="js/material-scrolltop.js"></script>
     <script src="js/main.js"></script>
 
-    <script>
+    <script type="text/javascript">
         $.material.init();
         $('body').materialScrollTop();
+
+        $(document).ready(function(){
+            $.ajax({
+                type: 'POST',
+                url: '/teacher/is_login',
+                success: function(data){
+                    $("#is_login").html(data);
+                }
+            });            
+        });
+        
     </script>
 
     </body>

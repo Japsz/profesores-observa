@@ -36,7 +36,7 @@ router.post('/newTeacher', function(req, res, next) {
                 res.send({err:true,errMsg: "Error al conectarse a los servicios"});
             } else {
                 //Consigue las estadisticas generales
-                teacherRoutes.create(req.body,connection,function(err,data){
+                teacherRoutes.create(req.body,function(err,data){
                     if(err){
                         res.send({err:true,errMsg: "Error al crear el profesor"});
                     } else {
