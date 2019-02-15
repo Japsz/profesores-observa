@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var connection  = require('express-myconnection');
 var mysql = require('mysql');
+var teacherModel = require("../models/teacher_model");
 
 router.use(
     connection(mysql,{
@@ -39,7 +40,19 @@ router.post('/handler', function(req, res, next) {
         });
     });
 });
-
+router.post('/checkEmail', function(req, res, next) {
+    var input = req.body;
+    req.getConnection(function(err, connection){
+        if(err) throw err;
+        teacherModel.check_email(input.email,connection,function(err,iduser){
+            if(err){
+                res.send({err:true,errMsg:iduser});
+            } else {
+                res.send({err:false,value: iduser});
+            }
+        });
+    });
+});
 
 
 module.exports = router;

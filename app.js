@@ -13,7 +13,7 @@ var app = express();
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-
+app.set('port',process.env.PORT || '3000');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
@@ -34,6 +34,7 @@ app.use(cookieSession({
 
 // Controladores
 var index = require('./routes/index');
+var admin = require('./routes/admin');
 var teacher = require('./routes/teacher');
 var resource = require('./routes/resource');
 var comment = require('./routes/comment');
@@ -45,6 +46,7 @@ app.use('/teacher', teacher);
 app.use('/resource', resource);
 app.use('/comment', comment);
 app.use('/review', reseña);
+app.use('/administrador', admin);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
