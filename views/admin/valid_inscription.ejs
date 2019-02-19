@@ -1,0 +1,62 @@
+<div class="col-lg-12">
+  <!-- Inscriptions -->
+  <div class="card shadow mb-12">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Solicitudes de inscripción</h6>
+    </div>
+    <div class="card-body">
+      <!-- DataTales -->
+      <div class="table-responsive">
+        <%
+        if(data.length > 0){
+        %>
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Mail</th>
+              <th style="width: 126px">Rut</th>
+              <th><%= data[0].question %></th>
+              <th><%= data[1].question %></th>
+              <th><%= data[2].question %></th>
+              <th>Validar</th>
+            </tr>
+          </thead>
+          <tbody>
+          <%
+          for(var i=0; i < data.length; i=i+3){
+          %>
+            <tr>
+              <td><%= data[i].mail %></td>
+              <td><%= data[i].rut %></td>
+              <td><%= data[i].answer %></td>
+              <td><%= data[i+1].answer %></td>
+              <td><%= data[i+2].answer %></td>
+              <td>
+                <div class="row">
+                  <div class="col-lg-6" style="padding: 0">
+                    <a href="#" class="btn btn-success btn-circle btn-sm">
+                      <i class="fas fa-check"></i>
+                    </a>
+                  </div>
+                  <div class="col-lg-6" style="padding: 0">
+                    <a href="#" class="btn btn-danger btn-circle btn-sm">
+                      <i class="fas fa-trash"></i>
+                    </a>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          <%
+          }
+          %>
+          </tbody>
+        </table>
+        <%
+        } else {
+        %>
+        <h3>No existen solicitudes por el momento.</h3>
+        <%}%>
+      </div>
+    </div>
+  </div>
+</div>

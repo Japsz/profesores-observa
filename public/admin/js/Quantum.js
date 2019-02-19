@@ -1,3 +1,20 @@
+// Redirige a la url de data-link y renderiza una vista en pageWrapper
+function ajax(yo){    
+    $.ajax({
+        type: 'GET',
+        url: $(yo).data('link'), 
+        beforeSend: function(){
+            $("#pageWrapper").css('display', 'none');
+        },
+        success: function(data){
+            if(data != "error"){
+                $("#pageWrapper").html(data);
+                $("#pageWrapper").css('display', 'block');
+            }
+        }
+    });
+}
+
 function ajax_send(caller,target,type = "insert",data = {},callback = {}){
     if(jQuery.isEmptyObject(data)) data = $(caller).data();
     $.ajax({
@@ -27,6 +44,7 @@ function ajax_send(caller,target,type = "insert",data = {},callback = {}){
     });
 };
 
+// Agrega un profesor nuevo, lo envia al controlador
 $("#newTeacherForm").on('submit',function(e){
     e.preventDefault();
     var data = {};
@@ -52,3 +70,5 @@ $("#newTeacherForm").on('submit',function(e){
     });
     return false;
 });
+
+

@@ -27,7 +27,26 @@ router.get('/', function(req, res) {
         res.redirect('/administrador/login');
     }
 });
-//
+
+/* Entrega los usuarios a validar y sus respuestas */
+router.get('/valid_inscription', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        // Obtiene las solicitudes de inscripcion
+        adminRoutes.valid_inscription(0, function(err,data){
+            if(err){
+                console.log(err.message);
+                res.send("error");
+            } else {
+                console.log(data);
+                res.render("admin/valid_inscription", {data: data});
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
+});
+
+// Inserta los datos de un nuevo profesor
 router.post('/newTeacher', function(req, res, next) {
     // Si está logueado
     if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
@@ -47,7 +66,7 @@ router.post('/newTeacher', function(req, res, next) {
             }
         });
     } else {
-        res.send({err:true,errMsg: "MALDITO JACKER TE ESTOY SIGUIENDO"});
+        res.send({err:true,errMsg: "No tiene acceso al sistema."});
     }
 });
 //Renderizar login
@@ -83,7 +102,7 @@ router.get('/index', function(req, res, next) {
            }
         });
     } else {
-        res.send("Maldito jacker");
+        res.send("No tiene acceso al sistema, inicie sesión.");
     }
 });
 

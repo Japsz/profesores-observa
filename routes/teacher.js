@@ -86,6 +86,7 @@ router.get('/info_teacher', function(req, res, next) {
 router.post('/update_teacher', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
     var data = {
+        idteacher: req.session.teacherData.idteacher,
         name: input.name, 
         username: input.username, 
         mail: input.mail,
@@ -127,6 +128,48 @@ router.post('/recover_password', function(req, res, next) {
                     }
                 });
                 res.send("ok");
+            } else {
+                res.send("error");
+            }
+        }
+    });
+});
+
+/* Inscripcion de usuario, admin debe validar */
+router.post('/inscription', function(req, res, next) {
+    var input = JSON.parse(JSON.stringify(req.body));
+    var data = {
+        mail: input.mail,
+        rut: input.rut,
+        valid: 0 
+        //Valid: 
+        // 0 En proceso de inscripcion
+        // 1 Usuario válido(con acceso a sesion)
+        // 2 Usuario deshabilitado(sin acceso a sesion)
+    };
+    teacherModel.show_teacher_by_mail(input.mail, function(err, result){
+        if (err) {
+            console.log(err.message);
+        } else {
+            if(result.length == 0){
+                teacherModel.create(data, function(err, result) {
+                    if (err) {
+                        console.log(err.message);
+                    } else {
+                        var data = [];
+                        data.push([result.insertId, "¿Cuales son sus objetivos personales?", input.q1]);
+                        data.push([result.insertId, "¿A qué se dedica?", input.q2]);
+                        data.push([result.insertId, "¿Porqué desea utilizar esta plataforma?", input.q3]);
+                        teacherModel.add_questionary(data, function(err, result) {
+                            if (err) {
+                                console.log(err.message);
+                                res.send("error");
+                            } else {
+                                res.send("ok");
+                            }
+                        });
+                    }
+                });
             } else {
                 res.send("error");
             }

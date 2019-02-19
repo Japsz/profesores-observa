@@ -17,8 +17,8 @@
                                     <input class="form-control" placeholder="Contraseña" id="password" type="password" required value="">
                                 </div>
                                 <button type="submit" class="btn btn-lg btn-success btn-block">Iniciar Sesión <i class="fa fa-sign-in"></i></button>
-                                <a style="margin-left: 14%" href="#">¿Eres nuevo? Solicita una inscripción aquí</a>
-                                <a style="margin-left: 20%" href="#" onclick="recover_password()">¿Deseas recuperar tu contraseña?</a>
+                                <a style="margin-left: 14%" data-toggle="modal" data-target="#inscription">¿Eres nuevo? Solicita una inscripción aquí</a>
+                                <a style="margin-left: 20%" data-toggle="modal" data-target="#recover_password">¿Deseas recuperar tu contraseña?</a>
                             </form>
                         </div>
                     </div>
@@ -27,7 +27,7 @@
         </div>
     </div><!-- /.container -->
 
-    <!-- Recuperar Contraseña Modal-->
+    <!-- Modal Recuperar Contraseña -->
     <div id="recover_password" class="modal fade">
         <div class="modal-dialog modal-md">
             <div class="modal-content">
@@ -57,6 +57,43 @@
         </div>
     </div>
 
+    <!-- Modal Solicitar inscripcion -->
+    <div id="inscription" class="modal fade">
+        <div class="modal-dialog modal-md">
+            <div class="modal-content">
+                <button type="button" class="close" data-dismiss="modal" style="padding: 5px 5px">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <div class="modal-header ">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="modal-title">Solicitar Inscripción</h4>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="form_inscription" class="form-horizontal style-form">
+                    <div class="modal-body">
+                        <label>Inserte su correo</label>
+                        <input class="form-control" type="text" id="mail2" placeholder="example@gmail.com" required autofocus>
+                        <label>Inserte su rut</label>
+                        <input class="form-control" type="text" id="rut" required>
+                        <label>¿Cuales son sus objetivos personales?</label>
+                        <input class="form-control" type="text" id="q1" required>
+                        <label>¿A qué se dedica?</label>
+                        <input class="form-control" type="text" id="q2" required>
+                        <label>¿Porqué desea utilizar esta plataforma?</label>
+                        <input class="form-control" type="text" id="q3" required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-primary btn-raised">Continuar</button>
+                        <button type="button" class="btn btn-secondary btn-raised" data-dismiss="modal">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <script src="/js/bootstrap.min.js"></script>
     <script src="/js/ripples.min.js"></script>
     <script src="/js/material.min.js"></script>
@@ -64,6 +101,7 @@
     <script src="/js/main.js"></script>
 
     <script type="text/javascript">
+
         $("#form_login_teacher").on('submit',function(e){
             e.preventDefault();
             $.ajax({
@@ -90,6 +128,7 @@
                     $('#recover_password').modal('hide');
                     if(data == "ok"){
                         alert("Se han enviado la información de usuario exitosamente.");
+                        window.location.href = "/teacher/login_teacher";
                     } else{
                         alert("Correo de usuario incorrecto, no existe en el sistema, intente nuevamente.");
                     }
@@ -97,10 +136,29 @@
             });
         });
 
-        //Abrir modal recuperar contraseña
-        function recover_password() {
-            $('#recover_password').modal('show');
-        }
+        $("#form_inscription").on('submit',function(e){
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                data: { 
+                    mail: $("#mail2").val(),
+                    rut: $("#rut").val(),
+                    q1: $("#q1").val(),
+                    q2: $("#q2").val(),
+                    q3: $("#q3").val()
+                },
+                url: '/teacher/inscription',
+                success: function(data){
+                    $('#inscription').modal('hide');
+                    if(data == "ok"){
+                        alert("Se han enviado la solicitud exitosamente, por favor este atento a su correo.");
+                    } else{
+                        alert("Existe una solicitud con este correo.");
+                    }
+                }
+            });
+        });
+
     </script>
 
 </body>
