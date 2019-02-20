@@ -6,16 +6,15 @@ var connection = mysql.createConnection(config);
 
 var admin_model = {};
 
-// Retorna los usuarios que solicitan inscripcion
-admin_model.valid_inscription = function(data,callback){
+//Funcion que retorna la info de un admin segun username y contraseña
+admin_model.show_admin_by_name = function(data, callback){
   if(connection){
-    var sql = "SELECT teacher.mail, teacher.rut, questionary.question, questionary.answer FROM questionary"
-    + " LEFT JOIN teacher ON teacher.idteacher=questionary.idteacher"
-    + " WHERE teacher.valid=0";
-    connection.query(sql,data,function(err, result){
+    var sql = 'SELECT * FROM admin WHERE username = ? AND password = ?';
+    connection.query(sql, data, function(err, result){
       if(err){
         throw err;
-      } else {
+      } else{
+        //devolvemos la última id insertada
         callback(null, result);
       }
     });
@@ -37,12 +36,20 @@ admin_model.create = function(data,callback){
   }
 };
 
-//Retorna las estadisticas generales
-admin_model.stats = function(data,callback){
-    if(connection){
-        callback(null,{msg: "hola"});
-    } else {
-        callback(true,{errMsg: "Wena"});
-    }
+// Retorna los usuarios que solicitan inscripcion
+admin_model.valid_inscription = function(data, callback){
+  if(connection){
+    var sql = "SELECT teacher.idteacher, teacher.mail, teacher.rut, questionary.question, questionary.answer FROM questionary"
+    + " LEFT JOIN teacher ON teacher.idteacher=questionary.idteacher"
+    + " WHERE teacher.valid=0 ORDER BY teacher.idteacher";
+    connection.query(sql,data,function(err, result){
+      if(err){
+        throw err;
+      } else {
+        callback(null, result);
+      }
+    });
+  }
 };
+
 module.exports = admin_model;

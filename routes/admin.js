@@ -1,20 +1,10 @@
 var express = require('express');
 var router = express.Router();
-var connection  = require('express-myconnection');
-var mysql = require('mysql');
+var send = require('../public/js/sendmail'); //Importar la funcion para enviar mail
 
-router.use(
-    connection(mysql,{
-        host: '127.0.0.1',
-        user: 'prof',
-        password : 'belita123',
-        port : 3306,
-        database:'profesapp'
-    },'pool')
-);
-
-var adminRoutes = require('../models/admin_model');
-var teacherRoutes = require('../models/teacher_model');
+// Modelos
+var admin_model = require('../models/admin_model');
+var teacher_model = require('../models/teacher_model');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -28,79 +18,24 @@ router.get('/', function(req, res) {
     }
 });
 
-/* Entrega los usuarios a validar y sus respuestas */
-router.get('/valid_inscription', function(req, res) {
-    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
-        // Obtiene las solicitudes de inscripcion
-        adminRoutes.valid_inscription(0, function(err,data){
-            if(err){
-                console.log(err.message);
-                res.send("error");
-            } else {
-                console.log(data);
-                res.render("admin/valid_inscription", {data: data});
-            }
-        });
-    } else {
-        res.redirect('/administrador/login');
-    }
-});
-
-// Inserta los datos de un nuevo profesor
-router.post('/newTeacher', function(req, res, next) {
-    // Si está logueado
-    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
-        req.getConnection(function(err,connection){
-            if(err){
-                console.log("ERROR al crear la conexión MYSQL: %s",err);
-                res.send({err:true,errMsg: "Error al conectarse a los servicios"});
-            } else {
-                //Consigue las estadisticas generales
-                teacherRoutes.create(req.body,function(err,data){
-                    if(err){
-                        res.send({err:true,errMsg: "Error al crear el profesor"});
-                    } else {
-                        res.send({err:false,data:data});
-                    }
-                });
-            }
-        });
-    } else {
-        res.send({err:true,errMsg: "No tiene acceso al sistema."});
-    }
-});
 //Renderizar login
 router.get('/login', function(req, res, next) {
     // console.log(req.session.teacherData);
     res.render('admin/login', { title: 'Express' });
 });
+
 //Borrar la session
 router.post('/logout', function(req, res, next) {
     // console.log(req.session.teacherData);
     req.session.isAdminLogged = false;
-    req.session.userData = {};
+    req.session.adminData = {};
     res.send({err:false});
 });
+
 //Handler que carga header y footers
 router.get('/index', function(req, res, next) {
-    // Si está logueado
     if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
-        req.getConnection(function(err,connection){
-           if(err){
-               console.log("ERROR al crear la conexión MYSQL: %s",err);
-               res.render('/404');
-           } else {
-               //Consigue las estadisticas generales
-               adminRoutes.stats(connection,function(err,data){
-                  if(err){
-                      console.log(data.errMsg);
-                      res.render("/404");
-                  } else {
-                      res.render('admin/index',data);
-                  }
-               });
-           }
-        });
+       res.render('admin/index');
     } else {
         res.send("No tiene acceso al sistema, inicie sesión.");
     }
@@ -109,31 +44,96 @@ router.get('/index', function(req, res, next) {
 //Handler para loguearse como administrador
 router.post('/handler', function(req, res, next) {
     var input = req.body;
-    req.getConnection(function(err, connection){
+    var data = [input.username, input.password];
+    admin_model.show_admin_by_name(data, function(err,data){
         if(err){
-            console.log("ERROR MYSQL: %s",err);
-            res.send({err:true,errMsg:"Error al conseguir los datos de la Base de Datos"});
-        }
-        //Buscamos en la tabla admin
-        connection.query("SELECT * FROM admin WHERE username = ?", [input.username], function(err, user){
-            if(err){
-                console.log("ERROR SELECT MYSQL: %s",err);
-                res.send({err:true,errMsg:"Error al conseguir los datos de la Base de Datos"});
+            console.log(err.message);
+            res.send("error");
+        } else {
+            if(data.length > 0){
+                req.session.isAdminLogged = true;
+                req.session.adminData = data[0];
+                res.send({err:false,errMsg:"Exito"});
             } else {
-                //Si existe y además calza la contraseña
-                if(user.length && user[0].password == input.password){
-                    req.session.isAdminLogged = true;
-                    req.session.userData = user[0];
-                    res.send({err:false,errMsg:"Exito"});
-                } else {
-                    //sino, no
-                    res.send({err:true,errMsg:"El username y/o la contraseña son incorrectos, inténtelo nuevamente"});
-                }
+                res.send({err:true,errMsg:"El username y/o la contraseña son incorrectos, inténtelo nuevamente"});
             }
-        });
+        }
     });
 });
 
+// Inserta los datos de un nuevo profesor
+router.post('/newTeacher', function(req, res, next) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){ // Si está logueado
+        teacher_model.create(req.body,function(err,data){
+            if(err){
+                res.send({err:true,errMsg: "Error al crear el profesor"});
+            } else {
+                res.send({err:false,data:data});
+            }
+        });
+    } else {
+        res.send({err:true,errMsg: "No tiene acceso al sistema."});
+    }
+});
 
+/* Entrega los usuarios a validar y sus respuestas */
+router.get('/valid_inscription', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        // Obtiene las solicitudes de inscripcion
+        admin_model.valid_inscription(0, function(err,data){
+            if(err){
+                console.log(err.message);
+                res.send("error");
+            } else {
+                res.render("admin/valid_inscription", {data: data});
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
+});
+
+/* Valida las solicitudes de inscripcion (cambia valid a 1 y envia un mail para rellenar datos) */
+router.post('/valid_teacher', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        var input = JSON.parse(JSON.stringify(req.body));
+        var data = {
+            idteacher: input.idteacher,
+            valid: 1
+        };
+        teacher_model.update_valid(data, function(err,data){
+            if(err){
+                console.log(err.message);
+                res.send("error");
+            } else {
+                // Enviar correo afirmando la solicitud !!!!!!
+                res.send("ok");
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
+});
+
+/* Inhabilita a un solicitante de inscripción (no le permite iniciar sesion) */
+router.post('/disable_teacher', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        var input = JSON.parse(JSON.stringify(req.body));
+        var data = {
+            idteacher: input.idteacher,
+            valid: 2
+        };
+        teacher_model.update_valid(data, function(err,data){
+            if(err){
+                console.log(err.message);
+                res.send("error");
+            } else {
+                res.send("ok");
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
+});
 
 module.exports = router;

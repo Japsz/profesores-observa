@@ -55,7 +55,7 @@ teacher_model.show_teacher_by_name = function(data, callback){
 //Funcion que actualiza la información del usuario
 teacher_model.update_teacher = function(data, callback){
   if(connection){
-    var sql = 'UPDATE teacher SET ?';
+    var sql = 'UPDATE teacher SET ? WHERE idteacher=' + connection.escape(data.idteacher);
     connection.query(sql, data, function(err, result){
       if(err){
         throw err;
@@ -113,6 +113,25 @@ teacher_model.check_email = function(email,callback){
     });
   } else {
     callback(true,"");
+  }
+};
+
+// Actualiza el campo valid un profesor
+// Params idteacher, nro valid
+/* Valid:
+  0: solicitando inscripcion 
+  1: usuario validado y con acceso al sistema
+  2: usuario inhabilitado, sin acceso al sistema */
+teacher_model.update_valid = function(data, callback){
+  if(connection){
+    var sql = 'UPDATE teacher SET ? WHERE idteacher=' + connection.escape(data.idteacher);
+    connection.query(sql, data, function(err, result){
+      if(err) {
+        throw err;
+      } else {
+        callback(null, result);
+      }
+    });
   }
 };
 

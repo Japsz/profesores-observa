@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var teacherModel = require("../models/teacher_model");
+var teacher_model = require("../models/teacher_model");
 var send = require('../public/js/sendmail'); //Importar la funcion para enviar mail
 
 /* Inicializa variables session y renderiza mainframe */
@@ -17,7 +17,7 @@ router.get('/', function(req, res, next) {
 router.post('/is_login', function(req, res, next) {
     console.log(req.session.teacherData.idteacher);
     if(req.session.isteacherLogged == true){
-        teacherModel.show_teacher(req.session.teacherData.idteacher, function(err, data) {
+        teacher_model.show_teacher(req.session.teacherData.idteacher, function(err, data) {
             if(err){
                 console.log(err.message);
             }else{
@@ -42,15 +42,19 @@ router.get('/login_teacher', function(req, res, next) {
 router.post('/login_teacher_confirm', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
     var data = [input.username, input.username, input.password];
-    teacherModel.show_teacher_by_name(data, function(err, data) {
+    teacher_model.show_teacher_by_name(data, function(err, data) {
         if(err){
             console.log(err.message);
         }else{
             if(data.length > 0){
-                req.session.isteacherLogged = true;
-                req.session.teacherData = data[0];
-                console.log(req.session.teacherData);
-                res.send("ok");
+                if(data[0].valid == 1){
+                    req.session.isteacherLogged = true;
+                    req.session.teacherData = data[0];
+                    console.log(req.session.teacherData);
+                    res.send("ok");
+                } else {
+                    res.send("disable");
+                }
             } else {
                 res.send("false");
             }
@@ -58,9 +62,10 @@ router.post('/login_teacher_confirm', function(req, res, next) {
     });
 });
 
+// Chequea si existe el mail
 router.post('/checkEmail', function(req, res, next) {
     var input = req.body;
-    teacherModel.check_email(input.email, function (err, iduser) {
+    teacher_model.check_email(input.email, function (err, iduser) {
         if (err) {
             res.send({err: true, errMsg: iduser});
         } else {
@@ -70,44 +75,48 @@ router.post('/checkEmail', function(req, res, next) {
 });
 /* Renderiza la vista mainframe y cierra sesion */
 router.get('/logout', function(req, res, next) {
-    if(req.session.isteacherLogged == true){
+    if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
         req.session.isteacherLogged = false;
         req.session.teacherData = {};
+        res.redirect('/');
     }
-    res.redirect('/');
 });
 
 /* Renderiza la vista informacion con los datos del usuario */
 router.get('/info_teacher', function(req, res, next) {
-    res.render('teacher/info_teacher', {data: req.session.teacherData});
+    if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
+        res.render('teacher/info_teacher', {data: req.session.teacherData});
+    }
 });
 
 /* Actualiza la información del usuario */
 router.post('/update_teacher', function(req, res, next) {
-    var input = JSON.parse(JSON.stringify(req.body));
-    var data = {
-        idteacher: req.session.teacherData.idteacher,
-        name: input.name, 
-        username: input.username, 
-        mail: input.mail,
-        password: input.password,
-        address: input.address
-    };
-    req.session.teacherData = data;
-    teacherModel.update_teacher(data, function (err, result) {
-        if (err) {
-            console.log(err.message);
-        } else {
-            console.log(result);
-            res.send("ok");
-        }
-    });
+    if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
+        var input = JSON.parse(JSON.stringify(req.body));
+        var data = {
+            idteacher: req.session.teacherData.idteacher,
+            name: input.name, 
+            username: input.username, 
+            mail: input.mail,
+            password: input.password,
+            address: input.address
+        };
+        req.session.teacherData = data;
+        teacher_model.update_teacher(data, function (err, result) {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(result);
+                res.send("ok");
+            }
+        });
+    }
 });
 
 /* Envia mail a usuario con los datos de su cuenta */
 router.post('/recover_password', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
-    teacherModel.show_teacher_by_mail(input.mail, function (err, result) {
+    teacher_model.show_teacher_by_mail(input.mail, function (err, result) {
         if (err) {
             console.log(err.message);
         } else {
@@ -147,12 +156,12 @@ router.post('/inscription', function(req, res, next) {
         // 1 Usuario válido(con acceso a sesion)
         // 2 Usuario deshabilitado(sin acceso a sesion)
     };
-    teacherModel.show_teacher_by_mail(input.mail, function(err, result){
+    teacher_model.show_teacher_by_mail(input.mail, function(err, result){
         if (err) {
             console.log(err.message);
         } else {
             if(result.length == 0){
-                teacherModel.create(data, function(err, result) {
+                teacher_model.create(data, function(err, result) {
                     if (err) {
                         console.log(err.message);
                     } else {
@@ -160,7 +169,7 @@ router.post('/inscription', function(req, res, next) {
                         data.push([result.insertId, "¿Cuales son sus objetivos personales?", input.q1]);
                         data.push([result.insertId, "¿A qué se dedica?", input.q2]);
                         data.push([result.insertId, "¿Porqué desea utilizar esta plataforma?", input.q3]);
-                        teacherModel.add_questionary(data, function(err, result) {
+                        teacher_model.add_questionary(data, function(err, result) {
                             if (err) {
                                 console.log(err.message);
                                 res.send("error");

@@ -33,13 +33,13 @@
               <td><%= data[i+2].answer %></td>
               <td>
                 <div class="row">
-                  <div class="col-lg-6" style="padding: 0">
-                    <a href="#" class="btn btn-success btn-circle btn-sm">
+                  <div class="col-lg-5" style="padding: 0; margin-left: 5px">
+                    <a href="#" onclick="valid_teacher(this)" data-teacher="<%= data[i].idteacher %>" class="btn btn-success btn-circle btn-sm">
                       <i class="fas fa-check"></i>
                     </a>
                   </div>
-                  <div class="col-lg-6" style="padding: 0">
-                    <a href="#" class="btn btn-danger btn-circle btn-sm">
+                  <div class="col-lg-5" style="padding: 0">
+                    <a href="#" onclick="disable_teacher(this)" data-teacher="<%= data[i].idteacher %>" class="btn btn-danger btn-circle btn-sm">
                       <i class="fas fa-trash"></i>
                     </a>
                   </div>
