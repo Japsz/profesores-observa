@@ -1,55 +1,134 @@
 <%- include ../layouts/header.ejs %>
 
-    <div class="container blog-content">
-        <div class="row">
-            <div id="leftframe" class="col-md-6 col-md-offset-3 blog-sidebar">
-                <div class="sidebar-module">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <h3 class="panel-title">Información de Usuario</h3>
+<div class="container blog-content">
+    <div class="row">
+        <form id="form_update_teacher">
+        <div id="leftframe" class="col-md-5 col-md-offset-1 blog-sidebar">
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Información de Usuario</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input class="form-control" id="name" type="text" value="<%= data.name%>" required autofocus>
                         </div>
-                        <div class="panel-body">
-                            <form id="form_update_teacher">
-                                <div class="form-group">
-                                    <label>Nombre</label>
-                                    <input class="form-control" id="name" type="text" value="<%= data.name%>" required autofocus>
-                                </div>
-                                <div class="form-group">
-                                    <label>Nombre de Usuario</label>
-                                    <input class="form-control" id="username" type="text" value="<%= data.username%>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Rut</label>
-                                    <input class="form-control" id="rut" type="text" value="<%= data.rut%>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Mail</label>
-                                    <input class="form-control" id="mail" type="text" value="<%= data.mail%>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Contraseña</label>
-                                    <input class="form-control" id="password" type="password" value="<%= data.password%>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Repita su Contraseña</label>
-                                    <input class="form-control" id="password2" type="password" value="<%= data.password%>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Dirección</label>
-                                    <input class="form-control" id="address" type="text" value="<%= data.address%>" required>
-                                </div>
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Actualizar información <i class="glyphicon glyphicon-pencil"></i></button>
-                            </form>
+                        <div class="form-group">
+                            <label>Nombre de Usuario</label>
+                            <input class="form-control" id="username" type="text" value="<%= data.username%>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Rut</label>
+                            <input class="form-control" id="rut" type="text" value="<%= data.rut%>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Mail</label>
+                            <input class="form-control" id="mail" type="text" value="<%= data.mail%>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Contraseña</label>
+                            <input class="form-control" id="password" type="password" value="<%= data.password%>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Repita su Contraseña</label>
+                            <input class="form-control" id="password2" type="password" value="<%= data.password%>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Dirección</label>
+                            <input class="form-control" id="address" type="text" value="<%= data.address%>" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Fecha de Nacimiento</label>
+                            <input class="form-control" id="b_date" type="date" value="<%= data.birth_date%>" required>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div><!-- /.container -->
+        <div id="leftframe" class="col-md-5 blog-sidebar">
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Privacidad</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h4>Selecciona tu información de usuario que estará pública ante otros usuarios:</h4>
+                        <table class="table table-bordered table-hover table-striped" >
+                        <thead>
+                          <tr>
+                            <th>Información</th>
+                            <th style="text-align: center;">Si</th>
+                            <th style="text-align: center;">No</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Nombre</td>
+                            <td><input class="form-control" id="name1" value="1" name="name" type="radio"></td>
+                            <td><input class="form-control" id="name0" value="0" name="name" type="radio"></td>
+                        </tr>
+                        <tr>
+                            <td>Mail</td>
+                            <td><input class="form-control" id="mail1" value="1" name="mail" type="radio"></td>
+                            <td><input class="form-control" id="mail0" value="0" name="mail" type="radio"></td>
+                        </tr>
+                        <tr>
+                            <td>Rut</td>
+                            <td><input class="form-control" id="rut1" value="1" name="rut" type="radio"></td>
+                            <td><input class="form-control" id="rut0" value="0" name="rut" type="radio"></td>
+                        </tr>
+                        <tr>
+                            <td>Dirección</td>
+                            <td><input class="form-control" id="address1" value="1" name="address" type="radio"></td>
+                            <td><input class="form-control" id="address0" value="0" name="address" type="radio"></td>
+                        </tr>
+                        <tr>
+                            <td>Fecha Nacimiento</td>
+                            <td><input class="form-control" id="b_date1" value="1" name="b_date" type="radio"></td>
+                            <td><input class="form-control" id="b_date0" value="0" name="b_date" type="radio"></td>
+                        </tr>
+                        </tbody>
+                        <tfoot>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tfoot>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-lg btn-success btn-block">Actualizar información <i class="glyphicon glyphicon-pencil"></i></button>
+        </div>
+        </form>
+    </div>
+</div><!-- /.container -->
+
+<style type="text/css">
+    input[type="radio"]{
+        width: 20px;
+        height: 20px;
+        margin-right: 0px;
+        margin-left: 28px;
+    }
+</style>
 
 <script type="text/javascript">
-
+    // public almacena 1 si se muestra y 0 si no, en el orden del sig arreglo
+    var type = ["name", "mail", "rut", "address", "b_date"];
     $(document).ready(function(){
+        var public = "<%=data.public%>".split(",");
+        console.log(public);
+        for(var i=0; i<type.length; i++){
+            if(public[i] == "1"){
+                $("#" + type[i] + "1").attr('checked', 'checked');
+            } else {
+                $("#" + type[i] + "0").attr('checked', 'checked');
+            }
+        }
         $.ajax({
             type: 'POST',
             url: '/teacher/is_login',
@@ -65,6 +144,12 @@
             alert("Las contraseñas no coinciden, intente nuevamente.");
             return;
         } else {
+            var public = $('input[name=name]:checked', '#form_update_teacher').val();
+            public += "," + $('input[name=mail]:checked', '#form_update_teacher').val();
+            public += "," + $('input[name=rut]:checked', '#form_update_teacher').val();
+            public += "," + $('input[name=address]:checked', '#form_update_teacher').val();
+            public += "," + $('input[name=b_date]:checked', '#form_update_teacher').val();
+            console.log(public);
             $.ajax({
                 type: 'POST',
                 data: { 
@@ -73,7 +158,9 @@
                     rut: $("#rut").val(), 
                     mail: $("#mail").val(),
                     password: $("#password").val(),
-                    address: $("#address").val()
+                    address: $("#address").val(),
+                    b_date: $("#b_date").val(),
+                    public: public
                 },
                 url: '/teacher/update_teacher',
                 success: function(data){

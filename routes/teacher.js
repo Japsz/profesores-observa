@@ -102,10 +102,12 @@ router.post('/update_teacher', function(req, res, next) {
             rut: input.rut, 
             mail: input.mail,
             password: input.password,
-            address: input.address
+            address: input.address,
+            birth_date: input.b_date,
+            public: input.public
         };
         req.session.teacherData = data;
-        teacher_model.update_teacher(data, function (err, result) {
+        teacher_model.update_teacher(data, function(err, result) {
             if (err) {
                 console.log(err.message);
             } else {
@@ -163,7 +165,7 @@ router.post('/recover_password', function(req, res, next) {
                     subject: subj, //Asunto del mensaje
                     data: data, //Array con informacion necesaria
                     mails: result[0].mail}; //Array de los correos
-                mail.send_mail(data_mail,function(err) {
+                mail.send_mail(data_mail, function(err) {
                     if(err){
                         console.log(err.message);
                     }

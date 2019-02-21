@@ -114,7 +114,7 @@ router.post('/valid_teacher', function(req, res) {
                             subject: subj, //Asunto del mensaje
                             data: data, //Array con informacion necesaria
                             mails: mails }; //Array de los correos
-                        mail.send_mail(data_mail,function(err) {
+                        mail.send_mail(data_mail, function(err) {
                             if(err){
                                 console.log(err.message);
                             }
