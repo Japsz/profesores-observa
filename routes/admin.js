@@ -1,8 +1,9 @@
 var express = require('express');
 var router = express.Router();
-var send = require('../public/js/sendmail'); //Importar la funcion para enviar mail
+//Importar la funcion para enviar mail
+var mail = require('../public/js/sendmail');
 
-// Modelos
+// Models
 var admin_model = require('../models/admin_model');
 var teacher_model = require('../models/teacher_model');
 
@@ -24,23 +25,6 @@ router.get('/login', function(req, res, next) {
     res.render('admin/login', { title: 'Express' });
 });
 
-//Borrar la session
-router.post('/logout', function(req, res, next) {
-    // console.log(req.session.teacherData);
-    req.session.isAdminLogged = false;
-    req.session.adminData = {};
-    res.send({err:false});
-});
-
-//Handler que carga header y footers
-router.get('/index', function(req, res, next) {
-    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
-       res.render('admin/index');
-    } else {
-        res.send("No tiene acceso al sistema, inicie sesión.");
-    }
-});
-
 //Handler para loguearse como administrador
 router.post('/handler', function(req, res, next) {
     var input = req.body;
@@ -59,6 +43,15 @@ router.post('/handler', function(req, res, next) {
             }
         }
     });
+});
+
+//Handler que carga header y footers
+router.get('/index', function(req, res, next) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+       res.render('admin/index');
+    } else {
+        res.send("No tiene acceso al sistema, inicie sesión.");
+    }
 });
 
 // Inserta los datos de un nuevo profesor
@@ -93,21 +86,42 @@ router.get('/valid_inscription', function(req, res) {
     }
 });
 
-/* Valida las solicitudes de inscripcion (cambia valid a 1 y envia un mail para rellenar datos) */
+/* Valida las solicitudes de inscripcion (cambia valid a 3 y envia un mail para rellenar datos) */
 router.post('/valid_teacher', function(req, res) {
     if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
         var input = JSON.parse(JSON.stringify(req.body));
         var data = {
             idteacher: input.idteacher,
-            valid: 1
+            valid: 3
         };
         teacher_model.update_valid(data, function(err,data){
             if(err){
                 console.log(err.message);
                 res.send("error");
             } else {
-                // Enviar correo afirmando la solicitud !!!!!!
-                res.send("ok");
+                //Variables para envio de correo, data_mail debe tener las mismas variables
+                teacher_model.show_teacher(input.idteacher, function (err, result) {
+                    if (err) {
+                        console.log(err.message);
+                    } else {
+                        // Envia correo afirmando la solicitud con link a recuperar los datos
+                        console.log(result);
+                        var data = new Array(input.idteacher);
+                        var mails = new Array(result[0].mail); //Debe ser array!
+                        var subj = "Estimad@ usuario de Observa Profesores";
+                        var data_mail = {
+                            view: "views\\admin\\mail_valid_teacher.ejs", //Path
+                            subject: subj, //Asunto del mensaje
+                            data: data, //Array con informacion necesaria
+                            mails: mails }; //Array de los correos
+                        mail.send_mail(data_mail,function(err) {
+                            if(err){
+                                console.log(err.message);
+                            }
+                        });
+                        res.send("ok");
+                    }
+                });
             }
         });
     } else {
@@ -135,5 +149,14 @@ router.post('/disable_teacher', function(req, res) {
         res.redirect('/administrador/login');
     }
 });
+
+// Salir de la session
+router.post('/logout', function(req, res, next) {
+    // console.log(req.session.teacherData);
+    req.session.isAdminLogged = false;
+    req.session.adminData = {};
+    res.send({err:false});
+});
+
 
 module.exports = router;

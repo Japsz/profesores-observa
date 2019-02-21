@@ -121,7 +121,8 @@ teacher_model.check_email = function(email,callback){
 /* Valid:
   0: solicitando inscripcion 
   1: usuario validado y con acceso al sistema
-  2: usuario inhabilitado, sin acceso al sistema */
+  2: usuario inhabilitado, sin acceso al sistema 
+  3: Usuario validado pero que aun no completa su info */
 teacher_model.update_valid = function(data, callback){
   if(connection){
     var sql = 'UPDATE teacher SET ? WHERE idteacher=' + connection.escape(data.idteacher);

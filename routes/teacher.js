@@ -1,7 +1,10 @@
 var express = require('express');
 var router = express.Router();
+//Importar la funcion para enviar mail
+var mail = require('../public/js/sendmail');
+
+// Models
 var teacher_model = require("../models/teacher_model");
-var send = require('../public/js/sendmail'); //Importar la funcion para enviar mail
 
 /* Inicializa variables session y renderiza mainframe */
 router.get('/', function(req, res, next) {
@@ -15,7 +18,6 @@ router.get('/', function(req, res, next) {
 
 /* Verifica si esta logeado para mostrar info de teacher en nav */
 router.post('/is_login', function(req, res, next) {
-    console.log(req.session.teacherData.idteacher);
     if(req.session.isteacherLogged == true){
         teacher_model.show_teacher(req.session.teacherData.idteacher, function(err, data) {
             if(err){
@@ -97,6 +99,7 @@ router.post('/update_teacher', function(req, res, next) {
             idteacher: req.session.teacherData.idteacher,
             name: input.name, 
             username: input.username, 
+            rut: input.rut, 
             mail: input.mail,
             password: input.password,
             address: input.address
@@ -113,6 +116,35 @@ router.post('/update_teacher', function(req, res, next) {
     }
 });
 
+/* Completa la información del usuario con inscripcion validada */
+router.get('/complete_teacher_data/:idteacher', function(req, res, next) {
+    teacher_model.show_teacher(req.params.idteacher, function (err, data) {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log(data);
+            if(data[0].valid == 3 && data[0].password == null && data[0].username == null){
+                req.session.teacherData = data[0];
+                req.session.isteacherLogged = true;
+                data[0].valid = 1;
+                console.log(data[0]);
+                // Cambia valid a 1
+                teacher_model.update_valid(data[0], function(err,data){
+                    if(err){
+                        console.log(err.message);
+                        res.send("error");
+                    } else {
+                        //Redirecciona a la vista de actualizar info de usuario
+                        res.redirect("/teacher/info_teacher");
+                    }
+                });
+            } else {
+                res.redirect("/");
+            }
+        }
+    });
+});
+
 /* Envia mail a usuario con los datos de su cuenta */
 router.post('/recover_password', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));
@@ -125,13 +157,13 @@ router.post('/recover_password', function(req, res, next) {
                 var data = new Array(result[0].username, result[0].password );
                 console.log(data);
                 var mails = new Array(result[0].mail); //Debe ser array!
-                var subj = "Estimado usuario de Observa Ciudadanía";
+                var subj = "Estimado usuario de Observa Profesores";
                 var data_mail = {
                     view: "views\\teacher\\mail_recover_password.ejs", //Path
                     subject: subj, //Asunto del mensaje
                     data: data, //Array con informacion necesaria
                     mails: result[0].mail}; //Array de los correos
-                send.send_mail(data_mail,function(err) {
+                mail.send_mail(data_mail,function(err) {
                     if(err){
                         console.log(err.message);
                     }
@@ -155,6 +187,7 @@ router.post('/inscription', function(req, res, next) {
         // 0 En proceso de inscripcion
         // 1 Usuario válido(con acceso a sesion)
         // 2 Usuario deshabilitado(sin acceso a sesion)
+        // 3 Usuario validado pero que aun no completa su info
     };
     teacher_model.show_teacher_by_mail(input.mail, function(err, result){
         if (err) {

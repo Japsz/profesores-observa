@@ -13,10 +13,10 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-var send = {};
+var mail = {};
 
 // Funcion para enviar mails
-send.send_mail = function(data, res){
+mail.send_mail = function(data, res){
     console.log(__dirname.split("public")[0] + data.view);
 	ejs.renderFile(__dirname.split("public")[0] + data.view , { data: data.data }, function (err, html) {
         if(err) { console.log(err);
@@ -38,4 +38,4 @@ send.send_mail = function(data, res){
 };
 
 //exportamos el objeto
-module.exports = send;
+module.exports = mail;
