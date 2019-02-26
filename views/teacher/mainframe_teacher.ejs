@@ -1,14 +1,102 @@
-<%- include layouts/header.ejs %>
+<%- include ../layouts/header.ejs %>
 
 <!-- Esta es la vista principal donde se renderiza, contiene las 2 columnas laterales
 y la columna central mainframe -->
 
-<div class="container blog-content" style="width: 85%">
+<div class="container blog-content" style="width: 90%">
 <!-- class="visible-xs-block" para el responsive, permite hacer que una clase no se vea en cierto tamaño de display.  -->
     <div class="row">
+        <!-- Columna de la izquierda -->
+        <div id="leftframe" class="col-sm-3 blog-sidebar">
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h3 style="color: #FFCC00; font-weight: 400; margin-top: 0"> ¡Bienvenido/a!</h3>
+                        <div class="row">
+                            <div class="col-md-4" style="padding: 5px; margin-left: 5%">
+                                <a href="#">
+                                    <img src="/icons/avatar.png" class="img-circle" style="width: 100%">
+                                </a>
+                            </div>
+                            <div class="col-md-7" style="padding: 0">
+                                <h5 style="margin-bottom: 10px; margin-top: 20px; font-size: 20px"><%=data.name%></h5>
+                                <h5>Institucion AIEP</h5>
+                            </div>
+                        </div>
+                        <div class="btn-group-vertical" role="group" style="width: 100%">
+                            <div class="row" style="margin-left: 4%">
+                                <a class="btn btn-default" style="width: 220px">
+                                    <div class="col-sm-3" style="padding-left: 5%">
+                                        <img src="/icons/RRCC web-16.png" class="img-rounded" style="width: 60px">
+                                    </div>
+                                    <div class="col-sm-7" style="margin-top: 10%;">
+                                        <p>Mis recursos</p>
+                                    </div>
+                                </a>
+                                <a class="btn btn-default" style="width: 220px">
+                                    <div class="col-sm-3">
+                                        <img src="/icons/RRCC web-17.png" class="img-rounded" style="width: 50px">
+                                    </div>
+                                    <div class="col-sm-7" style="margin-top: 7%;">
+                                        <p>Mis comentarios</p>
+                                    </div>
+                                </a>
+                                <a class="btn btn-default" style="width: 220px">
+                                    <div class="col-sm-3">
+                                        <img src="/icons/RRCC web-18.png" class="img-rounded" style="width: 50px">
+                                    </div>
+                                    <div class="col-sm-7" style="margin-top: 7%;">
+                                        <p>Mis revisiones</p>
+                                    </div>
+                                </a>
+                                <a class="btn btn-default" style="width: 220px">
+                                    <div class="col-sm-3">
+                                        <img src="/icons/RRCC web-19.png" class="img-rounded" style="width: 50px">
+                                    </div>
+                                    <div class="col-sm-7" style="margin-top: 7%;">
+                                        <p>Mis eventos</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-        <!-- Columna izquierda -->
-        <div class="col-sm-7 col-sm-offset-1">
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <h5 style="text-align: center"><img src="/icons/RRCC web-20.png" class="img-circle img_40">Crea y comparte</h5>
+                        <!-- Barra -->
+                        <div class="progress" style="height: 3px">
+                            <div class="progress-bar" role="progressbar" style="width:100%">
+                            </div>
+                        </div>
+                        <div class="row" style="margin-left: 4%">
+                            <a class="btn btn-default" onclick="new_resource()" style="width: 220px">
+                                <div class="col-sm-3" style="padding-left: 5%">
+                                    <img src="/icons/RRCC web-15.png" class="img-rounded" style="width: 60px">
+                                </div>
+                                <div class="col-sm-7" style="margin-top: 10%;">
+                                    <p>Crear recurso</p>
+                                </div>
+                            </a>
+                            <a class="btn btn-default" style="width: 220px">
+                                <div class="col-sm-3" style="padding-left: 5%">
+                                    <img src="/icons/RRCC web-14.png" class="img-rounded" style="width: 60px">
+                                </div>
+                                <div class="col-sm-7" style="margin-top: 10%;">
+                                    <p>Crear evento</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna del medio -->
+        <div class="col-sm-6" >
             <div class="blog-main">
                 <div class="row">
                     <!-- Filtro -->
@@ -83,16 +171,16 @@ y la columna central mainframe -->
             </div>
         </div>
 
-
         <!-- Columna derecha -->
-        <div class="col-sm-4 blog-sidebar">
+        <div class="col-sm-3 blog-sidebar">
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
                         <h5><img src="/icons/RRCC web-16.png" class="img-circle" style="width: 60px; height: 60px">Recursos de la plataforma</h5>
                         <!-- Barra -->
                         <div class="progress" style="height: 3px">
-                            <div class="progress-bar" role="progressbar" style="width:100%"></div>
+                            <div class="progress-bar" role="progressbar" style="width:100%">
+                            </div>
                         </div>
                         <div class="row" style="margin-top: 5%">
                             <div class="col-sm-6">
@@ -182,4 +270,4 @@ y la columna central mainframe -->
 
 </div><!-- /.container -->
 
-<%- include layouts/user_footer.ejs %>
+<%- include ../layouts/user_footer.ejs %>
