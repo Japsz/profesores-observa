@@ -13,6 +13,7 @@
                     <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                     <div class="blog-post-content">
                         <h2 class="blog-post-title"><%=title%></h2>
+                        <button class="btn btn-primary" onclick="edit_resource(<%=idresource%>)" style="float: right" >Test</button>
                         <p><%=description%></p>
                         <p><%=text%></p>
                     </div>
@@ -54,12 +55,13 @@
                 </div>
             </div>
         </section>
-        <!-- Aca va insertar comentario y los comentarios existentes del recurso. -->
         <div id="view_comment">
-            <!-- Todo sobre comentarios. -->
+            <!-- Aca va insertar comentario y los comentarios existentes del recurso. -->
         </div>
     </div>
 </div>
+
+<%- include modal/edit_resource.ejs %>
 
 <script type="text/javascript">
     $(document).ready(function(){
@@ -71,4 +73,8 @@
             }
         });
     });
+
+    function edit_resource(idresource) {
+        $('#modal_edit_resource').modal('toggle');
+    }
 </script>
