@@ -25,7 +25,7 @@ y la columna central mainframe -->
                         </div>
                         <div class="btn-group-vertical" role="group" style="width: 100%">
                             <div class="row" style="margin-left: 4%">
-                                <a class="btn btn-default" style="width: 220px">
+                                <a class="btn btn-default" onclick="resources_by_teacher()" style="width: 220px">
                                     <div class="col-sm-3" style="padding-left: 5%">
                                         <img src="/icons/RRCC web-16.png" class="img-rounded" style="width: 60px">
                                     </div>
@@ -33,7 +33,7 @@ y la columna central mainframe -->
                                         <p>Mis recursos</p>
                                     </div>
                                 </a>
-                                <a class="btn btn-default" style="width: 220px">
+                                <a class="btn btn-default" onclick="resources_by_comment_teacher()" style="width: 220px">
                                     <div class="col-sm-3">
                                         <img src="/icons/RRCC web-17.png" class="img-rounded" style="width: 50px">
                                     </div>
@@ -41,7 +41,7 @@ y la columna central mainframe -->
                                         <p>Mis comentarios</p>
                                     </div>
                                 </a>
-                                <a class="btn btn-default" style="width: 220px">
+                                <a class="btn btn-default" onclick="resources_by_review()" style="width: 220px">
                                     <div class="col-sm-3">
                                         <img src="/icons/RRCC web-18.png" class="img-rounded" style="width: 50px">
                                     </div>
@@ -166,8 +166,10 @@ y la columna central mainframe -->
                     </div>
                 </div>
             </div>
+
+            <!-- Insertamos aca todos los recursos, recordar id mainframe -->
             <div class="blog-main" id="mainframe">
-                <!-- Insertamos aca todos los recursos, recordar id mainframe -->
+
             </div>
         </div>
 
@@ -269,5 +271,45 @@ y la columna central mainframe -->
     </div><!-- /.row -->
 
 </div><!-- /.container -->
+
+<script type="text/javascript">
+
+    // Buscar recursos del usuario
+    function resources_by_teacher() {
+        $.ajax({
+            type: 'POST',
+            url: "/resource/resources_by_teacher",
+            success: function (html) {
+                $("#mainframe").empty();
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Buscar recursos del usuario
+    function resources_by_comment_teacher() {
+        $.ajax({
+            type: 'POST',
+            url: "/resource/resources_by_comment_teacher",
+            success: function (html) {
+                $("#mainframe").empty();
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Buscar recursos del usuario
+    function resources_by_review() {
+        $.ajax({
+            type: 'POST',
+            url: "/resource/resources_by_review",
+            success: function (html) {
+                $("#mainframe").empty();
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+</script>
 
 <%- include ../layouts/user_footer.ejs %>

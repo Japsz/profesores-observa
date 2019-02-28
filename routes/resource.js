@@ -22,7 +22,7 @@ function validate(){
     //Para tratar lo del usuario. O esta misma funcion podria retornarlo.
     return true;
 }
-// Esta ruta consigue los últimos materiales subidos
+// Esta ruta consigue los últimos recursos subidos
 router.get('/', function(req, res, next){
     req.getConnection(function (err, connection) {
         if (err) {console.log(err);}
@@ -37,7 +37,7 @@ router.get('/', function(req, res, next){
 });
 
 router.get('/:idresource', function(req, res){
-    //Obtener material idresource
+    //Obtener recurso idresource
     req.getConnection(function (err, connection){
         if (err) {console.log(err);}
         connection.query('SELECT * FROM resource WHERE idresource = ?',
@@ -49,6 +49,53 @@ router.get('/:idresource', function(req, res){
     });
 });
 
+// Muestra los recursos del teacher
+router.post('/resources_by_teacher', function(req, res){
+    if(req.session.isteacherLogged == true){
+        resource_model.resources_by_teacher(req.session.teacherData.idteacher, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
+});
+
+// Muestra los recursos en los que ha comentado el teacher
+router.post('/resources_by_comment_teacher', function(req, res){
+    if(req.session.isteacherLogged == true){
+        resource_model.resources_by_comment_teacher(req.session.teacherData.idteacher, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
+});
+
+// Muestra los recursos con reseña del teacher
+router.post('/resources_by_review', function(req, res){
+    if(req.session.isteacherLogged == true){
+        resource_model.resources_by_review(req.session.teacherData.idteacher, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
+});
 
 //Esta ruta consigue los materiales que estén ligado a 'idtag'
 router.get('/search_tags/:idtag', function(req, res, next) {
@@ -66,7 +113,7 @@ router.post('/add', function(req, res) {
             let body = req.body;
             //Creamos un recurso.
             connection.query('INSERT INTO resource (idteacher, title, description, text) VALUES (?)',
-                [[body.idteacher, body.title, body.description, body.text]],    //TODO Cambiar idteacher
+                [[ req.session.teacherData.idteacher, body.title, body.description, body.text]],    //TODO Cambiar idteacher
                 function (err, result) {
                     if (err) {console.log(err);}
                     let idresource = result.insertId;   //Sacamos idresource de lo que insertamos.
