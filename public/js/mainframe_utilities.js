@@ -11,16 +11,7 @@ function show_resources() {
     });
 }
 
-function show_a_resource(idresource) {
-    $.ajax({
-        type: 'GET',
-        url: "/resource/"+idresource,
-        success: function (html) {
-            $("#mainframe").empty();
-            $("#mainframe").append(html);
-        }
-    });
-}
+
 
 //Abrir modal crear nuevo recurso
 function new_resource() {

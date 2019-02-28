@@ -1,6 +1,6 @@
 <!-- Informacion necesaria para crear un recurso base. -->
-<div id="modal_new_resource" class="modal fade">
-    <div class="modal-dialog modal-lg">
+<div id="modal_edit_resource" class="modal fade">
+    <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" style="padding: 5px 5px">
                 <span aria-hidden="true">&times;</span>
@@ -9,7 +9,7 @@
             <div class="modal-header ">
                 <div class="row">
                     <div class="col-md-6">
-                        <h3 class="modal-title">Formulario agregar nuevo Recurso</h3>
+                        <h3 class="modal-title">Editar recurso</h3>
                     </div>
                     <div class="col-md-6">
                         <div class="progress">
@@ -22,46 +22,28 @@
             <form id="resource_form" class="form-horizontal style-form">
                 <div class="modal-body">
                     <div class="row">
+                        <input name="idresource" type="hidden" value="<%=idresource%>">
+
                         <div class="col-sm-6" style="padding-right: 3px">
                             <div class="form-group">
                                 <label for="title">Titulo</label>
                                 <input name="title" type="text" class="form-control"
-                                       placeholder="¿Cual es el titulo del recurso?">
+                                       placeholder="¿Cual es el titulo del recurso?"
+                                       value="<%=title%>">
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            <!-- <div class="form-group">
-                                <label for="author">Autor</label>
-                                <input name="author" type="text" class="form-control"
-                                       placeholder="Si el campo esta vacio, supondremos que tu lo eres.">
-                            </div> -->
-                        </div>
-                        <div class="form-group col-sm-12">
-                            <label for="title">Tags</label>
-                            <input name="tags" type="text" class="form-control"
-                                   placeholder="¿Algun tags que caracterice tu recurso? (separados por comas)">
                         </div>
                         <div class="form-group col-sm-12">
                             <label for="description">Descripcion</label>
                             <textarea name="description" class="form-control" rows="3" maxlength="255"
-                                      placeholder="Descripcion breve de tu Recurso. (Max. 255 caracteres)"></textarea>
+                                      placeholder="Descripcion breve de tu Recurso. (Max. 255 caracteres)"><%=description%></textarea>
                         </div>
-                        <div class="col-sm-12">
-                            <label for="description">Texto de Columna</label>
-                            <textarea name="text" class="form-control" rows="5"
-                                      placeholder="¡Aca puedes explayarte cuanto quieras sobre tu aporte!"></textarea>
-                        </div>
-                        <div class="col-sm-8 col-sm-offset-2">
-                            <label>Subir Anexos, esta imagen sera la portada del recurso.</label>
-                            <input name="frontfile" type="file">
-                        </div>
-                        <div class="row col-sm-8 col-sm-offset-2">
-                            <label>Subir Anexos 2</label>
-                            <input name="file1" type="file">
+                        <div class="form-group col-sm-12">
+                            <label for="tags">Tags</label>
+                            <input name="tags" type="text" class="form-control"
+                                   placeholder="¿De que habla tu material?"
+                                   value="<%=tags%>">
                         </div>
                     </div>
-
-                </div>
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary btn-raised">Continuar</button>
                     <button type="button" class="btn btn-secondary btn-raised" data-dismiss="modal">Cancelar</button>
@@ -86,11 +68,11 @@
     $('#resource_form').submit(function(e) {
         e.preventDefault();
         $(this).ajaxSubmit({
-            url: '/resource/add',
+            url: '/resource/edit',
             type: 'POST',
-            data: {idteacher : 1}, //TODO Hay que pasar idteacher o quizas no.
+            data: {idteacher: 1}, //TODO Hay que pasar idteacher o quizas no.
             complete: function (xhr) {
-                $('#modal_new_resource').modal('hide');
+                $('#modal_edit_resource').modal('hide');
                 console.log(xhr);
             }
         });
