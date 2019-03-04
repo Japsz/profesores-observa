@@ -13,7 +13,13 @@ router.get('/', function(req, res, next) {
         req.session.isteacherLogged = false;
         req.session.teacherData = {};
     }
-    res.render('mainframe', {});
+    if(req.session.isteacherLogged == true){
+        // Si esta logeado va al mainframe con todas las funcionalidades
+        res.render('teacher/mainframe_teacher', {data: req.session.teacherData});
+    } else {
+        // Si no, lo redirige a una vista donde solo puede ver el recurso sin detalles
+        res.render('mainframe', {});
+    }
 });
 
 /* Verifica si esta logeado para mostrar info de teacher en nav */
@@ -102,10 +108,12 @@ router.post('/update_teacher', function(req, res, next) {
             rut: input.rut, 
             mail: input.mail,
             password: input.password,
-            address: input.address
+            address: input.address,
+            birth_date: input.b_date,
+            public: input.public
         };
         req.session.teacherData = data;
-        teacher_model.update_teacher(data, function (err, result) {
+        teacher_model.update_teacher(data, function(err, result) {
             if (err) {
                 console.log(err.message);
             } else {
@@ -116,7 +124,7 @@ router.post('/update_teacher', function(req, res, next) {
     }
 });
 
-/* Completa la información del usuario con inscripcion validada */
+/* Redirije a completar la información del usuario cuando la inscripcion es validada */
 router.get('/complete_teacher_data/:idteacher', function(req, res, next) {
     teacher_model.show_teacher(req.params.idteacher, function (err, data) {
         if (err) {
@@ -163,7 +171,7 @@ router.post('/recover_password', function(req, res, next) {
                     subject: subj, //Asunto del mensaje
                     data: data, //Array con informacion necesaria
                     mails: result[0].mail}; //Array de los correos
-                mail.send_mail(data_mail,function(err) {
+                mail.send_mail(data_mail, function(err) {
                     if(err){
                         console.log(err.message);
                     }

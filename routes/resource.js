@@ -4,94 +4,162 @@ var connection  = require('express-myconnection');
 var mysql = require('mysql');
 var resource_model = require('../models/resource_model');
 
-router.use(
-    connection(mysql,{
-        host: '127.0.0.1',
-        user: 'prof',
-        password : 'belita123',
-        port : 3306,
-        database:'profesapp'
-    },'pool')
-);
-
 //Función Para verificar si el usuario que pide la información puede acceder a ella.
 //¿¿ Esto no deberia ser de usuario ??
-function validate(){
-    //TODO validar al usuario conectado.
-    // El idteacher deberia guardarse en una variable de sesion.
-    //Para tratar lo del usuario. O esta misma funcion podria retornarlo.
-    return true;
+function validate(req){
+    if(req.session.isteacherLogged){
+        return req.session.teacherData.idteacher;
+    }
+    else return null;
 }
+
 // Esta ruta consigue los últimos materiales subidos
-router.get('/', function(req, res, next){
-    req.getConnection(function (err, connection) {
+router.get('/', function(req, res){
+	idteacher = validate(req);
+	resource_model.get_resources(null, function (err, results) {
+		if (err) {console.log(err);}
+		results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
+		idresources = [];
+		for (let result in results) {
+			idresources.push(results[result].idresource);
+		}
+		resource_model.get_tag_idresource(idresources, function (err, tags) {
+			tags = JSON.parse(JSON.stringify(tags));
+			tagsLst = [];
+			idresTags = {};
+            if(tags.length > 0){
+                idres = tags[0].idresource;
+                for (let tag in tags){
+                    if (tags[tag].idresource != idres || tag == (tags.length-1)){
+                       idresTags[idres] = tagsLst;
+                       idres = tags[tag].idresource;
+                       tagsLst = [];
+                    }
+                    tagsLst.push(tags[tag].tag);
+                }
+                //Enviamos los recursos y los tags de aquellos recursos separados.
+                //Para adquirir un tag es tags[idresource]
+                res.render('resource/show_resources', {results: results, tags: idresTags, idteacher: idteacher});
+            } else {
+                res.render('resource/show_resources', {results: results, tags: idresTags, idteacher: idteacher});
+            }
+		});
+	});
+});
+
+//Obtener material idresource
+router.get('/get/:idresource', function(req, res){
+    resource_model.get_resource(req.params.idresource, function(err, results) {
         if (err) {console.log(err);}
-        query = 'SELECT * FROM resource ' +
-                'ORDER BY date DESC';
-        connection.query(query, 0, function (err, results) {
-            if (err) {console.log(err);}
-            results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
-            res.render('resource/show_resources', {results: results});
+        results = JSON.parse(JSON.stringify(results[0])); //Para quitar el RowDataPacket
+        resource_model.get_tag_idresource(results.idresource, function (err, tags) {
+            tags = JSON.parse(JSON.stringify(tags));
+            tagsLst = [];
+            for (tag in tags){
+                tagsLst.push(tags[tag].tag);
+            }
+            results.tags = tagsLst;
+            console.log(results);
+            res.render('resource/show_a_resource', results);
         });
+
     });
 });
 
-router.get('/:idresource', function(req, res){
-    //Obtener material idresource
-    req.getConnection(function (err, connection){
-        if (err) {console.log(err);}
-        connection.query('SELECT * FROM resource WHERE idresource = ?',
-           req.params.idresource, function (err, results) {
-           if (err) {console.log(err);}
-           results = JSON.parse(JSON.stringify(results[0])); //Para quitar el RowDataPacket
-           res.render('resource/show_a_resource', results);
-       });
-    });
+// Muestra los recursos del teacher
+router.post('/resources_by_teacher', function(req, res){
+    if(req.session.isteacherLogged == true){
+        resource_model.resources_by_teacher(req.session.teacherData.idteacher, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
 });
 
+// Muestra los recursos en los que ha comentado el teacher
+router.post('/resources_by_comment_teacher', function(req, res){
+    if(req.session.isteacherLogged == true){
+        resource_model.resources_by_comment_teacher(req.session.teacherData.idteacher, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
+});
+
+// Muestra los recursos con reseña del teacher
+router.post('/resources_by_review', function(req, res){
+    if(req.session.isteacherLogged == true){
+        resource_model.resources_by_review(req.session.teacherData.idteacher, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
+});
 
 //Esta ruta consigue los materiales que estén ligado a 'idtag'
 router.get('/search_tags/:idtag', function(req, res, next) {
     res.render('material/ver_todos');
 });
+
 //Esta ruta consigue los materiales que tengan una palabra/texto (query) específico en su título o descripción
 router.post('/search_query', function(req, res, next) {
     res.render('material/ver_todos');
 });
+
 // Esta ruta añade un nuevo material
 router.post('/add', function(req, res) {
-    //TODO agregar los tags.
-    if(validate()){
-        req.getConnection(function (err,connection) {
-            let body = req.body;
-            //Creamos un recurso.
-            connection.query('INSERT INTO resource (idteacher, title, description, text) VALUES (?)',
-                [[body.idteacher, body.title, body.description, body.text]],    //TODO Cambiar idteacher
-                function (err, result) {
-                    if (err) {console.log(err);}
-                    let idresource = result.insertId;   //Sacamos idresource de lo que insertamos.
-                    console.log('Se ha insertado '+idresource);
-
-                    //Si hay archivos, los guardamos en el servidor y el nombre en la BD.
-                    //Formato direccion de guardado 'public/uploaded-files/<idteacher>/<filename>
-                    if (req.files){
-                        for (let key in req.files) {
-                            let filename = req.files[key].name;
-                            req.files[key].mv('public/uploaded-files/1/'+idresource+'/'+filename);//TODO Ese 1 debe ser idteacher.
-                            connection.query('INSERT INTO file (idresource, filename) VALUES (?)',
-                                [[idresource,filename]],
-                                function (err, result) {
-                                    if (err) {console.log(err);}
-                                    console.log('Se ha insertado un file.');
-                                }
-                            );
-                        }
-                    }
+    if (validate()) {
+        let data = {
+            resource: [req.body.idteacher, req.body.title, req.body.description, req.body.text],
+            files: req.files,
+            tags: req.body.tags.split(',')
+        };
+        resource_model.new_resource(data.resource, function (err, results) {
+            data.insertId = results.insertId;
+            for (tag in data.tags) {
+                resource_model.new_resource_tag([results.insertId, data.tags[tag]], function (err, result) {
+                    console.log('Se ha creado un nuevo resource tag')
+                });
+            }
+            if (data.files) {
+                for (key in req.files) {
+                    file = req.files[key];
+                    filename = file.name;
+                    //TODO ¿Si ya existe un archivo con ese nombre en la carpeta?
+                    file.mv('public/uploaded-files/' + req.session.teacherData.idteacher + '/' + idresource + '/' + filename);
+                    resource_model.new_file([results.insertId, filename], function (err, results) {
+                        console.log('Se ha insertado ' + filename);
+                    });
                 }
-            );
+            }
         });
+        res.send('Creado!');
     }
-    res.send('Creado!');
+});
+
+router.get('/deactivate', function (req, res) {
+    resource_model.deactivate(req.body.idresource, function (err, results) {
+        console.log('desactivando?');
+        res.send('Desactivado!');
+    });
 });
 
 
