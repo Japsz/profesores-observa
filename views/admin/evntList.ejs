@@ -1,0 +1,111 @@
+<div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800">Eventos</h1>
+</div>
+<div class="row">
+    <div class="col-md-12 bg-dark">
+        <div class="btn-group">
+            <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="month">Mes</a>
+            <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year">Año</a>
+            <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week">Semana</a>
+            <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day">Día</a>
+        </div>
+    </div>
+    <div class="col-md-12 bg-primary">
+        <div class="d-inline">
+            <a onclick="navegar(this)" class="btn btn-default text-white" data-calendar-nav="prev"><i class="fa fa-caret-left"></i></a>
+        </div>
+        <div class="d-inline-block"><h5 id="calendarTitle" class="text-center text-white "></h5></div>
+        <div class="d-inline">
+            <a onclick="navegar(this)" class="btn btn-default float-right text-white" data-calendar-nav="next"><i class="fa fa-caret-right"></i></a>
+        </div>
+    </div>
+    <div class="col-md-12">
+        <div id="calendar"></div>
+    </div>
+</div>
+<div class="row">
+</div>
+<link rel="stylesheet" href="/css/calendar.css">
+<script type="text/javascript" src="/js/vendor/underscore-min.js"></script>
+<script type="text/javascript" src="/js/calendar.js"></script>
+<script type="text/javascript" src="/js/language/es-MX.js"></script>
+<script type="text/javascript" src="/js/jstz.min.js"></script>
+<!-- Evnt Modal-->
+<div class="modal fade" id="evntModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Evento</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body"></div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+        var options = {
+            tmpl_path: '/tmpls/',
+            language: "es-MX",
+            tmpl_cache: false,
+            events_source: "/calendar/calendarquery",
+            view: 'month',
+            modal: "#evntModal",
+            modal_type: "ajax",
+            onAfterEventsLoad: function(events) {
+                if(!events) {
+                    return;
+                }
+                var list = $('#eventlist');
+                list.html('');
+
+                $.each(events, function(key, val) {
+                    list.append('<li><a href="' + val.url + '">' + val.title + '</a></li>');
+                });
+            },
+            onAfterViewLoad: function(view) {
+                $("#calendarTitle").text(this.getTitle());
+                $('.btn-group button').removeClass('active');
+                $('button[data-calendar-view="' + view + '"]').addClass('active');
+            },
+            classes: {
+                months: {
+                    general: 'label'
+                }
+            }
+        };
+        var calendar = $('#calendar').calendar(options);
+
+        function navegar(esto) {
+            var $this = $(esto);
+            calendar.navigate($this.data('calendar-nav'));
+        };
+
+        function vista(esto) {
+            var $this = $(esto);
+            calendar.view($this.data('calendar-view'));
+        };
+        $('#first_day').change(function(){
+            var value = $(this).val();
+            value = value.length ? parseInt(value) : null;
+            calendar.setOptions({first_day: value});
+            calendar.view();
+        });
+        $('#language').change(function(){
+            calendar.setLanguage($(this).val());
+            calendar.view();
+        });
+
+        $('#events-in-modal').change(function(){
+            var val = $(this).is(':checked') ? $(this).val() : null;
+            calendar.setOptions({modal: val});
+        });
+        $('#events-modal .modal-header, #events-modal .modal-footer').click(function(e){
+            //e.preventDefault();
+            //e.stopPropagation();
+        });
+</script>

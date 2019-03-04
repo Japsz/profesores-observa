@@ -70,7 +70,25 @@ $("#newTeacherForm").on('submit',function(e){
     });
     return false;
 });
-
+// Agrega un profesor nuevo, lo envia al controlador
+$("#newEvntForm").on('submit',function(e){
+    e.preventDefault();
+    var data = {};
+    $("#newEvntForm input").each(function (idx) {
+        data[$(this).attr("name")] = $(this).val();
+    });
+    data.summary = $("#newEvntSummary").val();
+    ajax_send(this,"","custom",data,function (res) {
+        console.log(res.data);
+        if(res.err){
+            alert("Error al crear el evento");
+        } else {
+            $("#modalNewEvnt").modal('toggle');
+            ajax("/administrador/listEvnt");
+        }
+    });
+    return false;
+});
 // Habilita el profesor
 function valid_teacher(yo){
     $.ajax({

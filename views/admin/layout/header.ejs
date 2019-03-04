@@ -71,7 +71,20 @@
                 </div>
             </div>
         </li>
-
+        <!-- Nav Item - Eventos -->
+        <li class="nav-item">
+            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseThree" aria-expanded="true" aria-controls="collapseThree">
+                <i class="fas fa-fw fa-cog"></i>
+                <span>Eventos</span>
+            </a>
+            <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
+                <div class="bg-white py-2 collapse-inner rounded">
+                    <h6 class="collapse-header">Eventos</h6>
+                    <a class="collapse-item" href="#" data-target="#modalNewEvnt" data-toggle="modal">Crear +</a>
+                    <a class="collapse-item" href="#" onclick="ajax('/administrador/listEvnt')">Ver</a>
+                </div>
+            </div>
+        </li>
     </ul>
     <!-- End of Sidebar -->
 

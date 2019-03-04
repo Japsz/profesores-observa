@@ -1,0 +1,44 @@
+<div class="jumbotron">
+    <div class="container">
+        <div class="col-md-12">
+            <h3><%=data.summary%></h3>
+            <p><%=data.description%></p>
+        </div>
+        <div class="col-md-12">
+            <% if(self == "noResponse"){%>
+            <div class="btn-group">
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{'idgEvnt': '<%=data.id%>','newStatus':'accepted'},function(data){$('#evntModalBody').html(data)})" data-url="/calendar/updAttendee" class="btn btn-success" >+ Asistiré</a>
+                <a href="#attCollapse" class="btn btn-primary" data-toggle="collapse"aria-expanded="false" aria-controls="attCollapse">Ver Asistentes</a>
+            </div>
+            <%} else {%>
+            <div class="btn-group pull-right">
+                <a href="#" data-url="/calendar/updAttendee/<%=data.id%>/accepted" class="btn btn-success" <%if(self == "accepted"){%>active<%}%>">Asistiré</a>
+                <a href="#" data-url="/calendar/updAttendee/<%=data.id%>/tentative" class="btn btn-warning <%if(self == "tentative"){%>active<%}%>">Quizás Asista</a>
+                <a href="#" data-url="/calendar/updAttendee/<%=data.id%>/declined" class="btn btn-danger <%if(self == "declined"){%>active<%}%>">No Asistiré</a>
+            </div>
+            <%}%>
+        </div>
+        <div class="col-md-12 collapse" id="attCollapse">
+            <div class="well">
+                <h4>Asistentes:</h4>
+                <% if(attendees.si.length){
+                attendees.si.map(function(att,i){%>
+                <div class="col-md-4 col-sm-6 col-xs-12"><%= att.name || att.username || att.mail %></div>
+                <%});
+                } else {%>
+                <div>No hay Confirmados</div>
+                <%}%>
+            </div>
+            <div class="well">
+                <h4>Quizás Asista:</h4>
+                <% if(attendees.talvez.length){
+                attendees.talvez.map(function(att,i){%>
+                <div><%= att.name%></div>
+                <%});
+                } else {%>
+                <div>No hay Confirmados</div>
+                <%}%>
+            </div>
+        </div>
+    </div>
+</div>

@@ -37,8 +37,27 @@ y la columna central mainframe -->
         <!-- Columna derecha -->
         <div class="col-sm-3 blog-sidebar">
             <div class="sidebar-module">
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Buscar">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="col-md-12">
+                            <div class="btn-group">
+                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="month">Mes</a>
+                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year">Año</a>
+                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week">Semana</a>
+                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day">Día</a>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="d-inline">
+                                <a onclick="navegar(this)" class="btn btn-default text-white" data-calendar-nav="prev"><i class="fa fa-caret-left"></i></a>
+                            </div>
+                            <div class="d-inline-block"><h5 id="calendarTitle" class="text-center text-white "></h5></div>
+                            <div class="d-inline">
+                                <a onclick="navegar(this)" class="btn btn-default float-right text-white" data-calendar-nav="next"><i class="fa fa-caret-right"></i></a>
+                            </div>
+                        </div>
+                        <div id="calendar"></div>
+                    </div>
                 </div>
             </div>
 
@@ -81,6 +100,8 @@ y la columna central mainframe -->
 
 <script type="text/javascript">
     // Cargar ultimos materiales subidos en #mainframe
+
 </script>
+
 
 <%- include layouts/user_footer.ejs %>
