@@ -10,7 +10,7 @@
         <!-- for(){} el numero de contribuciones que deseemos mostrar -->
         <%results.forEach(function (resource) { 
         if (resource.state == 'Activo'){ %>
-            <section class="blog-post" id=<%=results.idresource%>>
+            <section class="blog-post" id='<%=resource.idresource%>'>
                 <div class="panel panel-default">
                     <!-- Imagen -->
                     <div style="padding: 2%">
@@ -18,14 +18,9 @@
                         <p class="bs-component btn-group-sm" style="float: right">
                             <a href="#" class="btn btn-success btn-fab"><i class="material-icons">thumb_up_alt</i></a>
                             <%if(idteacher == resource.idteacher){%>
-                                <a class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
+                                <a onclick="edit_modal(<%=resource.idresource%>)" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
                                 <a onclick="deactivate(<%=resource.idresource%>)" class="btn btn-danger btn-fab"><i class="material-icons">block</i></a>
                             <%}%>
-                            <!-- TODO Los ultimos 2 botones deberian solo aparecer si eres autor del recurso
-                            <a href="#" class="btn btn-success btn-fab"><i class="material-icons">thumb_up_alt</i></a>
-                            <a href="#" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
-                            <a href="#" class="btn btn-danger btn-fab"><i class="material-icons">block</i></a>
-                            -->
                         <div class="blog-post-meta">
                             <span class="label label-light label-warning">Live</span>
                             <p class="blog-post-date pull-right">February 16, 2016</p>
@@ -59,7 +54,7 @@
                                 <p><%=resource.description%></p>
                             </div>
                             <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
-                                <!-- El param del onclick debe ser el iddelmat -->
+                                <!-- El param del onclick debe ser el idresource -->
                                 <a class="btn btn-success" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px">
                                      <span class="glyphicon glyphicon-search"></span>Revisar Recurso
                                 </a>
@@ -75,30 +70,47 @@
                         <br>
                     </div>
                 </div>
+                <%if (idteacher == resource.idteacher) {
+                    modal_data = {
+                        idresource: resource.idresource,
+                        idteacher: idteacher,
+                        title: resource.title,
+                        description: resource.description,
+                        tags: tags[resource.idresource]
+                    };
+                %>
+                    <%- include('./modal/edit_resource.ejs', modal_data); %>
+                <%}
+                }
+                %>
             </section>
-        <%  }
-        });
-        %>
+        <%});%>
         <!-- Aca se deberia cerrar el for(){} -->
 
     </div>
 </div>
 
+
+
 <script>
     function deactivate(idresource) {
-        $.ajax({
-            type: 'GET',
-            url: '/resource/deactivate',
-            data: {idresource: idresource},
-            success: function () {
-                $('#'+idresource.toString()).remove();
-            }
-        });
+        if (confirm('¿Seguro que desea desactivar este recurso?')) {
+            $.ajax({
+                type: 'POST',
+                url: '/resource/change_state',
+                data: {
+                    state: 'Desactivado',
+                    idresource: idresource},
+                success: function (html) {
+                    $('#'+idresource).remove();
+                }
+            });
+        }
     }
 
     function show_a_resource(idresource) {
         $.ajax({
-            type: 'GET',
+            type: 'POST',
             url: "/resource/get/"+idresource,
             success: function (html) {
                 $("#mainframe").empty();
@@ -106,4 +118,9 @@
             }
         });
     }
+
+    function edit_modal(idresource) {
+        $('#modal_edit_'+idresource).modal('toggle');
+    }
+
 </script>
