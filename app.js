@@ -39,12 +39,14 @@ var teacher = require('./routes/teacher');
 var resource = require('./routes/resource');
 var comment = require('./routes/comment');
 var reseña = require('./routes/reseña');
+var calendar = require("./routes/calendar");
 
 // Rutas
 app.use('/', index);
 app.use('/teacher', teacher);
 app.use('/resource', resource);
 app.use('/comment', comment);
+app.use('/calendar', calendar);
 app.use('/review', reseña);
 app.use('/administrador', admin);
 
@@ -68,10 +70,7 @@ app.use(function(err, req, res, next) {
 
 
 var server  = http.createServer(app);
-
-server.listen(app.get('port'), function(){
-    console.log('The server starts on port ' + app.get('port'));
-});
+app.set('port', process.env.PORT || '3000');
 
 
 module.exports = app;

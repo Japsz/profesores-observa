@@ -2,10 +2,10 @@ var express = require('express');
 var router = express.Router();
 //Importar la funcion para enviar mail
 var mail = require('../public/js/sendmail');
-
 // Models
 var admin_model = require('../models/admin_model');
 var teacher_model = require('../models/teacher_model');
+var gmodel = require('../Gmodel/event_model');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -157,6 +157,21 @@ router.post('/logout', function(req, res, next) {
     req.session.adminData = {};
     res.send({err:false});
 });
-
+// Vista cargar calendario
+router.get('/listEvnt', function(req, res, next) {
+    // console.log(req.session.teacherData);
+    res.render('admin/evntList');
+});
+// Insertar Evento
+router.post('/insertEvnt', function(req, res, next) {
+    // console.log(req.session.teacherData);
+    gmodel.insertEvnt('primary',req.body,function(err,rows){
+        if(err) {
+            res.send({err:true,data:rows});
+        } else {
+            res.send({err:null,data:rows});
+        }
+    });
+});
 
 module.exports = router;
