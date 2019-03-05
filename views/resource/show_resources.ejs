@@ -9,7 +9,7 @@
         <!-- Corresponde a una contribución -->
         <!-- for(){} el numero de contribuciones que deseemos mostrar -->
         <%if(results.length > 0){
-            results.forEach(function (resource) { 
+            results.forEach(function (resource) {
             if (resource.state == 'Activo'){ %>
                 <section id="<%=resource.idresource%>" class="blog-post">
                     <div class="panel panel-default">
@@ -38,15 +38,18 @@
                                     <div class="progress" style="height: 1px;">
                                         <div class="progress-bar" role="progressbar" style="width:100%"></div>
                                     </div>
+
                                     <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                                     <p><%=resource.description%></p>
                                 </div>
+
                                 <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
                                     <!-- El param del onclick debe ser el idresource -->
                                     <a class="btn btn-success" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px">
                                          <span class="glyphicon glyphicon-search"></span>Revisar Recurso
                                     </a>
                                 </div>
+
                                 <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
                                     <img src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
                                     <img src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
@@ -58,14 +61,15 @@
                         </div>
                     </div>
                     <%if (idteacher == resource.idteacher) {
-                        modal_data = {
+                        var modal_data = {
                             idresource: resource.idresource,
                             idteacher: idteacher,
                             title: resource.title,
                             description: resource.description,
                             tags: tags[resource.idresource]
                         };
-                    %>  <%- include('./modal/edit_resource.ejs', modal_data); %>
+                    %>
+                        <%- include('./modal/edit_resource.ejs', modal_data); %>
                     <%}%>
                 </section>
             <%}
@@ -75,7 +79,6 @@
                 <div class="panel panel-default">
                     <h3>No existen recursos solicitados.</h3>
                 </div>
-                }%>
             </section>
         <%}%>
         <!-- Aca se deberia cerrar el for(){} -->

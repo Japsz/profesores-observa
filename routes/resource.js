@@ -71,7 +71,6 @@ router.post('/get/:idresource', function(req, res){
             console.log(results);
             res.render('resource/show_a_resource', results);
         });
-
     });
 });
 
@@ -82,8 +81,9 @@ router.post('/resources_by_teacher', function(req, res){
             if(err){
                 console.log(err.message);
             }else{
+                data = JSON.parse(JSON.stringify(data));
                 console.log(data);
-                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+                res.render('resource/show_resources', {idteacher: validate(req), tags: {}, results: data});
             }
         });
     } else{
@@ -99,7 +99,7 @@ router.post('/resources_by_comment_teacher', function(req, res){
                 console.log(err.message);
             }else{
                 console.log(data);
-                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+                res.render('resource/show_resources', { idteacher: validate(req), tags: {}, results: data});
             }
         });
     } else{
