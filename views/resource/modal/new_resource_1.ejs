@@ -1,6 +1,6 @@
 <!-- Informacion necesaria para crear un recurso base. -->
 <div id="modal_new_resource" class="modal fade">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" style="padding: 5px 5px">
                 <span aria-hidden="true">&times;</span>
@@ -22,7 +22,7 @@
             <form id="resource_form" class="form-horizontal style-form">
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-sm-6" style="padding-right: 3px">
+                        <div class="col-sm-12" style="padding-right: 3px">
                             <div class="form-group">
                                 <label for="title">Titulo</label>
                                 <input name="title" type="text" class="form-control"
@@ -88,7 +88,6 @@
         $(this).ajaxSubmit({
             url: '/resource/add',
             type: 'POST',
-            data: {idteacher : 1}, //TODO Hay que pasar idteacher o quizas no.
             complete: function (xhr) {
                 $('#modal_new_resource').modal('hide');
                 console.log(xhr);

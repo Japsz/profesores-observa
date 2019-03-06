@@ -8,6 +8,8 @@ var connection = mysql.createConnection(config);
 //creamos un objeto
 var resource_model = {};
 
+//--- RESOURCE SECTION ---
+//Query obtener todos los recursos
 //Funcion que retorna los recursos de un teacher
 resource_model.resources_by_teacher = function(id, callback){
   if(connection){
@@ -56,6 +58,7 @@ resource_model.resources_by_review = function(id, callback){
   }
 };
 
+
 resource_model.get_resources = function(data, callback){
     if (connection){
         let sql;
@@ -71,7 +74,7 @@ resource_model.get_resources = function(data, callback){
         });
     }
 };
-
+//Query obtener un recurso segun data = idresource
 resource_model.get_resource = function(data, callback){
     if (connection){
         let sql = 'SELECT * FROM resource ' +
@@ -100,10 +103,41 @@ resource_model.new_resource = function(data, callback){
     }
 };
 
+resource_model.edit_resource = function(data, callback){
+    if (connection){
+        let sql =   'UPDATE resource ' +
+                    'SET title = ? , description = ? ' +
+                    'WHERE idresource = ?';
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
+
+resource_model.delete_resource_tag = function(data, callback){
+    if(connection){
+        let sql = 'DELETE FROM resource_tag WHERE idresource = ?';
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
+//TODO new_review
+
 resource_model.new_file = function(data, callback){
     if (connection){
         let  sql = 'INSERT INTO file (idresource, filename) VALUES (?)';
-        connection.query(sql, data, function (err, results) {
+        connection.query(sql, [data], function (err, results) {
             if (err) {
                 console.log(err);
                 throw err;
@@ -129,8 +163,8 @@ resource_model.new_tag = function(data, callback){
     }
 };
 
-//Recibe idresource, tagtext
-//data = [idresource, tag]
+
+//recibe data = [idresource, tag]
 resource_model.new_resource_tag = function(data, callback){
     if (connection){
         let sql = 'INSERT INTO resource_tag (idresource, idtag) VALUES (?)';
@@ -161,11 +195,12 @@ resource_model.new_resource_tag = function(data, callback){
 };
 
 //Recibe una lista de idresources. Puede ser 1 elemento.
-resource_model.get_tag_idresource = function(idresource, callback){
+resource_model.get_tag_idresources = function(idresource, callback){
     if (connection){
         let sql = 'SELECT resource_tag.idresource, tag.tag FROM resource_tag ' +
             'LEFT JOIN tag ON resource_tag.idtag = tag.idtag ' +
-            'WHERE resource_tag.idresource IN (?)';
+            'WHERE resource_tag.idresource IN (?) ' +
+            'ORDER BY resource_tag.idresource DESC';
         connection.query(sql, [idresource], function (err, results) {
             if (err) {
                 console.log(err);
@@ -195,23 +230,21 @@ resource_model.get_tag = function(data, callback){
     }
 };
 
-//idresource
-resource_model.deactivate = function (data, callback){
+//state, idresource
+resource_model.change_state = function (data, callback){
   if (connection){
       sql = 'UPDATE resource ' +
-          'SET state = (?) ' +
-          'WHERE idresource = (?)';
-      if (data == 'Activo'){
-          connection.query(sql,['Desactivado, data'], function (err, results) {
-              if (err) {
-                  console.log(err);
-                  throw err;
-              }
-              else {
-                  return callback(err, results);
-              }
-          });
-      }
+          'SET state = ? ' +
+          'WHERE idresource = ?';
+      connection.query(sql,data, function (err, results) {
+          if (err) {
+              console.log(err);
+              throw err;
+          }
+          else {
+              return callback(err, results);
+          }
+      });
   }
 };
 

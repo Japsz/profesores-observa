@@ -21,6 +21,20 @@ teacher_model.show_teacher = function(id, callback){
     });
   }
 };
+//Funcion que retorna la info de cero o mas teacher segun uno o mas correos
+teacher_model.getByMail = function(lista, callback){
+    if(connection && lista.length){
+        var sql = 'SELECT * FROM teacher WHERE mail IN (?)';
+        connection.query(sql,[lista], function(err, result){
+            if(err){
+                throw err;
+            } else{
+                //devolvemos la última id insertada
+                callback(null, result);
+            }
+        });
+    } else callback(null, []);
+};
 
 //Funcion que retorna la info de un teacher segun mail
 teacher_model.show_teacher_by_mail = function(mail, callback){

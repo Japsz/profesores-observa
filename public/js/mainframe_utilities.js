@@ -2,7 +2,7 @@
 
 function show_resources() {
     $.ajax({
-        type: 'GET',
+        type: 'POST',
         url: "/resource/",
         success: function (html) {
             $("#mainframe").empty();

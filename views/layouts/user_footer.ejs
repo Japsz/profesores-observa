@@ -29,15 +29,22 @@
     </footer>
     <!-- Modal mainframe -->
     <%- include ../resource/modal/new_resource_1.ejs %>
+    <!-- Modal calendario -->
+    <%- include ../calendar/calendarModals.ejs%>
 
     <button class="material-scrolltop inverse" type="button"></button>
 
     <script src="js/bootstrap.min.js"></script>
+    <script src="/admin/js/Quantum.js"></script>
     <script src="js/ripples.min.js"></script>
     <script src="js/material.min.js"></script>
     <script src="js/material-scrolltop.js"></script>
     <script src="js/main.js"></script>
 
+    <script type="text/javascript" src="/js/vendor/underscore-min.js"></script>
+    <script type="text/javascript" src="/js/calendar.js"></script>
+    <script type="text/javascript" src="/js/language/es-MX.js"></script>
+    <script type="text/javascript" src="/js/jstz.min.js"></script>
     <script type="text/javascript">
         $.material.init();
         $('body').materialScrollTop();
@@ -53,6 +60,45 @@
         });
         
     </script>
+    <script type="text/javascript">
+        var options = {
+            tmpl_path: '/tmpls/',
+            language: "es-MX",
+            events_source: "/calendar/calendarquery",
+            view: 'month',
+            modal: "#evntModal",
+            modal_type: "ajax",
+            modal_title: function(event) { $("#evntModalLabel").html("Evento: " + event.title); return; },
+            onAfterEventsLoad: function(events) {
+                if(!events) {
+                    return;
+                }
+                var list = $('#eventlist');
+                list.html('');
 
+                $.each(events, function(key, val) {
+                    list.append('<li><a href="' + val.url + '">' + val.title + '</a></li>');
+                });
+            },
+            onAfterViewLoad: function(view) {
+                $("#calendarTitle").text(this.getTitle());
+            },
+            classes: {
+                months: {
+                    general: 'label'
+                }
+            }
+        };
+        var calendar = $('#calendar').calendar(options);
+
+        function navegar(esto) {
+            var $this = $(esto);
+            calendar.navigate($this.data('calendar-nav'));
+        };
+        function vista(esto) {
+            var $this = $(esto);
+            calendar.view($this.data('calendar-view'));
+        };
+    </script>
     </body>
 </html>
