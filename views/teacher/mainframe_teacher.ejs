@@ -133,32 +133,72 @@ y la columna central mainframe -->
                                         </a>
                                     </div>
                                     <div class="col-sm-2" style="padding: 0">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-21.png" class="img-rounded" style="width:30px">Tipo
-                                        </h5>
-                                        </a>
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn">
+                                                <h5 style="margin: 0">
+                                                    <img src="/icons/RRCC web-21.png" class="img-rounded" style="width:30px">Tipo
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content type">
+                                                <a href="#">Columna de Opinión.</a>
+                                                <a href="#">Libros/Textos.</a>
+                                                <a href="#">Imagen.</a>
+                                                <a href="#">Guías/Pruebas.</a>
+                                                <a href="#">Mapas Conceptuales.</a>
+                                                <a href="#">Video.</a>
+                                                <a href="#">Presentación.</a>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm-2" style="padding: 0">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-22.png" class="img-rounded" style="width:30px">Área
-                                        </h5>
-                                        </a>
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn">
+                                                <h5 style="margin: 0">
+                                                    <img src="/icons/RRCC web-22.png" class="img-rounded" style="width:30px">Área
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content area">
+                                                <a href="#">Matemática.</a>
+                                                <a href="#">Lenguaje, Comunicación y Literatura.</a>
+                                                <a href="#">Ciencias Naturales.</a>
+                                                <a href="#">Historia, Geografía y Ciencias Sociales.</a>
+                                                <a href="#">Inglés.</a>
+                                                <a href="#">Tecnología.</a>
+                                                <a href="#">Orientación.</a>
+                                                <a href="#">Música.</a>
+                                                <a href="#">Educación Física y Salud.</a>
+                                                <a href="#">Artes Visuales.</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0; width: 90px">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-23.png" class="img-rounded" style="width:30px">Soporte
-                                        </h5>
-                                        </a>
+                                    <div class="col-sm-2" style="padding: 0; width: 97px">
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn" style="padding-right: 5px">
+                                                <h5 style="margin: 0">
+                                                    <img src="/icons/RRCC web-23.png" class="img-rounded" style="width:30px">Soporte
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content soport">
+                                                <a href="#">PDF.</a>
+                                                <a href="#">PNG, GIF, JPEG/JPG.</a>
+                                                <a href="#">MP4, AVI, MPG, MKV, FLV, MOV, WMV.</a>
+                                                <a href="#">DOCX.</a>
+                                                <a href="#">PPT/PPTX/PPSX.</a>
+                                                <a href="#">XLSX/XLTX.</a>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm-2" style="padding: 0">
-                                        <a href="#" class="btn btn-primary" style="margin-left: 10px">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-26.png" class="img-rounded" style="width:30px">Año
-                                        </h5>
-                                        </a>
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn" style="padding-right: 5px">
+                                                <h5 style="margin: 0">
+                                                    <img src="/icons/RRCC web-26.png" class="img-rounded" style="width:30px">Año
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content year">
+                                                <!-- <a href="#">2019.</a> -->
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -272,7 +312,51 @@ y la columna central mainframe -->
 
 </div><!-- /.container -->
 
+<style>
+
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+
+    .dropbtn{
+        padding: 0;
+        margin: 0;
+        padding-right: 10px;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px black;
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+        background-color: #ccc;
+    }
+    .dropdown:hover .dropdown-content {display: block;}
+    .dropdown:hover .dropbtn {background-color: #f1f1f1;}
+</style>
+
 <script type="text/javascript">
+    // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
+    var year = new Date();
+    var year = year.getFullYear();
+    for(var i=2008;i < year + 1; i++){
+        console.log(i);
+        $(".year").append("<a>" + i + ".</a>");
+    }
 
     // Buscar recursos del usuario
     function resources_by_teacher() {
