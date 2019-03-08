@@ -33,24 +33,26 @@ router.post('/', function(req, res){
 			tags = JSON.parse(JSON.stringify(tags));
 			tagsLst = [];
 			idresTags = {};
-			idres = tags[0].idresource;
-            for (let tag in tags){
-                if (idres == tags[tag].idresource){
-                    tagsLst.push(tags[tag].tag);
-                }
-                else {
-                    idresTags[idres] = tagsLst;
-                    idres = tags[tag].idresource;
-                    tagsLst = [];
-                    tagsLst.push(tags[tag].tag);
-                }
+            if(tags.length > 0) {
+    			idres = tags[0].idresource;
+                for (let tag in tags){
+                    if (idres == tags[tag].idresource){
+                        tagsLst.push(tags[tag].tag);
+                    }
+                    else {
+                        idresTags[idres] = tagsLst;
+                        idres = tags[tag].idresource;
+                        tagsLst = [];
+                        tagsLst.push(tags[tag].tag);
+                    }
 
+                }
+                idresTags[idres] = tagsLst;
+                //console.log(results);
+                //console.log(idresTags);
+                //Enviamos los recursos y los tags de aquellos recursos separados.
+                //Para adquirir un tag es tags[idresource]
             }
-            idresTags[idres] = tagsLst;
-            //console.log(results);
-            //console.log(idresTags);
-            //Enviamos los recursos y los tags de aquellos recursos separados.
-            //Para adquirir un tag es tags[idresource]
 		    res.render('resource/show_resources', {results: results, tags: idresTags, idteacher: validate(req)});
 		});
 	});
@@ -115,7 +117,7 @@ router.post('/resources_by_review', function(req, res){
                 console.log(err.message);
             }else{
                 console.log(data);
-                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data});
+                res.render('resource/show_resources', { is_login: req.session.isteacherLogged, results: data, idteacher: validate(req)});
             }
         });
     } else{
@@ -192,6 +194,29 @@ router.post('/change_state', function (req, res) {
         console.log('desactiv');
         res.send('Desactivado!');
     });
+});
+
+// Muestra los recursos buscados mediante el filtro
+router.post('/filter', function(req, res){
+    if(req.session.isteacherLogged == true){
+        var input = JSON.parse(JSON.stringify(req.body));
+        var data = {
+            filter: input.filter,
+            tags: input.tags, 
+            suport: input.suport,
+            date: input.date
+        };
+        resource_model.filter(data, function(err, data) {
+            if(err){
+                console.log(err.message);
+            }else{
+                console.log(data);
+                res.render('resource/show_resources', {tags: {}, results: data, idteacher: validate(req)});
+            }
+        });
+    } else{
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
+    }
 });
 
 module.exports = router;
