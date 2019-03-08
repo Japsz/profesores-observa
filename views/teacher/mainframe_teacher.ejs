@@ -14,7 +14,7 @@ y la columna central mainframe -->
                         <h3 style="color: #FFCC00; font-weight: 400; margin-top: 0"> ¡Bienvenido/a!</h3>
                         <div class="row">
                             <div class="col-md-4" style="padding: 5px; margin-left: 5%">
-                                <a href="#">
+                                <a>
                                     <img src="/icons/avatar.png" class="img-circle" style="width: 100%">
                                 </a>
                             </div>
@@ -105,7 +105,7 @@ y la columna central mainframe -->
                     </div>
                     <div class="col-sm-1" style="padding-left: 0">
                         <div class="input-group-btn">
-                            <a href="#" class="btn btn-default btn-lg" type="submit" style="padding: 0; margin: 0">
+                            <a href="#" class="btn btn-default btn-lg" onclick="filter()" style="padding: 0; margin: 0">
                                 <i class="glyphicon glyphicon-search" style="font-size:30px; color: gray"></i>
                             </a>
                         </div>
@@ -113,53 +113,101 @@ y la columna central mainframe -->
                     <div class="col-sm-3">
                         <div class="sidebar-module">
                             <div class="panel panel-default">
-                                <a href="#" class="btn btn-primary">
-                                <h5 style="margin: 0">
-                                    <img src="/icons/RRCC web-05.png" class="img-rounded" style="width:30px">Activada
-                                </h5>
-                                </a>
+                                <div class="dropdown">
+                                    <button class="dropbtn btn" style="width: 108%">
+                                        <h5 class="filter_text" style="padding-left: 5px" data-toggle="tooltip" data-placement="bottom" title="¡Visualizar imagenes activado!">
+                                            <img src="/icons/RRCC web-05.png" class="img-rounded filter_img">Activada
+                                        </h5>
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-9">
+                    <div class="col-sm-7" style="padding-left: 0;">
                         <div class="sidebar-module">
                             <div class="panel panel-default">
                                 <div class="row">
-                                    <div class="col-sm-3" style="padding-right: 0">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-06.png" class="img-rounded" style="width:30px">Filtrar
-                                        </h5>
-                                        </a>
+                                    <div class="col-sm-3" style="padding-right: 0;">
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn" style="width: 110%">
+                                                <h5 class="filter_text">
+                                                    <img src="/icons/RRCC web-21.png" class="img-rounded filter_img">Tipo
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content type">
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Columna Opinión">Columna de Opinión.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Libro Texto">Libro/Texto.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Imagen">Imagen.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Guía Prueba">Guía/Prueba.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Mapas Conceptual">Mapa Conceptual.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Video">Video.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Presentación">Presentación.</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-21.png" class="img-rounded" style="width:30px">Tipo
-                                        </h5>
-                                        </a>
+                                    <div class="col-sm-3" style="padding: 0;">
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn" style="width: 120%">
+                                                <h5 class="filter_text">
+                                                    <img src="/icons/RRCC web-22.png" class="img-rounded filter_img">Área
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content area">
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matemática">Matemática.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Lenguaje, Comunicación y Literatura">Lenguaje, Comunicación y Literatura.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Ciencias Naturales">Ciencias Naturales.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Historia Geografía Ciencias Sociales">Historia, Geografía y Ciencias Sociales.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Inglés">Inglés.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Tecnología">Tecnología.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Orientación">Orientación.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Música">Música.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Física y Salud">Educación Física y Salud.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Artes Visuales">Artes Visuales.</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-22.png" class="img-rounded" style="width:30px">Área
-                                        </h5>
-                                        </a>
+                                    <div class="col-sm-3" style="padding: 0;">
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn">
+                                                <h5 class="filter_text">
+                                                    <img src="/icons/RRCC web-23.png" class="img-rounded filter_img">Soporte
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content suport">
+                                                <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="pdf">PDF.</a>
+                                                <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="png gif jpeg jpg">PNG, GIF, JPEG/JPG.</a>
+                                                <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="mp4 avi mpg mkv flv mov wmc">MP4, AVI, MPG, MKV, FLV, MOV, WMV.</a>
+                                                <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="doc docx">DOCX.</a>
+                                                <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="ppt pptx ppsx">PPT/PPTX/PPSX.</a>
+                                                <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="xlsx xltx">Excel/XLSX/XLTX.</a>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0; width: 90px">
-                                        <a href="#" class="btn btn-primary">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-23.png" class="img-rounded" style="width:30px">Soporte
-                                        </h5>
-                                        </a>
+                                    <div class="col-sm-2" style="padding: 0;">
+                                        <div class="dropdown">
+                                            <button class="dropbtn btn" style="width: 112%">
+                                                <h5 class="filter_text">
+                                                    <img src="/icons/RRCC web-26.png" class="img-rounded filter_img">Año
+                                                </h5>
+                                            </button>
+                                            <div class="dropdown-content year">
+                                                <!-- <a>2019.</a> -->
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0">
-                                        <a href="#" class="btn btn-primary" style="margin-left: 10px">
-                                        <h5 style="margin: 0">
-                                            <img src="/icons/RRCC web-26.png" class="img-rounded" style="width:30px">Año
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-2" style="padding: 0; width: 14%">
+                        <div class="sidebar-module">
+                            <div class="panel panel-default">
+                                <div class="dropdown">
+                                    <button class="dropbtn btn" onclick="filter()" style="width: 102 %">
+                                        <h5 class="filter_text">
+                                            <img src="/icons/RRCC web-06.png" class="img-rounded filter_img">Filtrar
                                         </h5>
-                                        </a>
-                                    </div>
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -177,8 +225,8 @@ y la columna central mainframe -->
         <div class="col-sm-3 blog-sidebar">
             <div class="sidebar-module">
                 <div class="panel panel-default">
-                    <div class="panel-body">
-                        <h5><img src="/icons/RRCC web-16.png" class="img-circle" style="width: 60px; height: 60px">Recursos de la plataforma</h5>
+                    <h5><img src="/icons/RRCC web-16.png" class="img-circle" style="width: 60px; height: 60px">Recursos de la plataforma</h5>
+                    <div class="panel-body" style="padding-top: 0">
                         <!-- Barra -->
                         <div class="progress" style="height: 3px">
                             <div class="progress-bar" role="progressbar" style="width:100%">
@@ -273,7 +321,67 @@ y la columna central mainframe -->
 </div><!-- /.container -->
 
 <script type="text/javascript">
+    // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
+    var year = new Date();
+    var year = year.getFullYear();
+    for(var i=2019; i < year + 1; i++){
+        $(".year").append('<a onclick="select_data(this)" class="filter_date" data-select="false" data-filter="' + i + '">' + i + '.</a>');
+    }
 
+    // Funcion que muestra y quita la seleccion de un filtro
+    function select_data(ths){
+        if($(ths).data("select") == false){
+            $(ths).css("background-color", "#009688");
+            $(ths).css("opacity", 0.8);
+            $(ths).append('<i class="glyphicon glyphicon-ok"></i>');
+            $(ths).data("select", true);
+        } else {
+            $(ths).css("background-color", "#fff");
+            $(ths).css("opacity", 1);
+            $(ths).find("i").remove();
+            $(ths).data("select", false);
+        }
+    }
+
+    function filter(){
+        var tags = [];
+        var suport = [];
+        var date = [];
+        $(".filter_tags").each(function(e){
+            if($(this).data("select")){
+                tags.push($(this).data("filter"));
+            }
+        });
+        $(".filter_suport").each(function(e){
+            if($(this).data("select")){
+                suport.push($(this).data("filter"));
+            }
+        });
+        $(".filter_date").each(function(e){
+            if($(this).data("select")){
+                date.push($(this).data("filter"));
+            }
+        });
+        console.log(tags);
+        console.log(suport);
+        console.log(date);
+        $.ajax({
+            type: 'POST',
+            data: {
+                filter: $("#filter").val(),
+                tags: JSON.stringify(tags), 
+                suport: JSON.stringify(suport),
+                date: JSON.stringify(date)
+            },
+            url: "/resource/filter",
+            success: function (html) {
+                $("#mainframe").empty();
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Panel Personal de la izquierda
     // Buscar recursos del usuario
     function resources_by_teacher() {
         $.ajax({
@@ -311,5 +419,50 @@ y la columna central mainframe -->
     }
 
 </script>
+
+<style>
+
+    /*Filtro*/
+    .dropdown {
+      position: relative;
+      display: inline-block;
+    }
+    .dropbtn{
+        padding: 0;
+        margin: 0;
+        padding-right: 10px;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      left: 0;
+      background-color: #f9f9f9;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px 0px black;
+      z-index: 1;
+    }
+    .dropdown-content a {
+      color: black;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+    .dropdown-content a:hover {
+        background-color: #ccc;
+    }
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+    .dropdown:hover .dropbtn {
+        background-color: #f1f1f1;
+    }
+    .filter_text{        
+        text-transform: capitalize;
+    }
+    .filter_img{
+        width: 30px;
+    }
+
+</style>
 
 <%- include ../layouts/user_footer.ejs %>
