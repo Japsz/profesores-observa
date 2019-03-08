@@ -1,59 +1,90 @@
+<!-- Esta vista requiere results: results, tags: tags, idteacher: validate(req), show_hidden: false
+results: lista de objetos resource
+tags es una lista de objetos tags formato [{idresource:tags},...]
+idteacher id profesor logeado, o false.
+show_hidden: permite mostrar recursos bloqueados.
+
+-->
+
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <!-- Corresponde a una contribución -->
         <section class="blog-post">
             <div class="panel panel-default">
-                <img src="img/music/unsplash-2.jpg" class="img-responsive"/>
-                <div class="panel-body">
-                    <!-- Acá van los tags, ojalá sean clickeables para redireccionar a "buscar por tag" -->
-                    <div class="blog-post-meta">
-                        <span class="label label-light label-warning">Live</span>
-                        <p class="blog-post-date pull-right">February 16, 2016</p>
+                <%if (frontimage){ %>
+                    <div style="padding: 2%">
+                        <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%"/>
                     </div>
-                    <!-- Acá va el contenido de la contribución (sólo vista previa) -->
-                    <div class="blog-post-content">
-                        <h2 class="blog-post-title"><%=title%></h2>
-                        <button class="btn btn-primary" onclick="edit_resource(<%=idresource%>)" style="float: right" >Test</button>
+                <%}%>
+
+                <div class="row">
+                    <div class="col-sm-1">
+                        <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 60px">
+                    </div>
+                    <div class="col-sm-10" style="margin-left: 10px">
+                        <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">
+                            <%=title%>
+                            <p class="bs-component btn-group-sm pull-right">
+                                <%if(idteacher == logged){%>
+                                    <a onclick="edit_modal(<%=idresource%>)" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
+                                    <%if(state != 'Activo'){%>
+                                        <a onclick="activate(<%=idresource%>)" class="btn btn-success btn-fab"><i class="material-icons">lock_open</i></a>
+                                    <%} else {%>
+                                        <a onclick="deactivate(<%=idresource%>)" class="btn btn-danger btn-fab"><i class="material-icons">lock</i></a>
+                                    <%}
+                                }%>
+                            </p>
+                        </h2>
+                        <div class="blog-post-meta" style="padding: 0;">
+                            <h4>por <%=name%> - <%=date.slice(0, date.indexOf('T'))%></h4>
+                        </div>
+                        <!-- Barra -->
+
+                        <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                         <p><%=description%></p>
                         <p><%=text%></p>
                     </div>
 
+                    <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
+                        <!-- El param del onclick debe ser el idresource -->
+                    </div>
+
+                    <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
+                        <img src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
+                        <img src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
+                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                    </div>
                 </div>
 
-                <!-- Aca van pequeñas vistas previas de los recursos que nacieron de este recurso. reviews-->
+                <!-- Aca van las descargas-->
                 <div class="row resource-row">
-                    <div class="col-xs-6 col sm-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading resource-head">
-                                <h5>Soy una revision</h5>
-                            </div>
-                            <div class="panel-body">
-                                <div class="blog-post-content">
-                                    Este recurso esta bueno, lo complementare. tengo un poco de mi cosecha que servira aca
-                                </div>
-                            </div>
-                            <div class="panel-footer">
-                                Probando un footer
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xs-6 col sm-6">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading resource-head">
-                                <h5>Soy una revision</h5>
-                            </div>
-                            <div class="panel-body">
-                                <div class="blog-post-content">
-                                    Este recurso esta bueno, lo complementare. tengo un poco de mi cosecha que servira aca
+                    <%for(file in files){%>
+                        <div class="col-xs-4 col sm-4">
+                            <div class="panel panel-primary">
+                                <div class="panel-heading resource-head">
+                                    <h5><%=files[file].filename%></h5>
+                                    </div>
+                                <div class="panel-body">
+                                    <a class="btn btn-primary" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>>" style="float: left">Descargar</a>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <a class="blog-post-share pull-right" href="#">
-                        <i class="material-icons">&#xE80D;</i>
-                    </a>
+                    <%}%>
                 </div>
             </div>
+            <%if (idteacher == logged) {
+                var modal_data = {
+                    idresource: idresource,
+                    idteacher: idteacher,
+                    title: title,
+                    description: description,
+                    tags: tags[idresource]
+                };
+            %>
+            <%- include('./modal/edit_resource.ejs', modal_data); %>
+            <%}%>
         </section>
         <div id="view_comment">
             <!-- Aca va insertar comentario y los comentarios existentes del recurso. -->
@@ -73,6 +104,21 @@
             }
         });
     });
+
+    function download(idteacher, idresource, filename) {
+        console.log(idteacher, idresource, filename);
+        $.ajax({
+            type: 'POST',
+            data: {
+                idteacher: idteacher,
+                idresource: idresource,
+                filename: filename},
+            url: '/resource/download',
+            success: function (html) {
+            }
+        })
+
+    }
 
     function edit_resource(idresource) {
         $('#modal_edit_resource').modal('toggle');

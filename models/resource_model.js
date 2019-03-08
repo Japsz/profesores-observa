@@ -62,9 +62,9 @@ resource_model.resources_by_review = function(id, callback){
 resource_model.get_resources = function(data, callback){
     if (connection){
         let sql;
-        sql = 'SELECT * FROM resource ' +
+        sql = 'SELECT resource.*, teacher.name FROM resource ' +
+              'LEFT JOIN teacher ON resource.idteacher = teacher.idteacher ' +
               'ORDER BY idresource DESC';
-        //TODO Como obtendre todos los tags de aca??
         connection.query(sql,data, function (err,results) {
             if (err){
                 console.log(err);
@@ -77,7 +77,8 @@ resource_model.get_resources = function(data, callback){
 //Query obtener un recurso segun data = idresource
 resource_model.get_resource = function(data, callback){
     if (connection){
-        let sql = 'SELECT * FROM resource ' +
+        let sql = 'SELECT resource.*, teacher.name FROM resource ' +
+                  'LEFT JOIN teacher ON resource.idteacher = teacher.idteacher ' +
                   'WHERE idresource = ?';
         connection.query(sql, data, function (err, results) {
             if (err){
@@ -92,7 +93,7 @@ resource_model.get_resource = function(data, callback){
 resource_model.new_resource = function(data, callback){
     if (connection){
         let sql = 'INSERT INTO resource ' +
-            '(idteacher, title, description, text) VALUES (?)';
+            '(idteacher, title, description, text, frontimage) VALUES (?)';
         connection.query(sql, [data], function (err, results){
             if (err) {
                 console.log(err);
@@ -134,6 +135,7 @@ resource_model.delete_resource_tag = function(data, callback){
 
 //TODO new_review
 
+//idresource, filename
 resource_model.new_file = function(data, callback){
     if (connection){
         let  sql = 'INSERT INTO file (idresource, filename) VALUES (?)';
@@ -143,6 +145,38 @@ resource_model.new_file = function(data, callback){
                 throw err;
             }
             else return callback(null, results);
+        });
+    }
+};
+
+//idresource
+resource_model.get_files = function(data, callback){
+    if (connection){
+        let sql = 'SELECT * FROM file WHERE idresource = (?)';
+        connection.query(sql, [data],function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(null, results);
+        });
+    }
+};
+
+//state, idresource
+resource_model.change_state = function (data, callback){
+    if (connection){
+        sql = 'UPDATE resource ' +
+            'SET state = ? ' +
+            'WHERE idresource = ?';
+        connection.query(sql,data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
         });
     }
 };
@@ -230,22 +264,6 @@ resource_model.get_tag = function(data, callback){
     }
 };
 
-//state, idresource
-resource_model.change_state = function (data, callback){
-  if (connection){
-      sql = 'UPDATE resource ' +
-          'SET state = ? ' +
-          'WHERE idresource = ?';
-      connection.query(sql,data, function (err, results) {
-          if (err) {
-              console.log(err);
-              throw err;
-          }
-          else {
-              return callback(err, results);
-          }
-      });
-  }
-};
+
 
 module.exports = resource_model;
