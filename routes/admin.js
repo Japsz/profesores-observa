@@ -54,6 +54,7 @@ router.get('/index', function(req, res, next) {
     }
 });
 
+
 // Inserta los datos de un nuevo profesor
 router.post('/newTeacher', function(req, res, next) {
     if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){ // Si está logueado
@@ -172,6 +173,38 @@ router.post('/insertEvnt', function(req, res, next) {
             res.send({err:null,data:rows});
         }
     });
+});
+/* Entrega los eventos a aprobar */
+router.get('/valid_events', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        // Obtiene las propuestas de eventos.
+        admin_model.eventProposals(function(err,data){
+            if(err){
+                res.send("error");
+            } else {
+                res.render("admin/valid_event", {data: data});
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
+});
+/* Valida un evento en específico */
+router.post('/validate_event', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        // Obtiene las propuestas de eventos.
+        admin_model.evntModifType(req.body.newType,req.body.idevent,function(err,data){
+            if(err){
+                console.log(err.message);
+                res.send("error");
+            } else {
+
+                res.render("admin/valid_inscription", {data: data});
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
 });
 
 module.exports = router;

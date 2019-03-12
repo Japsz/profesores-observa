@@ -223,6 +223,39 @@ y la columna central mainframe -->
 
         <!-- Columna derecha -->
         <div class="col-sm-3 blog-sidebar">
+            <!-- Calendario -->
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group" style="width: 100%">
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="month">Mes</a>
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year">Año</a>
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week">Semana</a>
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day">Día</a>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <a onclick="navegar(this)" class="btn btn-default text-white" data-calendar-nav="prev"><i class="glyphicon glyphicon-triangle-left"></i></a>
+                            </div>
+                            <div class="col-md-9">
+                                <h5 id="calendarTitle" class="text-center text-white "></h5>
+                            </div>
+                            <div class="col-md-1">
+                                <a onclick="navegar(this)" class="btn btn-default float-right text-white" data-calendar-nav="next"><i class="glyphicon glyphicon-triangle-right"></i></a>
+                            </div>
+                            <div class="col-md-12">
+                                <div id="calendar"></div>
+                            </div>
+                            <div class="col-md-12" style="margin-top: 5px">
+                                <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default pull-right text-white">+ Proponer evento</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <h5><img src="/icons/RRCC web-16.png" class="img-circle" style="width: 60px; height: 60px">Recursos de la plataforma</h5>
