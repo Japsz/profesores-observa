@@ -89,35 +89,32 @@ y la columna central mainframe -->
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <div class="col-md-12">
-                            <div class="btn-group">
-                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="month">Mes</a>
-                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year">Año</a>
-                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week">Semana</a>
-                                <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day">Día</a>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="btn-group">
+                                    <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="month">Mes</a>
+                                    <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year">Año</a>
+                                    <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week">Semana</a>
+                                    <a onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day">Día</a>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <a onclick="navegar(this)" class="btn btn-default text-white" data-calendar-nav="prev"><i class="glyphicon glyphicon-triangle-left"></i></a>
+                            </div>
+                            <div class="col-md-9">
+                                <h5 id="calendarTitle" class="text-center text-white "></h5>
+                            </div>
+                            <div class="col-md-1">
+                                <a onclick="navegar(this)" class="btn btn-default float-right text-white" data-calendar-nav="next"><i class="glyphicon glyphicon-triangle-right"></i></a>
+                            </div>
+                            <div class="col-md-12">
+                                <div id="calendar"></div>
                             </div>
                         </div>
-                        <div class="col-md-12">
-                            <div class="d-inline">
-                                <a onclick="navegar(this)" class="btn btn-default text-white" data-calendar-nav="prev"><i class="fa fa-caret-left"></i></a>
-                            </div>
-                            <div class="d-inline-block"><h5 id="calendarTitle" class="text-center text-white "></h5></div>
-                            <div class="d-inline">
-                                <a onclick="navegar(this)" class="btn btn-default float-right text-white" data-calendar-nav="next"><i class="fa fa-caret-right"></i></a>
-                            </div>
-                        </div>
-                        <div id="calendar"></div>
                     </div>
                 </div>
             </div>
 
-            <div class="sidebar-module">
-                <div class="panel panel-default">
-                    <div class="panel-body">
-                        <button class="btn btn-primary" onclick="new_resource()"><i class="material-icons md-24">note_add</i>Recurso</button>
-                    </div>
-                </div>
-            </div>
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
@@ -213,5 +210,28 @@ y la columna central mainframe -->
     </div><!-- /.row -->
 
 </div><!-- /.container -->
+
+<!-- Estilo de calendario -->
+<style type="text/css">
+
+    .cal-month-day{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+    }
+    
+    .cal-month-box .cal-cell{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+        -webkit-tap-highlight-color: ;
+    }
+
+    .cal-row-fluid{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+    }
+</style>
 
 <%- include layouts/user_footer.ejs %>

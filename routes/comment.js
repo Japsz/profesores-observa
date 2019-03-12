@@ -37,7 +37,7 @@ router.get('/show_comments/:idresource', function (req, res) {
 
 // Controlador que inserta un punto en el comentario votado
 router.post('/comment_point', function (req, res) {
-	var input = JSON.parse(JSON.stringify(req.body));
+  var input = JSON.parse(JSON.stringify(req.body));
   var data = {
     idteacher: req.session.teacherData.idteacher,
     idcomment: input.idcomment,
