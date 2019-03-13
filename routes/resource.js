@@ -57,13 +57,14 @@ router.post('/', function(req, res){
         results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
         idresources = idresource_list(results);
         resource_model.get_tag_idresources(idresources, function (err, tags) {
-            tags = parse_tags(tags);
+            if(tags.length){
+                tags = parse_tags(tags);
+            }
             //Enviamos los recursos y los tags de aquellos recursos separados.
             //Para adquirir un tag es tags[idresource]
             res.render('resource/show_resources', {results: results, tags: tags, idteacher: validate(req), show_hidden: false});
         });
     });
-
 });
 
 //Obtener material idresource
