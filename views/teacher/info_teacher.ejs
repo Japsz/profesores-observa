@@ -11,8 +11,13 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
+                            <img src="<%=data.perfil_image%>" class="img-circle" style="width: 50px;">
+                            <label>Editar imagen</label>
+                            <input id="perfil_image" type="file" accept="image/*">
+                        </div>
+                        <div class="form-group">
                             <label>Nombre</label>
-                            <input class="form-control" id="name" type="text" value="<%= data.name%>" required autofocus>
+                            <input class="form-control" id="name" type="text" value="<%= data.name%>" required>
                         </div>
                         <div class="form-group">
                             <label>Nombre de Usuario</label>
@@ -160,6 +165,7 @@
                     password: $("#password").val(),
                     address: $("#address").val(),
                     b_date: $("#b_date").val(),
+                    perfil_image: $("#perfil_image").val(),
                     public: public
                 },
                 url: '/teacher/update_teacher',

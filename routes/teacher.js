@@ -11,11 +11,12 @@ router.get('/', function(req, res, next) {
     // req.session.isteacherLogged = false;
     if(req.session.isteacherLogged == null){
         req.session.isteacherLogged = false;
+        req.session.show_image = true;
         req.session.teacherData = {};
     }
     if(req.session.isteacherLogged == true){
         // Si esta logeado va al mainframe con todas las funcionalidades
-        res.render('teacher/mainframe_teacher', {data: req.session.teacherData});
+        res.render('teacher/mainframe_teacher', {data: req.session.teacherData, show_image: req.session.show_image});
     } else {
         // Si no, lo redirige a una vista donde solo puede ver el recurso sin detalles
         res.render('mainframe', {});
@@ -25,13 +26,7 @@ router.get('/', function(req, res, next) {
 /* Verifica si esta logeado para mostrar info de teacher en nav */
 router.post('/is_login', function(req, res, next) {
     if(req.session.isteacherLogged == true){
-        teacher_model.show_teacher(req.session.teacherData.idteacher, function(err, data) {
-            if(err){
-                console.log(err.message);
-            }else{
-                res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: data});
-            }
-        });
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: req.session.teacherData});
     } else{
         res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
     }
@@ -42,7 +37,7 @@ router.get('/login_teacher', function(req, res, next) {
     if(req.session.isteacherLogged == false){
         res.render('teacher/login_teacher', {});
     } else{
-        res.redirect('teacher');
+        res.redirect('teacher/');
     }
 });
 
@@ -56,6 +51,9 @@ router.post('/login_teacher_confirm', function(req, res, next) {
         }else{
             if(data.length > 0){
                 if(data[0].valid == 1){
+                    if(data[0].perfil_image == null){
+                        data[0].perfil_image = "/icons/avatar.png";
+                    }
                     req.session.isteacherLogged = true;
                     req.session.teacherData = data[0];
                     console.log(req.session.teacherData);
@@ -101,15 +99,24 @@ router.get('/info_teacher', function(req, res, next) {
 router.post('/update_teacher', function(req, res, next) {
     if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
         var input = JSON.parse(JSON.stringify(req.body));
+        var idteacher = req.session.teacherData.idteacher;
+        let perfil_image = input.perfil_image;
+        var url_image = "/public/perfil-images/" + idteacher + "/" + perfil_image.name;
+        perfil_image.mv( url_image, function(err) {
+            if(err){
+                console.log(err.message);
+            }
+        });
         var data = {
-            idteacher: req.session.teacherData.idteacher,
-            name: input.name, 
-            username: input.username, 
-            rut: input.rut, 
+            idteacher: idteacher,
+            name: input.name,
+            username: input.username,
+            rut: input.rut,
             mail: input.mail,
             password: input.password,
             address: input.address,
             birth_date: input.b_date,
+            perfil_image: url_image,
             public: input.public
         };
         req.session.teacherData = data;
