@@ -41,9 +41,9 @@
                                 </h2>
                                 <div class="blog-post-meta" style="padding: 0;">
                                     <h4>por <%=resource.name%> - <%=resource.date.slice(0, resource.date.indexOf('T'))%></h4>
-                                    <%if (tags[resource.idresource][0]){%>
+                                    <%if (tags[resource.idresource]){%>
                                         <div class="col-sm-12>">
-                                            <h4><%=tags[resource.idresource][0]%></h4>
+                                            <h4><%=tags[resource.idresource][0][0]%></h4>
                                         </div>
                                     <%}%>
                                 </div>

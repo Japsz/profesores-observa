@@ -19,8 +19,14 @@ function mysplit(str){
     return str;
 }
 
-//Obtiene un diccionario con una lista de objetos [{tag,idresource}, ... ]
-//Retorna un diccionario con estructura {idresource: tags}
+function getXtension(str) {
+    str = str.split('.');
+    str = str[str.length-1];
+    return str;
+}
+
+//Obtiene un diccionario con una lista de objetos [{idresource, tag, type}, ... ]
+//Retorna un diccionario con estructura {idresource: [tags, type]}
 function parse_tags(tags){
     tags = JSON.parse(JSON.stringify(tags));
     tagsLst = [];
@@ -28,16 +34,17 @@ function parse_tags(tags){
     idres = tags[0].idresource;
     for (let tag in tags){
         if (idres == tags[tag].idresource){
-            tagsLst.push(tags[tag].tag);
+            tagsLst.push([tags[tag].tag, tags[tag].type]);
         }
         else {
             idresTags[idres] = tagsLst;
             idres = tags[tag].idresource;
             tagsLst = [];
-            tagsLst.push(tags[tag].tag);
+            tagsLst.push([tags[tag].tag, tags[tag].type]);
         }
     }
     idresTags[idres] = tagsLst;
+    console.log(idresTags);
     return idresTags;
 }
 
@@ -56,14 +63,18 @@ router.post('/', function(req, res){
         if (err) {console.log(err);}
         results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
         idresources = idresource_list(results);
-        resource_model.get_tag_idresources(idresources, function (err, tags) {
-            if(tags.length){
-                tags = parse_tags(tags);
-            }
-            //Enviamos los recursos y los tags de aquellos recursos separados.
-            //Para adquirir un tag es tags[idresource]
-            res.render('resource/show_resources', {results: results, tags: tags, idteacher: validate(req), show_hidden: false});
-        });
+        if (idresources.length){
+            resource_model.get_tag_idresources(idresources, function (err, tags) {
+                if(tags.length){
+                    tags = parse_tags(tags);
+                }
+                //Enviamos los recursos y los tags de aquellos recursos separados.
+                //Para adquirir un tag es tags[idresource]
+                res.render('resource/show_resources', {results: results, tags: tags, idteacher: validate(req), show_hidden: false});
+            });
+        } else {
+            res.render('resource/show_resources', {results: {}, tags: {}, idteacher: validate(req), show_hidden: false});
+        }
     });
 });
 
@@ -91,10 +102,24 @@ router.post('/resources_by_teacher', function(req, res){
         resource_model.resources_by_teacher(validate(req), function(err, results) {
             results = JSON.parse(JSON.stringify(results));
             idresources = idresource_list(results);
-            resource_model.get_tag_idresources(idresources, function (err, tags) {
-                tags = parse_tags(tags);
-                res.render('resource/show_resources', {idteacher: validate(req), tags: tags, results: results, show_hidden: true});
-            });
+            if (idresources.length) {
+                resource_model.get_tag_idresources(idresources, function (err, tags) {
+                    tags = parse_tags(tags);
+                    res.render('resource/show_resources', {
+                        idteacher: validate(req),
+                        tags: tags,
+                        results: results,
+                        show_hidden: true
+                    });
+                })
+            } else {
+                res.render('resource/show_resources', {
+                    idteacher: validate(req),
+                    tags: {},
+                    results: {},
+                    show_hidden: false
+                });
+            }
         });
     } else{
         res.render('teacher/is_login', { is_login: validate(req), data: false});
@@ -104,13 +129,27 @@ router.post('/resources_by_teacher', function(req, res){
 // Muestra los recursos en los que ha comentado el teacher
 router.post('/resources_by_comment_teacher', function(req, res){
     if(req.session.isteacherLogged == true){
-        resource_model.resources_by_comment_teacher(req.session.teacherData.idteacher, function(err, results) {
+        resource_model.resources_by_comment_teacher(validate(req), function(err, results) {
             results = JSON.parse(JSON.stringify(results));
             idresources = idresource_list(results);
-            resource_model.get_tag_idresources(idresources, function (err, tags) {
-                tags = parse_tags(tags);
-                res.render('resource/show_resources', {idteacher: validate(req), tags: tags, results: results, show_hidden: true});
-            });
+            if (idresources.length) {
+                resource_model.get_tag_idresources(idresources, function (err, tags) {
+                    tags = parse_tags(tags);
+                    res.render('resource/show_resources', {
+                        idteacher: validate(req),
+                        tags: tags,
+                        results: results,
+                        show_hidden: true
+                    });
+                });
+            } else {
+                res.render('resource/show_resources', {
+                    idteacher: validate(req),
+                    tags: {},
+                    results: {},
+                    show_hidden: false
+                });
+            }
         });
     } else{
         res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
@@ -142,7 +181,8 @@ router.post('/add', function(req, res) {
         let data = {
             resource: [validate(req), req.body.title, req.body.description, req.body.text, null],
             files: req.files,
-            tags: mysplit(req.body.tags)
+            tags: mysplit(req.body.tags),
+            box: req.body.box
         };
         if (!('frontimage' in req.body)){
             console.log("Foto de portada");
@@ -152,8 +192,13 @@ router.post('/add', function(req, res) {
         resource_model.new_resource(data.resource, function (err, results) {
             data.insertId = results.insertId;
             for (tag in data.tags) {
-                resource_model.new_resource_tag([results.insertId, data.tags[tag]], function (err, result) {
-                    console.log('Se ha creado un nuevo resource tag')
+                resource_model.new_resource_tag([results.insertId, data.tags[tag], 'area'], function (err, result) {
+                    console.log('Se ha creado un nuevo resource tag');
+                });
+            }
+            for (box in data.box) {
+                resource_model.new_resource_tag([results.insertId, data.box[box], 'type'], function (err, result) {
+                    console.log('Se ha creado un nuevo resource tag');
                 });
             }
             if (req.body.idresourcedad){
@@ -161,15 +206,23 @@ router.post('/add', function(req, res) {
                     console.log('Se ha creado una review');
                 });
             }
+            var extlist = [];
             if (data.files) {
                 console.log('agregando archivos');
                 for (key in data.files) {
                     file = data.files[key];
-                    console.log(file);
+                    extlist.push(getXtension(file.name));
                     //TODO ¿Si ya existe un archivo con ese nombre en la carpeta?
                     file.mv('public/uploaded-files/' + validate(req) + '/' + data.insertId + '/' + file.name);
                     resource_model.new_file([data.insertId, file.name], function (err, results) {
                         console.log('Se ha insertado ' + file.name);
+                    });
+                }
+                extlist = new Set(extlist);
+                console.log(exlist);
+                for (ext in extlist){
+                    resource_model.new_resource_tag([data.insertId, extlist[ext], 'file'], function (err, results) {
+                        console.log('Se han insertado tags file ' + extlist[ext]);
                     });
                 }
             }

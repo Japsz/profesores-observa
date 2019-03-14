@@ -215,8 +215,8 @@ resource_model.change_state = function (data, callback){
 //Recibe solo un tag
 resource_model.new_tag = function(data, callback){
     if (connection){
-        let sql = 'INSERT INTO tag (tag) VALUES (?)';
-        connection.query(sql, data, function (err, results) {
+        let sql = 'INSERT INTO tag (tag, type) VALUES (?)';
+        connection.query(sql, [data], function (err, results) {
             if (err) {
                 console.log(err);
                 throw err;
@@ -227,13 +227,13 @@ resource_model.new_tag = function(data, callback){
 };
 
 
-//recibe data = [idresource, tag]
+//recibe data = [idresource, tag, type]
 resource_model.new_resource_tag = function(data, callback){
     if (connection){
         let sql = 'INSERT INTO resource_tag (idresource, idtag) VALUES (?)';
         resource_model.get_tag(data[1], function (err, results) {
             if (results.length == 0){
-                resource_model.new_tag(data[1], function (err, results) {
+                resource_model.new_tag([data[1],data[2]], function (err, results) {
                     let data2 = [data[0] ,results.insertId];
                     connection.query(sql, [data2], function (err, results) {
                         if (err) {
@@ -260,7 +260,7 @@ resource_model.new_resource_tag = function(data, callback){
 //Recibe una lista de idresources. Puede ser 1 elemento.
 resource_model.get_tag_idresources = function(idresource, callback){
     if (connection){
-        let sql = 'SELECT resource_tag.idresource, tag.tag FROM resource_tag ' +
+        let sql = 'SELECT resource_tag.idresource, tag.tag, tag.type FROM resource_tag ' +
             'LEFT JOIN tag ON resource_tag.idtag = tag.idtag ' +
             'WHERE resource_tag.idresource IN (?) ' +
             'ORDER BY resource_tag.idresource DESC';

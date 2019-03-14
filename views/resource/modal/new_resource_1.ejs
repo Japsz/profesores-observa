@@ -13,7 +13,7 @@
                     </div>
                     <div class="col-md-6">
                         <div class="progress">
-                            <div class="progress-bar" role="progressbar" style="width: 0%;"></div>
+                            <div id="bar" class="progress-bar" role="progressbar" style="width: 0%;"></div>
                         </div>
                     </div>
                 </div>
@@ -45,24 +45,24 @@
                                 <label for="checkboxlist" style="display: flex;">Tipo de Recurso</label>
                                 <div class="col-sm-6" style="padding: 0;">
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="">Columna/Libros/Texto</label>
+                                        <label><input name="box" type="checkbox" value="text">Columna/Libros/Texto</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="">Imagen</label>
+                                        <label><input name="box" type="checkbox" value="image">Imagen</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="">Guías/pruebas</label>
+                                        <label><input name="box" type="checkbox" value="guide">Guías/pruebas</label>
                                     </div>
                                 </div>
                                 <div class="col-sm-6" style="padding: 0;">
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="">Mapas conceptuales</label>
+                                        <label><input name="box" type="checkbox" value="map">Mapas conceptuales</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="">Video</label>
+                                        <label><input name="box" type="checkbox" value="video">Video</label>
                                     </div>
                                     <div class="checkbox">
-                                        <label><input type="checkbox" value="">Presentación</label>
+                                        <label><input name="box" type="checkbox" value="presentation">Presentación</label>
                                     </div>
                                 </div>
                             </div>
@@ -124,18 +124,8 @@
 <script>
     $('#resource_form').submit(function(e) {
         e.preventDefault();
+        var bar = $('#bar');
         $(this).ajaxSubmit({
-            url: '/resource/add',
-            type: 'POST',
-            complete: function (xhr) {
-                $('#modal_new_resource').modal('hide');
-            }
-        });
-        return false;
-    });
-
-    $(function() {
-        options = {
             url: '/resource/add',
             type: 'POST',
             beforeSend: function() {
@@ -146,9 +136,14 @@
                 var percentVal = percentComplete + '%';
                 bar.width(percentVal);
             },
-            complete: function(xhr) {
+            complete: function (xhr) {
+                $('#modal_new_resource').modal('hide');
+                $('#resource_form').each(function(){
+                    this.reset();
+                });
             }
-        };
+        });
+        return false;
     });
 
     $('#modal_new_resource').on('hidden.bs.modal', function (e) {
