@@ -8,16 +8,22 @@ show_hidden: permite mostrar recursos bloqueados.
 
 <div class="row">
     <div class="col-xs-12 col-sm-12">
-        <!-- Corresponde a una contribución -->
+        <section>
+            <div class="row">
+                <div style="margin: 1.6%">
+                    <div class="col-sm-12" style="border-bottom: 2px gray solid; padding: 0; padding-bottom: 3px; margin-bottom: 5px">
+                        <h4 style="display: inline-block; margin: 0">Estas en el recurso/<%=title%></h4>
+                        <div class="pull-right" style="display: inline-block;">
+                            <a class="btn btn_obs" href="/teacher" style="">Volver a Inicio</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <br><br>
+        <!-- Corresponde a un recurso -->
         <section class="blog-post">
             <div class="panel panel-default" style="padding: 10px">
-                <%if (frontimage){ %>
-                    <div style="padding: 2%">
-                        <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>"
-                             class="img-responsive" style=";border: 2px solid black; width: 100%"/>
-                    </div>
-                <%}%>
-
                 <div class="row">
                     <div class="col-sm-1">
                         <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 60px">
@@ -41,8 +47,20 @@ show_hidden: permite mostrar recursos bloqueados.
                             <h4>por <%=name%> - <%=date.slice(0, date.indexOf('T'))%></h4>
                         </div>
 
-                        <!-- Acá va el contenido de la contribución (sólo vista previa) -->
-                        <p><%=description%></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <!-- DESCRIPCION -->
+                                <p><%=description%></p>
+                            </div>
+                            <div class="col-sm-6">
+                                <!-- IMAGEN -->
+                                <div style="padding: 2%">
+                                    <%if(frontimage){%>
+                                        <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%">
+                                    <%}%>
+                                </div>
+                            </div>
+                        </div>
                         <p><%=text%></p>
 
                         <!-- Aca comienza contenido descargas -->
@@ -107,6 +125,12 @@ show_hidden: permite mostrar recursos bloqueados.
 </div>
 
 <%- include modal/edit_resource.ejs %>
+
+<style type="text/css">
+    .btn_obs{
+
+    }
+</style>
 
 <script type="text/javascript">
     $(document).ready(function(){

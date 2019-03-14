@@ -140,6 +140,10 @@
             url: "/resource/get/"+idresource,
             success: function (html) {
                 $("#mainframe").empty();
+                $("#full_filter").empty();
+                $("#right_col").empty();
+                $("#central_col").removeClass();
+                $("#central_col").addClass("col-sm-9");
                 $("#mainframe").append(html);
             }
         });
