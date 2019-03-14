@@ -11,36 +11,41 @@
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
+                            <img src="<%=data.perfil_image%>" class="img-circle" style="width: 50px; height: 50px">
+                            <label>Editar imagen</label>
+                            <input name="perfil_image" type="file" accept="image/*">
+                        </div>
+                        <div class="form-group">
                             <label>Nombre</label>
-                            <input class="form-control" id="name" type="text" value="<%= data.name%>" required autofocus>
+                            <input class="form-control" name="name" id="name" type="text" value="<%= data.name%>" required>
                         </div>
                         <div class="form-group">
                             <label>Nombre de Usuario</label>
-                            <input class="form-control" id="username" type="text" value="<%= data.username%>" required>
+                            <input class="form-control" name="username" id="username" type="text" value="<%= data.username%>" required>
                         </div>
                         <div class="form-group">
                             <label>Rut</label>
-                            <input class="form-control" id="rut" type="text" value="<%= data.rut%>" required>
+                            <input class="form-control" name="rut" id="rut" type="text" value="<%= data.rut%>">
                         </div>
                         <div class="form-group">
                             <label>Mail</label>
-                            <input class="form-control" id="mail" type="text" value="<%= data.mail%>" required>
+                            <input class="form-control" name="mail" id="mail" type="text" value="<%= data.mail%>" required>
                         </div>
                         <div class="form-group">
                             <label>Contraseña</label>
-                            <input class="form-control" id="password" type="password" value="<%= data.password%>" required>
+                            <input class="form-control" name="password" id="password" type="password" value="<%= data.password%>" required>
                         </div>
                         <div class="form-group">
                             <label>Repita su Contraseña</label>
-                            <input class="form-control" id="password2" type="password" value="<%= data.password%>" required>
+                            <input class="form-control" name="" id="password2" type="password" value="<%= data.password%>" required>
                         </div>
                         <div class="form-group">
                             <label>Dirección</label>
-                            <input class="form-control" id="address" type="text" value="<%= data.address%>" required>
+                            <input class="form-control" name="addess" id="address" type="text" value="<%= data.address%>">
                         </div>
                         <div class="form-group">
                             <label>Fecha de Nacimiento</label>
-                            <input class="form-control" id="b_date" type="date" value="<%= data.birth_date%>" required>
+                            <input class="form-control" name="b_date" id="b_date" type="date" value="<%=data.birth_date%>">
                         </div>
                     </div>
                 </div>
@@ -65,28 +70,28 @@
                         <tbody>
                         <tr>
                             <td>Nombre</td>
-                            <td><input class="form-control" id="name1" value="1" name="name" type="radio"></td>
-                            <td><input class="form-control" id="name0" value="0" name="name" type="radio"></td>
+                            <td><input class="form-control" id="name1" value="1" name="name_r" type="radio"></td>
+                            <td><input class="form-control" id="name0" value="0" name="name_r" type="radio"></td>
                         </tr>
                         <tr>
                             <td>Mail</td>
-                            <td><input class="form-control" id="mail1" value="1" name="mail" type="radio"></td>
-                            <td><input class="form-control" id="mail0" value="0" name="mail" type="radio"></td>
+                            <td><input class="form-control" id="mail1" value="1" name="mail_r" type="radio"></td>
+                            <td><input class="form-control" id="mail0" value="0" name="mail_r" type="radio"></td>
                         </tr>
                         <tr>
                             <td>Rut</td>
-                            <td><input class="form-control" id="rut1" value="1" name="rut" type="radio"></td>
-                            <td><input class="form-control" id="rut0" value="0" name="rut" type="radio"></td>
+                            <td><input class="form-control" id="rut1" value="1" name="rut_r" type="radio"></td>
+                            <td><input class="form-control" id="rut0" value="0" name="rut_r" type="radio"></td>
                         </tr>
                         <tr>
                             <td>Dirección</td>
-                            <td><input class="form-control" id="address1" value="1" name="address" type="radio"></td>
-                            <td><input class="form-control" id="address0" value="0" name="address" type="radio"></td>
+                            <td><input class="form-control" id="address1" value="1" name="address_r" type="radio"></td>
+                            <td><input class="form-control" id="address0" value="0" name="address_r" type="radio"></td>
                         </tr>
                         <tr>
                             <td>Fecha Nacimiento</td>
-                            <td><input class="form-control" id="b_date1" value="1" name="b_date" type="radio"></td>
-                            <td><input class="form-control" id="b_date0" value="0" name="b_date" type="radio"></td>
+                            <td><input class="form-control" id="b_date1" value="1" name="b_date_r" type="radio"></td>
+                            <td><input class="form-control" id="b_date0" value="0" name="b_date_r" type="radio"></td>
                         </tr>
                         </tbody>
                         <tfoot>
@@ -121,7 +126,6 @@
     var type = ["name", "mail", "rut", "address", "b_date"];
     $(document).ready(function(){
         var public = "<%=data.public%>".split(",");
-        console.log(public);
         for(var i=0; i<type.length; i++){
             if(public[i] == "1"){
                 $("#" + type[i] + "1").attr('checked', 'checked');
@@ -138,39 +142,26 @@
         });
     });
 
-    $("#form_update_teacher").on('submit',function(e){
-        e.preventDefault();
+    $("#form_update_teacher").submit(function(e) {
         if($("#password").val() != $("#password2").val()){
             alert("Las contraseñas no coinciden, intente nuevamente.");
             return;
         } else {
-            var public = $('input[name=name]:checked', '#form_update_teacher').val();
-            public += "," + $('input[name=mail]:checked', '#form_update_teacher').val();
-            public += "," + $('input[name=rut]:checked', '#form_update_teacher').val();
-            public += "," + $('input[name=address]:checked', '#form_update_teacher').val();
-            public += "," + $('input[name=b_date]:checked', '#form_update_teacher').val();
-            console.log(public);
-            $.ajax({
+            e.preventDefault();
+            $(this).ajaxSubmit({
                 type: 'POST',
-                data: { 
-                    name: $("#name").val(), 
-                    username: $("#username").val(), 
-                    rut: $("#rut").val(), 
-                    mail: $("#mail").val(),
-                    password: $("#password").val(),
-                    address: $("#address").val(),
-                    b_date: $("#b_date").val(),
-                    public: public
-                },
                 url: '/teacher/update_teacher',
-                success: function(data){
+                success: function (data) {
+                    console.log(data);
                     if(data == "ok"){
+                        e.preventDefault(); 
                         alert("Se han actualizado los datos correctamente.");
+                        window.location.href = "/teacher/info_teacher";
                     } else{
                         alert("Datos de usuario incorrectos, intente nuevamente.");
                     }
                 }
-            });            
+            });
         }
     });
 </script>

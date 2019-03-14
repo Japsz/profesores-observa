@@ -13,74 +13,76 @@
         <!-- for(){} el numero de contribuciones que deseemos mostrar -->
         <%if(results.length > 0){
             results.forEach(function (resource) {
-            if (resource.state == 'Activo' || show_hidden){ %>
-                <section id="<%=resource.idresource%>" class="blog-post">
-                    <div class="panel panel-default" style="padding: 10px">
-                        <!-- Imagen -->
-                        <%if(resource.frontimage){%>
-                            <img src="/uploaded-files/<%=resource.idteacher%>/<%=resource.idresource%>/<%=resource.frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%">
-                        <%}%>
-                        <!-- Titulo -->
-                        <div class="row">
-                            <div class="col-sm-1">
-                                <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 60px">
+                if (resource.state == 'Activo' || show_hidden){ %>
+                    <section id="<%=resource.idresource%>" class="blog-post">
+                        <div class="panel panel-default">
+                            <!-- Imagen -->
+                            <div style="padding: 2%">
+                                <%if(resource.frontimage && show_image){%>
+                                    <img src="/uploaded-files/<%=resource.idteacher%>/<%=resource.idresource%>/<%=resource.frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%">
+                                <%}%>
                             </div>
-                            <div class="col-sm-10" style="margin-left: 10px">
-                                <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">
-                                    <%=resource.title%>
-                                    <p class="bs-component btn-group-sm pull-right">
-                                        <%if(idteacher == resource.idteacher){%>
-                                            <a onclick="edit_modal(<%=resource.idresource%>)" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
-                                            <%if(resource.state != 'Activo'){%>
-                                                <a onclick="activate(<%=resource.idresource%>)" class="btn btn-success btn-fab"><i class="material-icons">lock_open</i></a>
-                                            <%} else {%>
-                                                <a onclick="deactivate(<%=resource.idresource%>)" class="btn btn-danger btn-fab"><i class="material-icons">lock</i></a>
-                                            <%}
-                                        }%>
-                                    </p>
-                                </h2>
-                                <div class="blog-post-meta" style="padding: 0;">
-                                    <h4>por <%=resource.name%> - <%=resource.date.slice(0, resource.date.indexOf('T'))%></h4>
-                                    <%if (tags[resource.idresource]){%>
-                                        <div class="col-sm-12>">
-                                            <h4><%=tags[resource.idresource][0][0]%></h4>
-                                        </div>
-                                    <%}%>
+                            <!-- Titulo -->
+                            <div class="row">
+                                <div class="col-sm-1">
+                                    <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 60px">
                                 </div>
-                                <!-- Acá va el contenido de la contribución (sólo vista previa) -->
-                                <p><%=resource.description%></p>
-                            </div>
+                                <div class="col-sm-10" style="margin-left: 10px">
+                                    <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">
+                                        <%=resource.title%>
+                                        <p class="bs-component btn-group-sm pull-right">
+                                            <%if(idteacher == resource.idteacher){%>
+                                                <a onclick="edit_modal(<%=resource.idresource%>)" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
+                                                <%if(resource.state != 'Activo'){%>
+                                                    <a onclick="activate(<%=resource.idresource%>)" class="btn btn-success btn-fab"><i class="material-icons">lock_open</i></a>
+                                                <%} else {%>
+                                                    <a onclick="deactivate(<%=resource.idresource%>)" class="btn btn-danger btn-fab"><i class="material-icons">lock</i></a>
+                                                <%}
+                                            }%>
+                                        </p>
+                                    </h2>
+                                    <div class="blog-post-meta" style="padding: 0;">
+                                        <h4>por <%=resource.name%> - <%=resource.date.slice(0, resource.date.indexOf('T'))%></h4>
 
+                                        <%if(tags[resource.idresource]) {%>
+                                            <div class="col-sm-12>">
+                                                <h4><%=tags[resource.idresource][0][0]%></h4>
+                                            </div>
+                                        <%}%>
+                                    </div>
+                                    <!-- Acá va el contenido de la contribución (sólo vista previa) -->
+                                    <p><%=resource.description%></p>
+                                </div>
 
-                            <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
-                                <!-- El param del onclick debe ser el idresource -->
-                                <a class="btn btn-success" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px">
-                                     <span class="glyphicon glyphicon-search"></span>Revisar Recurso
-                                </a>
-                            </div>
+                                <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
+                                    <!-- El param del onclick debe ser el idresource -->
+                                    <a class="btn btn-success" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px">
+                                         <span class="glyphicon glyphicon-search"></span>Revisar Recurso
+                                    </a>
+                                </div>
 
-                            <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
-                                <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
+                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <%if (idteacher == resource.idteacher) {
-                        var modal_data = {
-                            idresource: resource.idresource,
-                            idteacher: idteacher,
-                            title: resource.title,
-                            description: resource.description,
-                            tags: tags[resource.idresource]
-                        };
-                    %>
-                        <%- include('./modal/edit_resource.ejs', modal_data); %>
-                    <%}%>
-                </section>
-            <%}
+                        <%if (idteacher == resource.idteacher) {
+                            var modal_data = {
+                                idresource: resource.idresource,
+                                idteacher: idteacher,
+                                title: resource.title,
+                                description: resource.description,
+                                tags: tags[resource.idresource]
+                            };
+                        %>
+                            <%- include('./modal/edit_resource.ejs', modal_data); %>
+                        <%}%>
+                    </section>
+                <%}
             });
         } else { %>
             <section class="blog-post">
@@ -92,7 +94,6 @@
             </section>
         <%}%>
         <!-- Aca se deberia cerrar el for(){} -->
-
     </div>
 </div>
 
@@ -101,8 +102,6 @@
         width: 20px; 
         display: inline;
     }
-
-
 </style>
 
 <script>
