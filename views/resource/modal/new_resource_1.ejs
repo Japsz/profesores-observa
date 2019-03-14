@@ -1,6 +1,6 @@
 <!-- Informacion necesaria para crear un recurso base. -->
-<div id="modal_new_resource" class="modal  fade">
-    <div class="modal-dialog">
+<div id="modal_new_resource" class="modal fade">
+    <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <button type="button" class="close" data-dismiss="modal" style="padding: 5px 5px">
                 <span aria-hidden="true">&times;</span>
@@ -21,86 +21,84 @@
 
             <form id="resource_form" class="form-horizontal style-form">
                 <div class="modal-body">
-                    <div class="row">
-                        <div class="col-sm-12" style="padding-right: 3px">
+                    <div class="row" style="border-bottom: 1px black">
+                        <div class="col-sm-6">
+                            <input hidden id="idresourcedad" name="idresourcedad" type="text" value="">
+                            <div class="col-sm-12" style="padding-right: 3px">
+                                <div class="form-group">
+                                    <label for="title">Titulo</label>
+                                    <input name="title" type="text" class="form-control"
+                                           placeholder="¿Cual es el titulo del recurso?">
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12">
+                                <label for="tags">Area</label>
+                                <select name="tags" class="form-control">
+                                    <option>Lenguaje</option>
+                                    <option>Matemática</option>
+                                    <option>Ciencias Sociales</option>
+                                    <option>Ingles</option>
+                                    <option>Historia</option>
+                                </select>
+                            </div>
+                            <div id="checkboxlist" class="col-sm-12" style="padding-bottom: 5px">
+                                <label for="checkboxlist" style="display: flex;">Tipo de Recurso</label>
+                                <div class="col-sm-6" style="padding: 0;">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Columna/Libros/Texto</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Imagen</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Guías/pruebas</label>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6" style="padding: 0;">
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Mapas conceptuales</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Video</label>
+                                    </div>
+                                    <div class="checkbox">
+                                        <label><input type="checkbox" value="">Presentación</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
                             <div class="form-group">
-                                <label for="title">Titulo</label>
-                                <input name="title" type="text" class="form-control"
-                                       placeholder="¿Cual es el titulo del recurso?">
+                                <label for="description">Descripcion</label>
+                                <textarea name="description" class="form-control" rows="3" maxlength="255"
+                                          placeholder="Descripcion breve de tu Recurso. (Max. 255 caracteres)"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="description">Texto de Columna</label>
+                                <textarea name="text" class="form-control" rows="5"
+                                          placeholder="¡Aca puedes explayarte cuanto quieras sobre tu aporte!"></textarea>
                             </div>
                         </div>
-                        <div name="checkboxlist" class="row" style="padding-bottom: 5px">
-                            <h3>Tipo de recurso</h3>
-                            <div class="col-sm-4">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="inlineCheckbox1" value="text"> Columna/libros/textos
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="inlineCheckbox1" value="image"> Imagen
-                                </label>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="inlineCheckbox1" value="guide"> Guías/pruebas
-                                </label>
-                            </div>
-                            <div class="col-sm-4">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="inlineCheckbox1" value="presentation"> Presentación
-                                </label>
-                            </div>
-                            <div class="col-sm-3">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="inlineCheckbox1" value="video"> Video
-                                </label>
-                            </div>
-                            <div class="col-sm-5">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" id="inlineCheckbox1" value="map"> Mapas conceptuales
-                                </label>
-                            </div>
-                        </div>
+                    </div>
 
-                        <div class="form-group col-sm-12">
-                            <label for="tags">Tags</label>
-                            <select name="tags" class="form-control">
-                                <option>Lenguaje</option>
-                                <option>Matematicas</option>
-                                <option>Ciencias Sociales</option>
-                                <option>Ingles</option>
-                                <option>Historia</option>
-                            </select>
+                    <p class="row">
+                        <div class="col-sm-6">
+                                <label>Foto de Portada</label>
+                                <input name="frontimage" type="file" value="empty" accept="">
                         </div>
-                        <div class="form-group col-sm-12">
-                            <label for="description">Descripcion</label>
-                            <textarea name="description" class="form-control" rows="3" maxlength="255"
-                                      placeholder="Descripcion breve de tu Recurso. (Max. 255 caracteres)"></textarea>
-                        </div>
-                        <div class="col-sm-12">
-                            <label for="description">Texto de Columna</label>
-                            <textarea name="text" class="form-control" rows="5"
-                                      placeholder="¡Aca puedes explayarte cuanto quieras sobre tu aporte!"></textarea>
-                        </div>
-                        <div class="col-sm-8 col-sm-offset-2">
-                            <label>Portada</label>
-                            <input name="frontimage" type="file" accept="image/*">
-                        </div>
-                        <div class="row col-sm-8 col-sm-offset-2">
+                        <div class="col-sm-6">
                             <label>Subir Anexos 1</label>
                             <input name="file1" type="file">
                         </div>
-                        <div class="row col-sm-8 col-sm-offset-2">
+                        <div class="col-sm-6">
                             <label>Subir Anexos 2</label>
                             <input name="file2" type="file">
                         </div>
-                        <div class="row col-sm-8 col-sm-offset-2">
+                        <div class="col-sm-6">
                             <label>Subir Anexos 3</label>
                             <input name="file3" type="file">
                         </div>
-
-                    </div>
+                    </p>
 
                 </div>
                 <div class="modal-footer">
@@ -131,7 +129,6 @@
             type: 'POST',
             complete: function (xhr) {
                 $('#modal_new_resource').modal('hide');
-                console.log(xhr);
             }
         });
         return false;
@@ -150,8 +147,11 @@
                 bar.width(percentVal);
             },
             complete: function(xhr) {
-                console.log(xhr);
             }
         };
+    });
+
+    $('#modal_new_resource').on('hidden.bs.modal', function (e) {
+        $('#idresourcedad').attr('value', null);
     });
 </script>

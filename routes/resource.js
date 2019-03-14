@@ -16,7 +16,6 @@ function mysplit(str){
     str = str.split(', ');
     str = str.toString();
     str = str.split(',');
-    console.log(str);
     return str;
 }
 
@@ -178,15 +177,19 @@ router.post('/resources_by_review', function(req, res){
 // Esta ruta añade un nuevo material
 router.post('/add', function(req, res) {
     if (validate(req)) {
+        console.log('Imprimiendo body');
+        console.log(req.body);
+        console.log(req.files);
         let data = {
             resource: [validate(req), req.body.title, req.body.description, req.body.text, null],
             files: req.files,
             tags: mysplit(req.body.tags)
         };
-        console.log(data);
-        if(data.files.frontimage){
+        if (!('frontimage' in req.body)){
+            console.log("Foto de portada");
             data.resource[4] = data.files.frontimage.name;
         }
+        console.log('agregandorecurso');
         resource_model.new_resource(data.resource, function (err, results) {
             data.insertId = results.insertId;
             for (tag in data.tags) {
@@ -194,7 +197,13 @@ router.post('/add', function(req, res) {
                     console.log('Se ha creado un nuevo resource tag')
                 });
             }
+            if (req.body.idresourcedad){
+                resource_model.new_review([req.body.idresourcedad, results.insertId], function (err, results) {
+                    console.log('Se ha creado una review');
+                });
+            }
             if (data.files) {
+                console.log('agregando archivos');
                 for (key in data.files) {
                     file = data.files[key];
                     console.log(file);

@@ -112,6 +112,37 @@ resource_model.new_resource = function(data, callback){
     }
 };
 
+resource_model.new_review = function(data, callback){
+    if (connection){
+        let sql = 'INSERT INTO review (idresourcedad, idresourceson) ' +
+            'VALUES (?)';
+        connection.query(sql, [data], function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
+//recibe idresourceson
+resource_model.get_reviews = function(data, callback){
+    if (connection){
+        let sql = 'SELECT * FROM resource ' +
+            'WHERE resource.idresource IN ' +
+            '(SELECT idresourcedad FROM review ' +
+            'WHERE review.idresourceson = (?))';
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
 resource_model.edit_resource = function(data, callback){
     if (connection){
         let sql =   'UPDATE resource ' +
@@ -140,8 +171,6 @@ resource_model.delete_resource_tag = function(data, callback){
         });
     }
 };
-
-//TODO new_review
 
 //idresource, filename
 resource_model.new_file = function(data, callback){

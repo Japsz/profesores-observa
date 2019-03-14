@@ -10,10 +10,11 @@ show_hidden: permite mostrar recursos bloqueados.
     <div class="col-xs-12 col-sm-12">
         <!-- Corresponde a una contribución -->
         <section class="blog-post">
-            <div class="panel panel-default">
+            <div class="panel panel-default" style="padding: 10px">
                 <%if (frontimage){ %>
                     <div style="padding: 2%">
-                        <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%"/>
+                        <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>"
+                             class="img-responsive" style=";border: 2px solid black; width: 100%"/>
                     </div>
                 <%}%>
 
@@ -26,27 +27,54 @@ show_hidden: permite mostrar recursos bloqueados.
                             <%=title%>
                             <p class="bs-component btn-group-sm pull-right">
                                 <%if(idteacher == logged){%>
+                                    <a onclick="new_review(<%=idresource%>)" class="btn btn-success btn-fab-"><i class="material-icons">assignment</i></a>
                                     <a onclick="edit_modal(<%=idresource%>)" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
                                     <%if(state != 'Activo'){%>
                                         <a onclick="activate(<%=idresource%>)" class="btn btn-success btn-fab"><i class="material-icons">lock_open</i></a>
                                     <%} else {%>
                                         <a onclick="deactivate(<%=idresource%>)" class="btn btn-danger btn-fab"><i class="material-icons">lock</i></a>
                                     <%}
-                                }%>
+                                } %>
                             </p>
                         </h2>
                         <div class="blog-post-meta" style="padding: 0;">
                             <h4>por <%=name%> - <%=date.slice(0, date.indexOf('T'))%></h4>
                         </div>
-                        <!-- Barra -->
 
                         <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                         <p><%=description%></p>
                         <p><%=text%></p>
-                    </div>
 
-                    <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
-                        <!-- El param del onclick debe ser el idresource -->
+                        <!-- Aca comienza contenido descargas -->
+                        <div class="row" style="border-bottom: 2px orange solid; padding-bottom: 3px; margin-bottom: 5px">
+                            <img src="/icons/RRCC web-23.png" style="width: 50px; margin: 0px; float: left">
+                            <h3 style="margin: 0px">Archivos Adjuntos</h3>
+                            Aca estan los archivos que se asocian a este recurso.
+                        </div>
+                        <div class="row resource-row" >
+                            <%
+                            if(files.length > 0){
+                                    for(file in files){%>
+                            <div class="col-xs-4 col sm-4">
+                                <div class="panel panel-primary">
+                                    <div class="panel-heading resource-head">
+                                        <h5><%=files[file].filename%></h5>
+                                    </div>
+                                    <div class="panel-body">
+                                        <a class="btn btn-primary" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>" style="float: left">Descargar</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <%}
+                            } else {%>
+                                <br>
+                                <h3 style="text-align: center;">Este recurso no tiene archivos.</h3>
+                                <br>
+                            <%}%>
+                        </div>
+
+                        <!-- Aca comienza contenido revisiones -->
+
                     </div>
 
                     <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
@@ -59,20 +87,6 @@ show_hidden: permite mostrar recursos bloqueados.
                 </div>
 
                 <!-- Aca van las descargas-->
-                <div class="row resource-row">
-                    <%for(file in files){%>
-                        <div class="col-xs-4 col sm-4">
-                            <div class="panel panel-primary">
-                                <div class="panel-heading resource-head">
-                                    <h5><%=files[file].filename%></h5>
-                                    </div>
-                                <div class="panel-body">
-                                    <a class="btn btn-primary" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>>" style="float: left">Descargar</a>
-                                </div>
-                            </div>
-                        </div>
-                    <%}%>
-                </div>
             </div>
             <%if (idteacher == logged) {
                 var modal_data = {
@@ -105,22 +119,12 @@ show_hidden: permite mostrar recursos bloqueados.
         });
     });
 
-    function download(idteacher, idresource, filename) {
-        console.log(idteacher, idresource, filename);
-        $.ajax({
-            type: 'POST',
-            data: {
-                idteacher: idteacher,
-                idresource: idresource,
-                filename: filename},
-            url: '/resource/download',
-            success: function (html) {
-            }
-        })
-
+    function edit_modal(idresource) {
+        $('#modal_edit_resource').modal('toggle');
     }
 
-    function edit_resource(idresource) {
-        $('#modal_edit_resource').modal('toggle');
+    function new_review(idresource) {
+        $('#modal_new_resource').modal('toggle');
+        $('#idresourcedad').attr('value', idresource);
     }
 </script>
