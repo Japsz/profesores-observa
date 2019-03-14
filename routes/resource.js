@@ -184,7 +184,7 @@ router.post('/add', function(req, res) {
             tags: mysplit(req.body.tags)
         };
         console.log(data);
-        if (data.files.frontimage){
+        if(data.files.frontimage){
             data.resource[4] = data.files.frontimage.name;
         }
         resource_model.new_resource(data.resource, function (err, results) {

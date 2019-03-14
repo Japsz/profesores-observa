@@ -96,17 +96,30 @@ router.get('/info_teacher', function(req, res, next) {
 });
 
 /* Actualiza la información del usuario */
-router.post('/update_teacher', function(req, res, next) {
+router.post('/update_teacher', function(req, res) {
     if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
         var input = JSON.parse(JSON.stringify(req.body));
         var idteacher = req.session.teacherData.idteacher;
-        let perfil_image = input.perfil_image;
-        var url_image = "/public/perfil-images/" + idteacher + "/" + perfil_image.name;
-        perfil_image.mv( url_image, function(err) {
-            if(err){
-                console.log(err.message);
-            }
-        });
+        // Almacenar imagen como foto de perfil, se almacena en la carpeta del teacher
+        var url_image = req.session.teacherData.perfil_image;
+        console.log(req.files);
+        if(req.files){
+            let perfil_image = req.files.perfil_image;
+            url_image = "public/uploaded-files/" + idteacher + "/" + perfil_image.name;
+            perfil_image.mv(url_image);
+            url_image = url_image.split("public")[1];
+        }
+        // Actualiza el campo public
+        var public = input.name_r + "," + input.mail_r + "," + input.rut_r + "," + input.address_r + "," + input.b_date_r;
+        console.log(public);
+        // Fecha de nacimiento
+        var birth_date = null;
+        if(req.session.teacherData.birth_date != null){
+            birth_date = req.session.teacherData.birth_date.slice(0, 19).replace('T', ' ');
+        }
+        if(input.b_date != ""){
+           birth_date: input.b_date;
+        }
         var data = {
             idteacher: idteacher,
             name: input.name,
@@ -115,14 +128,16 @@ router.post('/update_teacher', function(req, res, next) {
             mail: input.mail,
             password: input.password,
             address: input.address,
-            birth_date: input.b_date,
+            birth_date: birth_date,
             perfil_image: url_image,
-            public: input.public
+            public: public
         };
+        console.log(data);
         req.session.teacherData = data;
         teacher_model.update_teacher(data, function(err, result) {
             if (err) {
                 console.log(err.message);
+                res.send("false");
             } else {
                 console.log(result);
                 res.send("ok");
