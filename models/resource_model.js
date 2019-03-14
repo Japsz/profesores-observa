@@ -13,8 +13,10 @@ var resource_model = {};
 //Funcion que retorna los recursos de un teacher
 resource_model.resources_by_teacher = function(id, callback){
   if(connection){
-    var sql = 'SELECT * FROM resource WHERE idteacher=' + connection.escape(id) 
-    + ' LEFT JOIN teacher ON resource.idteacher = teacher.idteacher '
+      console.log(id);
+    var sql = 'SELECT * FROM resource'
+    + ' LEFT JOIN teacher ON resource.idteacher = teacher.idteacher'
+    + ' WHERE teacher.idteacher=' + connection.escape(id)
     + ' ORDER BY idresource DESC';
     connection.query(sql, function(err, result){
       if(err){
@@ -108,7 +110,7 @@ resource_model.new_resource = function(data, callback){
                 throw err;
             }
             else return callback(data, results);
-        })
+        });
     }
 };
 
