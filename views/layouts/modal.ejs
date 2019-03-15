@@ -1,0 +1,70 @@
+<!-- Crear evento como profesor-->
+<div class="modal fade" id="modalProposeEvnt" tabindex="-1" role="dialog" aria-labelledby="evntModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <form id="proposeEvntForm" data-url="/event/proposeEvnt">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="evntModalLabel">Añadir un Evento</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12">
+                        <label for="title">Titulo</label>
+                        <div class="input-group">
+                            <input type="text" id="newEvntTitle" class="form-control" minlength="5" maxlength="45" name="title" placeholder="Completada Bailable" required>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <label for="description">Descripción</label>
+                        <div class="input-group">
+                            <textarea class="form-control" name="description" id="newEvntSummary" cols="10" rows="4" value=""></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="start">Fecha Inicio</label>
+                                <input type="datetime-local" id="newEvntStart" name="start" class="form-control" required>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label for="end">Fecha Término</label>
+                                <input type="datetime-local" id="newEvntEnd" class="form-control" name="end" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-primary" type="submit">+ Crear</button>
+                    <!-- Columnas de teacher -->
+                </div>
+            </div>
+        </form>
+    </div>
+    <script type="text/javascript">
+        // Agrega un profesor nuevo, lo envia al controlador
+        $("#proposeEvntForm").on('submit',function(e){
+            e.preventDefault();
+            var data = {};
+            $("#proposeEvntForm input").each(function (idx) {
+                data[$(this).attr("name")] = $(this).val();
+            });
+            data.description = $("#newEvntSummary").val();
+            ajax_send(this,"","custom",data,function (res) {
+                console.log(res.data);
+                if(res.err){
+                    alert("Error al crear el evento");
+                } else {
+                    alert("yupi");
+                    $("#modalProposeEvnt").modal('toggle');
+                    $(this).trigger('reset');
+                }
+            });
+            return false;
+        });
+    </script>
+</div>

@@ -44,51 +44,6 @@ function ajax_send(caller,target,type = "insert",data = {},callback = {}){
     });
 };
 
-// Agrega un profesor nuevo, lo envia al controlador
-$("#newTeacherForm").on('submit',function(e){
-    e.preventDefault();
-    var data = {};
-    $("#newTeacherForm input").each(function (idx) {
-        data[$(this).attr("name")] = $(this).val();
-    });
-    ajax_send(this,"","custom",data,function (iduser) {
-        if(iduser.value){
-            $("#newTeacherEmail").addClass("is-invalid");
-        } else {
-            $.ajax({
-                url:'/administrador/newTeacher',
-                type: 'post',
-                data: data,
-                success: function(data){
-                    if(!data.err){
-                        alert("Usuario Creado!");
-                        $("#modalNewTeacher").modal('toggle');
-                    } else alert(data.errMsg);
-                }
-            })
-        }
-    });
-    return false;
-});
-// Agrega un profesor nuevo, lo envia al controlador
-$("#newEvntForm").on('submit',function(e){
-    e.preventDefault();
-    var data = {};
-    $("#newEvntForm input").each(function (idx) {
-        data[$(this).attr("name")] = $(this).val();
-    });
-    data.summary = $("#newEvntSummary").val();
-    ajax_send(this,"","custom",data,function (res) {
-        console.log(res.data);
-        if(res.err){
-            alert("Error al crear el evento");
-        } else {
-            $("#modalNewEvnt").modal('toggle');
-            ajax("/administrador/listEvnt");
-        }
-    });
-    return false;
-});
 // Habilita el profesor
 function valid_teacher(yo){
     $.ajax({

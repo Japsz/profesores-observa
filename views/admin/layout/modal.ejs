@@ -16,6 +16,53 @@
         </div>
     </div>
 </div>
+<!-- Rechazar Propuesta de evento Modal-->
+<div class="modal fade" id="rejectProposal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="rejectProposalForm" data-url="/administrador/validateProposal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">¿Rechazar Propuesta?</h5>
+                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="razon">Escriba la razón de rechazo</label>
+                        <input type="text" class="form-control" name="razon" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="idevent" id="rejectIdEvnt" value="">
+                    <input type="hidden" name="newType" value="2">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                    <button class="btn btn-danger" type="submit" >Rechazar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script type="text/javascript">
+        // Agrega un profesor nuevo, lo envia al controlador
+        $("#rejectProposalForm").on('submit',function(e){
+            e.preventDefault();
+            var data = {};
+            $("#rejectProposalForm input").each(function (idx) {
+                data[$(this).attr("name")] = $(this).val();
+            });
+            ajax_send(this,"","custom",data,function (res) {
+                console.log(res.data);
+                if(res.err){
+                    alert("Error al crear el evento");
+                } else {
+                    $("#rejectProposal").modal('toggle');
+                    $("#proposal_" + data.idevent).remove();
+                }
+            });
+            return false;
+        });
+    </script>
+</div>
 
 <!-- Crear profesor modal-->
 <div class="modal fade" id="modalNewTeacher" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -62,6 +109,34 @@
             </div>
         </form>
     </div>
+    <script type="text/javascript">
+        // Agrega un profesor nuevo, lo envia al controlador
+        $("#newTeacherForm").on('submit',function(e){
+            e.preventDefault();
+            var data = {};
+            $("#newTeacherForm input").each(function (idx) {
+                data[$(this).attr("name")] = $(this).val();
+            });
+            ajax_send(this,"","custom",data,function (iduser) {
+                if(iduser.value){
+                    $("#newTeacherEmail").addClass("is-invalid");
+                } else {
+                    $.ajax({
+                        url:'/administrador/newTeacher',
+                        type: 'post',
+                        data: data,
+                        success: function(data){
+                            if(!data.err){
+                                alert("Usuario Creado!");
+                                $("#modalNewTeacher").modal('toggle');
+                            } else alert(data.errMsg);
+                        }
+                    })
+                }
+            });
+            return false;
+        });
+    </script>
 </div>
 <!-- Crear profesor modal-->
 <div class="modal fade" id="modalNewEvnt" tabindex="-1" role="dialog" aria-labelledby="evntModalLabel" aria-hidden="true">
@@ -116,4 +191,25 @@
             </div>
         </form>
     </div>
+    <script type="text/javascript">
+        // Agrega un profesor nuevo, lo envia al controlador
+        $("#newEvntForm").on('submit',function(e){
+            e.preventDefault();
+            var data = {};
+            $("#newEvntForm input").each(function (idx) {
+                data[$(this).attr("name")] = $(this).val();
+            });
+            data.summary = $("#newEvntSummary").val();
+            ajax_send(this,"","custom",data,function (res) {
+                console.log(res.data);
+                if(res.err){
+                    alert("Error al crear el evento");
+                } else {
+                    $("#modalNewEvnt").modal('toggle');
+                    ajax("/administrador/listEvnt");
+                }
+            });
+            return false;
+        });
+    </script>
 </div>
