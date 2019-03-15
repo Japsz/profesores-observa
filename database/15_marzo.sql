@@ -238,11 +238,11 @@ CREATE TABLE `resource_score` (
   `idresource` int(11) NOT NULL,
   `score` int(11) DEFAULT NULL,
   `date` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`idpoint`),
-  KEY `idresource_idx` (`idresource`),
-  KEY `fk_idteacher_rp_idx` (`idteacher`),
-  CONSTRAINT `fk_idteacher_rp` FOREIGN KEY (`idteacher`) REFERENCES `teacher` (`idteacher`) ON DELETE CASCADE ON UPDATE NO ACTION,
-  CONSTRAINT `idresource_fk_rp` FOREIGN KEY (`idresource`) REFERENCES `resource` (`idresource`) ON DELETE CASCADE ON UPDATE NO ACTION
+  PRIMARY KEY (`idscore`),
+  KEY `idresource_rs_idx` (`idresource`),
+  KEY `fk_idteacher_rs_idx` (`idteacher`),
+  CONSTRAINT `fk_idteacher_rs` FOREIGN KEY (`idteacher`) REFERENCES `teacher` (`idteacher`) ON DELETE CASCADE ON UPDATE NO ACTION,
+  CONSTRAINT `idresource_fk_rs` FOREIGN KEY (`idresource`) REFERENCES `resource` (`idresource`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -291,7 +291,7 @@ DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `idtag` int(11) NOT NULL AUTO_INCREMENT,
   `tag` varchar(45) COLLATE utf8_bin NOT NULL,
-  PRIMARY KEY (`idtag`),
+  PRIMARY KEY (`idtag`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
