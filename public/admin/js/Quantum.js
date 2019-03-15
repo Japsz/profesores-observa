@@ -13,7 +13,7 @@ function ajax(link){
             }
         }
     });
-}
+};
 
 function ajax_send(caller,target,type = "insert",data = {},callback = {}){
     if(jQuery.isEmptyObject(data)) data = $(caller).data();

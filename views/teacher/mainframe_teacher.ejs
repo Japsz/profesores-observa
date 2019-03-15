@@ -49,7 +49,7 @@ y la columna central mainframe -->
                                         <p>Mis revisiones</p>
                                     </div>
                                 </a>
-                                <a class="btn btn-default" style="width: 220px">
+                                <a class="btn btn-default" href="#" data-url="/evento/getMine" onclick="ajax_send(this,'#central_col','insert',{my:'evnt'})" id="myEvnts" style="width: 220px">
                                     <div class="col-sm-3">
                                         <img src="/icons/RRCC web-19.png" class="img-rounded" style="width: 50px">
                                     </div>
@@ -81,7 +81,7 @@ y la columna central mainframe -->
                                     <p>Crear recurso</p>
                                 </div>
                             </a>
-                            <a class="btn btn-default" style="width: 220px">
+                            <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default" style="width: 220px">
                                 <div class="col-sm-3" style="padding-left: 5%">
                                     <img src="/icons/RRCC web-14.png" class="img-rounded" style="width: 60px">
                                 </div>
@@ -253,9 +253,7 @@ y la columna central mainframe -->
                             <div class="col-md-12">
                                 <div id="calendar"></div>
                             </div>
-                            <div class="col-md-12" style="margin-top: 5px">
-                                <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default pull-right text-white">+ Proponer evento</a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
