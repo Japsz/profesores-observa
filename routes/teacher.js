@@ -175,6 +175,20 @@ router.get('/complete_teacher_data/:idteacher', function(req, res, next) {
     });
 });
 
+/* Redirije al perfil de otro usuario */
+router.get('/teacher_profile/:idteacher', function(req, res, next) {
+    if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
+        teacher_model.show_teacher(req.params.idteacher, function (err, data) {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(data[0]);
+                res.render("teacher/teacher_profile", {data: data[0]});
+            }
+        });        
+    }
+});
+
 /* Envia mail a usuario con los datos de su cuenta */
 router.post('/recover_password', function(req, res, next) {
     var input = JSON.parse(JSON.stringify(req.body));

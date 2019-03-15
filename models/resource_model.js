@@ -66,11 +66,10 @@ resource_model.resources_by_review = function(id, callback){
   }
 };
 
-
 resource_model.get_resources = function(data, callback){
     if (connection){
         let sql;
-        sql = 'SELECT resource.*, teacher.name FROM resource ' +
+        sql = 'SELECT resource.*, teacher.name, teacher.idteacher FROM resource ' +
               'LEFT JOIN teacher ON resource.idteacher = teacher.idteacher ' +
               'ORDER BY idresource DESC';
         connection.query(sql,data, function (err,results) {
@@ -85,7 +84,7 @@ resource_model.get_resources = function(data, callback){
 //Query obtener un recurso segun data = idresource
 resource_model.get_resource = function(data, callback){
     if (connection){
-        let sql = 'SELECT resource.*, teacher.name FROM resource ' +
+        let sql = 'SELECT resource.*, teacher.name, teacher.idteacher FROM resource ' +
                   'LEFT JOIN teacher ON resource.idteacher = teacher.idteacher ' +
                   'WHERE idresource = ?';
         connection.query(sql, data, function (err, results) {
