@@ -51,13 +51,11 @@ resource_model.resources_by_comment_teacher = function(id, callback){
 //Funcion que retorna los recursos en los que ha comentado un teacher
 resource_model.resources_by_review = function(id, callback){
   if(connection){
-    var sql = 'SELECT * FROM resource'
-    + ' LEFT JOIN teacher ON resource.idteacher = teacher.idteacher '
-    + ' WHERE idresource IN (SELECT review.idroot FROM resource'
-    + ' LEFT JOIN review ON review.idresourceson=resource.idresource'
-    + ' WHERE resource.idteacher=' + connection.escape(id) + ')'
-    + ' ORDER BY idresource DESC';
-    connection.query(sql, function(err, result){
+    var sql = 'SELECT * FROM review LEFT JOIN resource ' +
+        'ON resource.idresource = review.idresourceson ' +
+        'WHERE  resource.idteacher = ? ' +
+        'ORDER BY idresource DESC';
+    connection.query(sql,id, function(err, result){
       if(err){
         throw err;
       } else{
