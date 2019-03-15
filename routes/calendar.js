@@ -103,13 +103,8 @@ router.post('/proposeEvnt', function(req, res, next) {
         var data = req.body;
         data.idteacher = req.session.teacherData.idteacher;
         data.type = 0;
-        console.log(data.start);
-        console.log(data.end);
         data.start = data.start.split("T")[0] + " " + data.start.split("T")[1];
         data.end= data.end.split("T")[0] + " " + data.end.split("T")[1];
-        console.log("---");
-        console.log(data.start);
-        console.log(data.end);
         evntModel.create(data,function(err,rows){
             if(err) {
                 res.send({err:true,errMsg:rows});

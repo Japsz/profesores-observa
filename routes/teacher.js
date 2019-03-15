@@ -56,6 +56,7 @@ router.post('/login_teacher_confirm', function(req, res, next) {
                     }
                     req.session.isteacherLogged = true;
                     req.session.teacherData = data[0];
+                    req.session.show_image = true;
                     console.log(req.session.teacherData);
                     res.send("ok");
                 } else {
