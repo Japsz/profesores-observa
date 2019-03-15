@@ -13,7 +13,11 @@ var resource_model = {};
 //Funcion que retorna los recursos de un teacher
 resource_model.resources_by_teacher = function(id, callback){
   if(connection){
-    var sql = 'SELECT * FROM resource WHERE idteacher=' + connection.escape(id) + ' ORDER BY date DESC';
+      console.log(id);
+    var sql = 'SELECT * FROM resource'
+    + ' LEFT JOIN teacher ON resource.idteacher = teacher.idteacher'
+    + ' WHERE teacher.idteacher=' + connection.escape(id)
+    + ' ORDER BY idresource DESC';
     connection.query(sql, function(err, result){
       if(err){
         throw err;
@@ -28,8 +32,11 @@ resource_model.resources_by_teacher = function(id, callback){
 //Funcion que retorna los recursos en los que ha comentado un teacher
 resource_model.resources_by_comment_teacher = function(id, callback){
   if(connection){
-    var sql = 'SELECT * FROM resource WHERE idresource IN (SELECT idresource FROM resource_comment ' 
-    + 'WHERE idteacher=' + connection.escape(id) + ' GROUP BY idresource) ORDER BY date DESC';
+    var sql = 'SELECT * FROM resource'
+    + ' LEFT JOIN teacher ON resource.idteacher = teacher.idteacher '
+    + ' WHERE idresource IN (SELECT idresource FROM resource_comment ' 
+    + ' WHERE idteacher=' + connection.escape(id) + ' GROUP BY idresource) '
+    + ' ORDER BY idresource DESC';
     connection.query(sql, function(err, result){
       if(err){
         throw err;
@@ -44,10 +51,11 @@ resource_model.resources_by_comment_teacher = function(id, callback){
 //Funcion que retorna los recursos en los que ha comentado un teacher
 resource_model.resources_by_review = function(id, callback){
   if(connection){
-    var sql = 'SELECT * FROM resource WHERE idresource IN (SELECT review.idroot FROM resource'
-    + ' LEFT JOIN review ON review.idresourceson=resource.idresource'
-    + ' WHERE resource.idteacher=' + connection.escape(id) + ')';
-    connection.query(sql, function(err, result){
+    var sql = 'SELECT * FROM review LEFT JOIN resource ' +
+        'ON resource.idresource = review.idresourceson ' +
+        'WHERE  resource.idteacher = ? ' +
+        'ORDER BY idresource DESC';
+    connection.query(sql,id, function(err, result){
       if(err){
         throw err;
       } else{
@@ -100,7 +108,38 @@ resource_model.new_resource = function(data, callback){
                 throw err;
             }
             else return callback(data, results);
-        })
+        });
+    }
+};
+
+resource_model.new_review = function(data, callback){
+    if (connection){
+        let sql = 'INSERT INTO review (idresourcedad, idresourceson) ' +
+            'VALUES (?)';
+        connection.query(sql, [data], function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
+//recibe idresourceson
+resource_model.get_reviews = function(data, callback){
+    if (connection){
+        let sql = 'SELECT * FROM resource ' +
+            'WHERE resource.idresource IN ' +
+            '(SELECT idresourcedad FROM review ' +
+            'WHERE review.idresourceson = (?))';
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
     }
 };
 
@@ -132,8 +171,6 @@ resource_model.delete_resource_tag = function(data, callback){
         });
     }
 };
-
-//TODO new_review
 
 //idresource, filename
 resource_model.new_file = function(data, callback){
@@ -186,8 +223,8 @@ resource_model.change_state = function (data, callback){
 //Recibe solo un tag
 resource_model.new_tag = function(data, callback){
     if (connection){
-        let sql = 'INSERT INTO tag (tag) VALUES (?)';
-        connection.query(sql, data, function (err, results) {
+        let sql = 'INSERT INTO tag (tag, type) VALUES (?)';
+        connection.query(sql, [data], function (err, results) {
             if (err) {
                 console.log(err);
                 throw err;
@@ -198,13 +235,13 @@ resource_model.new_tag = function(data, callback){
 };
 
 
-//recibe data = [idresource, tag]
+//recibe data = [idresource, tag, type]
 resource_model.new_resource_tag = function(data, callback){
     if (connection){
         let sql = 'INSERT INTO resource_tag (idresource, idtag) VALUES (?)';
         resource_model.get_tag(data[1], function (err, results) {
             if (results.length == 0){
-                resource_model.new_tag(data[1], function (err, results) {
+                resource_model.new_tag([data[1],data[2]], function (err, results) {
                     let data2 = [data[0] ,results.insertId];
                     connection.query(sql, [data2], function (err, results) {
                         if (err) {
@@ -231,7 +268,7 @@ resource_model.new_resource_tag = function(data, callback){
 //Recibe una lista de idresources. Puede ser 1 elemento.
 resource_model.get_tag_idresources = function(idresource, callback){
     if (connection){
-        let sql = 'SELECT resource_tag.idresource, tag.tag FROM resource_tag ' +
+        let sql = 'SELECT resource_tag.idresource, tag.tag, tag.type FROM resource_tag ' +
             'LEFT JOIN tag ON resource_tag.idtag = tag.idtag ' +
             'WHERE resource_tag.idresource IN (?) ' +
             'ORDER BY resource_tag.idresource DESC';
@@ -275,9 +312,6 @@ resource_model.filter = function(data, callback){
     	var tags = JSON.parse(data.tags);
     	var suport = JSON.parse(data.suport);
     	var date = JSON.parse(data.date);
-    	console.log(tags);
-    	console.log(suport);
-    	console.log(date);
         if(tags.length > 0){
         	var where2 = " AND resource.idresource IN (SELECT resource_tag.idresource FROM tag LEFT JOIN resource_tag ON tag.idtag=resource_tag.idtag WHERE ("; //Filtra tags(tipo y area)
 	        for(var i=0; i<tags.length; i++){

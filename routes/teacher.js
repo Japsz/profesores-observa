@@ -11,11 +11,12 @@ router.get('/', function(req, res, next) {
     // req.session.isteacherLogged = false;
     if(req.session.isteacherLogged == null){
         req.session.isteacherLogged = false;
+        req.session.show_image = true;
         req.session.teacherData = {};
     }
     if(req.session.isteacherLogged == true){
         // Si esta logeado va al mainframe con todas las funcionalidades
-        res.render('teacher/mainframe_teacher', {data: req.session.teacherData});
+        res.render('teacher/mainframe_teacher', {data: req.session.teacherData, show_image: req.session.show_image});
     } else {
         // Si no, lo redirige a una vista donde solo puede ver el recurso sin detalles
         res.render('mainframe', {});
@@ -25,13 +26,7 @@ router.get('/', function(req, res, next) {
 /* Verifica si esta logeado para mostrar info de teacher en nav */
 router.post('/is_login', function(req, res, next) {
     if(req.session.isteacherLogged == true){
-        teacher_model.show_teacher(req.session.teacherData.idteacher, function(err, data) {
-            if(err){
-                console.log(err.message);
-            }else{
-                res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: data});
-            }
-        });
+        res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: req.session.teacherData});
     } else{
         res.render('teacher/is_login', { is_login: req.session.isteacherLogged, data: false });
     }
@@ -42,7 +37,7 @@ router.get('/login_teacher', function(req, res, next) {
     if(req.session.isteacherLogged == false){
         res.render('teacher/login_teacher', {});
     } else{
-        res.redirect('teacher');
+        res.redirect('teacher/');
     }
 });
 
@@ -56,6 +51,9 @@ router.post('/login_teacher_confirm', function(req, res, next) {
         }else{
             if(data.length > 0){
                 if(data[0].valid == 1){
+                    if(data[0].perfil_image == null){
+                        data[0].perfil_image = "/icons/avatar.png";
+                    }
                     req.session.isteacherLogged = true;
                     req.session.teacherData = data[0];
                     console.log(req.session.teacherData);
@@ -98,24 +96,48 @@ router.get('/info_teacher', function(req, res, next) {
 });
 
 /* Actualiza la información del usuario */
-router.post('/update_teacher', function(req, res, next) {
+router.post('/update_teacher', function(req, res) {
     if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
         var input = JSON.parse(JSON.stringify(req.body));
+        var idteacher = req.session.teacherData.idteacher;
+        // Almacenar imagen como foto de perfil, se almacena en la carpeta del teacher
+        var url_image = req.session.teacherData.perfil_image;
+        console.log(req.files);
+        if(req.files){
+            let perfil_image = req.files.perfil_image;
+            url_image = "public/uploaded-files/" + idteacher + "/" + perfil_image.name;
+            perfil_image.mv(url_image);
+            url_image = url_image.split("public")[1];
+        }
+        // Actualiza el campo public
+        var public = input.name_r + "," + input.mail_r + "," + input.rut_r + "," + input.address_r + "," + input.b_date_r;
+        console.log(public);
+        // Fecha de nacimiento
+        var birth_date = null;
+        if(req.session.teacherData.birth_date != null){
+            birth_date = req.session.teacherData.birth_date.slice(0, 19).replace('T', ' ');
+        }
+        if(input.b_date != ""){
+           birth_date: input.b_date;
+        }
         var data = {
-            idteacher: req.session.teacherData.idteacher,
-            name: input.name, 
-            username: input.username, 
-            rut: input.rut, 
+            idteacher: idteacher,
+            name: input.name,
+            username: input.username,
+            rut: input.rut,
             mail: input.mail,
             password: input.password,
             address: input.address,
-            birth_date: input.b_date,
-            public: input.public
+            birth_date: birth_date,
+            perfil_image: url_image,
+            public: public
         };
+        console.log(data);
         req.session.teacherData = data;
         teacher_model.update_teacher(data, function(err, result) {
             if (err) {
                 console.log(err.message);
+                res.send("false");
             } else {
                 console.log(result);
                 res.send("ok");

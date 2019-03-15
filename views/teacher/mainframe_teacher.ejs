@@ -15,12 +15,12 @@ y la columna central mainframe -->
                         <div class="row">
                             <div class="col-md-4" style="padding: 5px; margin-left: 5%">
                                 <a>
-                                    <img src="/icons/avatar.png" class="img-circle" style="width: 100%">
+                                    <img src="<%=data.perfil_image%>" class="img-circle" style="width: 80px; height: 80px">
                                 </a>
                             </div>
                             <div class="col-md-7" style="padding: 0">
-                                <h5 style="margin-bottom: 10px; margin-top: 20px; font-size: 20px"><%=data.name%></h5>
-                                <h5>Institucion AIEP</h5>
+                                <h5 style="margin-bottom: 10px; margin-top: 20px; font-size: 20px;margin-left: 5%"><%=data.name%></h5>
+                                <!-- <h5>Institucion AIEP</h5> -->
                             </div>
                         </div>
                         <div class="btn-group-vertical" role="group" style="width: 100%">
@@ -96,10 +96,10 @@ y la columna central mainframe -->
         </div>
 
         <!-- Columna del medio -->
-        <div class="col-sm-6" >
+        <div class="col-sm-6" id="central_col">
             <div class="blog-main">
-                <div class="row">
-                    <!-- Filtro -->
+                <!-- Filtro -->
+                <div class="row" id="full_filter">
                     <div class="col-sm-11" style="padding-right: 0">
                         <input type="text" id="filter" class="form-control" placeholder="Buscador de recursos" style="margin: 0; padding-bottom: 0" autofocus>
                     </div>
@@ -112,11 +112,14 @@ y la columna central mainframe -->
                     </div>
                     <div class="col-sm-3">
                         <div class="sidebar-module">
-                            <div class="panel panel-default">
+                            <div class="panel panel-default" id="show_image" style="opacity: 0.8">
                                 <div class="dropdown">
-                                    <button class="dropbtn btn" style="width: 108%">
-                                        <h5 class="filter_text" style="padding-left: 5px" data-toggle="tooltip" data-placement="bottom" title="¡Visualizar imagenes activado!">
-                                            <img src="/icons/RRCC web-05.png" class="img-rounded filter_img">Activada
+                                    <button class="dropbtn btn" onclick="show_image()" style="width: 101%; padding: 0">
+                                        <h5 class="filter_text" id="msj_show_image" data-toggle="tooltip" data-placement="bottom" style="left: -10px">
+                                            <img src="/icons/RRCC web-05.png" class="img-rounded filter_img" style="display: inline-block;">
+                                            <div id="state_img" style="display: inline-block;">
+                                                Ver imagen
+                                            </div>
                                         </h5>
                                     </button>
                                 </div>
@@ -153,16 +156,17 @@ y la columna central mainframe -->
                                                 </h5>
                                             </button>
                                             <div class="dropdown-content area">
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matemática">Matemática.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Lenguaje, Comunicación y Literatura">Lenguaje, Comunicación y Literatura.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Ciencias Naturales">Ciencias Naturales.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Historia Geografía Ciencias Sociales">Historia, Geografía y Ciencias Sociales.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Biología">Biología.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Fisica">Fisica.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matematica">Matematica.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Quimica">Quimica.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Inglés">Inglés.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Tecnología">Tecnología.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Orientación">Orientación.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Música">Música.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Física y Salud">Educación Física y Salud.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Artes Visuales">Artes Visuales.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Lenguaje y Comuncación">Lenguaje y Comuncación.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Tecnologica">Educación Tecnologica.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Artes Visuales">Historia, Geografía y Ciencias Sociales.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Física y Salud">Educación Física.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Filosofía y Psicología">Filosofía y Psicología.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Orientación y Consejo de Curso">Orientación y Consejo de Curso.</a>
                                             </div>
                                         </div>
                                     </div>
@@ -219,10 +223,11 @@ y la columna central mainframe -->
             <div class="blog-main" id="mainframe">
 
             </div>
+            <div class="loader" style="display: none; margin-left: 42%"></div>
         </div>
 
         <!-- Columna derecha -->
-        <div class="col-sm-3 blog-sidebar">
+        <div class="col-sm-3 blog-sidebar" id="right_col">
             <!-- Calendario -->
             <div class="sidebar-module">
                 <div class="panel panel-default">
@@ -255,7 +260,6 @@ y la columna central mainframe -->
                     </div>
                 </div>
             </div>
-
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <h5><img src="/icons/RRCC web-16.png" class="img-circle" style="width: 60px; height: 60px">Recursos de la plataforma</h5>
@@ -353,109 +357,9 @@ y la columna central mainframe -->
 
 </div><!-- /.container -->
 
-<script type="text/javascript">
-    // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
-    var year = new Date();
-    var year = year.getFullYear();
-    for(var i=2019; i < year + 1; i++){
-        $(".year").append('<a onclick="select_data(this)" class="filter_date" data-select="false" data-filter="' + i + '">' + i + '.</a>');
-    }
-
-    // Funcion que muestra y quita la seleccion de un filtro
-    function select_data(ths){
-        if($(ths).data("select") == false){
-            $(ths).css("background-color", "#009688");
-            $(ths).css("opacity", 0.8);
-            $(ths).append('<i class="glyphicon glyphicon-ok"></i>');
-            $(ths).data("select", true);
-        } else {
-            $(ths).css("background-color", "#fff");
-            $(ths).css("opacity", 1);
-            $(ths).find("i").remove();
-            $(ths).data("select", false);
-        }
-    }
-
-    function filter(){
-        var tags = [];
-        var suport = [];
-        var date = [];
-        $(".filter_tags").each(function(e){
-            if($(this).data("select")){
-                tags.push($(this).data("filter"));
-            }
-        });
-        $(".filter_suport").each(function(e){
-            if($(this).data("select")){
-                suport.push($(this).data("filter"));
-            }
-        });
-        $(".filter_date").each(function(e){
-            if($(this).data("select")){
-                date.push($(this).data("filter"));
-            }
-        });
-        console.log(tags);
-        console.log(suport);
-        console.log(date);
-        $.ajax({
-            type: 'POST',
-            data: {
-                filter: $("#filter").val(),
-                tags: JSON.stringify(tags), 
-                suport: JSON.stringify(suport),
-                date: JSON.stringify(date)
-            },
-            url: "/resource/filter",
-            success: function (html) {
-                $("#mainframe").empty();
-                $("#mainframe").append(html);
-            }
-        });
-    }
-
-    // Panel Personal de la izquierda
-    // Buscar recursos del usuario
-    function resources_by_teacher() {
-        $.ajax({
-            type: 'POST',
-            url: "/resource/resources_by_teacher",
-            success: function (html) {
-                $("#mainframe").empty();
-                $("#mainframe").append(html);
-            }
-        });
-    }
-
-    // Buscar recursos del usuario
-    function resources_by_comment_teacher() {
-        $.ajax({
-            type: 'POST',
-            url: "/resource/resources_by_comment_teacher",
-            success: function (html) {
-                $("#mainframe").empty();
-                $("#mainframe").append(html);
-            }
-        });
-    }
-
-    // Buscar recursos del usuario
-    function resources_by_review() {
-        $.ajax({
-            type: 'POST',
-            url: "/resource/resources_by_review",
-            success: function (html) {
-                $("#mainframe").empty();
-                $("#mainframe").append(html);
-            }
-        });
-    }
-
-</script>
-
 <style>
 
-    /*Filtro*/
+    /* Filtro */
     .dropdown {
       position: relative;
       display: inline-block;
@@ -496,6 +400,157 @@ y la columna central mainframe -->
         width: 30px;
     }
 
+    /* Loader */
+    .loader {
+        border: 12px solid #D3D3D3;
+        border-radius: 50%;
+        border-top: 12px solid #3498db;
+        width: 90px;
+        height: 90px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
 </style>
+
+<script type="text/javascript">
+    // Funciones filtro
+    // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
+    var year = new Date();
+    var year = year.getFullYear();
+    for(var i=2019; i < year + 1; i++){
+        $(".year").append('<a onclick="select_data(this)" class="filter_date" data-select="false" data-filter="' + i + '">' + i + '.</a>');
+    }
+    // Verifica si desea mostrar imagenes al cargar la vista
+    if(<%=show_image%>) {
+        // Ver imagenes activado
+        $("#show_image").css("background-color","");
+        $("#msj_show_image").prop("title","¡Visualizar imagenes activado!");
+    } else {
+        $("#show_image").css("background-color","#f44336");
+        $("#msj_show_image").prop("title","¡Visualizar imagenes desactivado!");
+    }
+
+    // Funcion que activa/desactiva imagenes
+    function show_image() {
+        $("#mainframe").empty();
+        $(".loader").css("display","block");
+        $.ajax({
+            type: 'POST',
+            url: "/resource/show_image",
+            success: function (html) {
+                $(".loader").css("display","none");
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Funcion que muestra y quita la seleccion de un filtro
+    function select_data(ths){
+        if($(ths).data("select") == false){
+            $(ths).css("background-color", "#009688");
+            $(ths).css("opacity", 0.8);
+            $(ths).append('<i class="glyphicon glyphicon-ok"></i>');
+            $(ths).data("select", true);
+        } else {
+            $(ths).css("background-color", "");
+            $(ths).css("opacity", 1);
+            $(ths).find("i").remove();
+            $(ths).data("select", false);
+        }
+    }
+
+    function filter(){
+        $("#mainframe").empty();
+        $(".loader").css("display","block");
+        var tags = [];
+        var suport = [];
+        var date = [];
+        $(".filter_tags").each(function(e){
+            if($(this).data("select")){
+                tags.push($(this).data("filter"));
+            }
+        });
+        $(".filter_suport").each(function(e){
+            if($(this).data("select")){
+                suport.push($(this).data("filter"));
+            }
+        });
+        $(".filter_date").each(function(e){
+            if($(this).data("select")){
+                date.push($(this).data("filter"));
+            }
+        });
+        $.ajax({
+            type: 'POST',
+            data: {
+                filter: $("#filter").val(),
+                tags: JSON.stringify(tags), 
+                suport: JSON.stringify(suport),
+                date: JSON.stringify(date)
+            },
+            url: "/resource/filter",
+            success: function (html) {
+                $(".loader").css("display","none");
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Funciones Panel Izquierdo
+    // Buscar recursos del usuario
+    function resources_by_teacher() {
+        $("#mainframe").empty();
+        $(".loader").css("display","block");
+        $.ajax({
+            type: 'POST',
+            url: "/resource/resources_by_teacher",
+            success: function (html) {
+                $(".loader").css("display","none");
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Buscar recursos del usuario
+    function resources_by_comment_teacher() {
+        $("#mainframe").empty();
+        $(".loader").css("display","block");
+        $.ajax({
+            type: 'POST',
+            url: "/resource/resources_by_comment_teacher",
+            success: function (html) {
+                $(".loader").css("display","none");
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    // Buscar recursos del usuario
+    function resources_by_review() {
+        $("#mainframe").empty();
+        $(".loader").css("display","block");
+        $.ajax({
+            type: 'POST',
+            url: "/resource/resources_by_review",
+            success: function (html) {
+                $(".loader").css("display","none");
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+</script>
 
 <%- include ../layouts/user_footer.ejs %>
