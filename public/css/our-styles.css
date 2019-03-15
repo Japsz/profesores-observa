@@ -57,7 +57,7 @@
 
 /*---*/
 .modal-header{
-    border-bottom: 1px solid grey !important;
+    border-bottom: 1px solid grey;
     padding-top: 20px !important;
     padding-bottom: 5px !important;
 }

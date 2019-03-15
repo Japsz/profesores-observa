@@ -47,7 +47,6 @@ function parse_tags(tags){
         idresTags[idres] = tagsLst;
     }
     idresTags[idres] = tagsLst;
-    console.log(idresTags);
     return idresTags;
 }
 
@@ -232,12 +231,14 @@ router.post('/add', function(req, res) {
                     });
                 }
                 extlist = new Set(extlist);
+                extlist = Array.from(extlist);
                 console.log(extlist);
                 for (ext in extlist){
+                    console.log(extlist[ext]);
                     resource_model.new_resource_tag([data.insertId, extlist[ext], 'file'], function (err, results) {
                         console.log('Se han insertado tags file ' + extlist[ext]);
                     });
-                }
+                };
             }
             res.send('Creado!');
         });

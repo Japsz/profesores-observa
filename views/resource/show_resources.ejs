@@ -17,7 +17,7 @@
                     <section id="<%=resource.idresource%>" class="blog-post">
                         <div class="panel panel-default">
                             <!-- Imagen -->
-                            <div style="padding: 2%">
+                            <div style="padding: 1%">
                                 <%if(resource.frontimage && show_image){%>
                                     <img src="/uploaded-files/<%=resource.idteacher%>/<%=resource.idresource%>/<%=resource.frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%">
                                 <%}%>
@@ -43,20 +43,38 @@
                                     </h2>
                                     <div class="blog-post-meta" style="padding: 0;">
                                         <h4>por <%=resource.name%> - <%=resource.date.slice(0, resource.date.indexOf('T'))%></h4>
-
-                                        <%if(tags[resource.idresource]) {%>
-                                            <div class="col-sm-12>">
-                                                <h4><%=tags[resource.idresource][0][0]%></h4>
-                                            </div>
-                                        <%}%>
                                     </div>
                                     <!-- Acá va el contenido de la contribución (sólo vista previa) -->
                                     <p><%=resource.description%></p>
+                                    <div>
+                                        <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-21.png" style="width: 40px"></div>
+                                        <div id="tagtype<%=resource.idresource%>" class="col-sm-3" style="margin-top: 3px"></div>
+                                        <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-22.png" style="width: 40px"></div>
+                                        <div id="tagarea<%=resource.idresource%>" class="col-sm-3" style="margin-top: 3px"></div>
+                                        <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-23.png" style="width: 40px"></div>
+                                        <div id="tagfile<%=resource.idresource%>" class="col-sm-3" style="margin-top: 3px"></div>
+                                    </div>
+                                    <script>
+                                        <%if (tags[resource.idresource]){
+                                            tags[resource.idresource].forEach(function (tag) {
+                                                console.log(tag[0]);
+                                                if (tag[1] == 'type'){%>
+                                                    $('#tagtype<%=resource.idresource%>').append('<%=tag[0]%>.<br>');
+                                                <%}
+                                                if (tag[1] == 'area'){%>
+                                                    $('#tagarea<%=resource.idresource%>').append('<%=tag[0]%>.<br>');
+                                                <%}
+                                                if (tag[1] == 'file'){%>
+                                                    $('#tagfile<%=resource.idresource%>').append('<%=tag[0]%>.<br>');
+                                                <%}
+                                            });
+                                        }%>
+                                    </script>
                                 </div>
 
                                 <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
                                     <!-- El param del onclick debe ser el idresource -->
-                                    <a class="btn btn-success" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px">
+                                    <a class="btn" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px; background-color: #00897B; color: white; margin: 5px">
                                          <span class="glyphicon glyphicon-search"></span>Revisar Recurso
                                     </a>
                                 </div>
