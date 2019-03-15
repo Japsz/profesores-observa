@@ -19,8 +19,14 @@ function mysplit(str){
     return str;
 }
 
-//Obtiene un diccionario con una lista de objetos [{tag,idresource}, ... ]
-//Retorna un diccionario con estructura {idresource: tags}
+function getXtension(str) {
+    str = str.split('.');
+    str = str[str.length-1];
+    return str;
+}
+
+//Obtiene un diccionario con una lista de objetos [{idresource, tag, type}, ... ]
+//Retorna un diccionario con estructura {idresource: [tags, type]}
 function parse_tags(tags){
     tags = JSON.parse(JSON.stringify(tags));
     tagsLst = [];
@@ -29,17 +35,18 @@ function parse_tags(tags){
         idres = tags[0].idresource;
         for (let tag in tags){
             if (idres == tags[tag].idresource){
-                tagsLst.push(tags[tag].tag);
+                tagsLst.push([tags[tag].tag, tags[tag].type]);
             }
             else {
                 idresTags[idres] = tagsLst;
                 idres = tags[tag].idresource;
                 tagsLst = [];
-                tagsLst.push(tags[tag].tag);
+                tagsLst.push([tags[tag].tag, tags[tag].type]);
             }
         }
         idresTags[idres] = tagsLst;
     }
+    idresTags[idres] = tagsLst;
     return idresTags;
 }
 
@@ -58,6 +65,7 @@ router.post('/', function(req, res){
         if(err){
             console.log(err.message);
         } else {
+            console.log(req.session.show_image);
             if(results.length > 0){
                 results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
                 var idresources = idresource_list(results);
@@ -112,10 +120,10 @@ router.post('/resources_by_teacher', function(req, res){
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
                         results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image(req), tags: tags, results: results, show_hidden: true});
+                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
                     });
                 } else {
-                    res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image(req), tags: {}, results: results, show_hidden: true});
+                    res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
                 }
             }
         });
@@ -137,10 +145,10 @@ router.post('/resources_by_comment_teacher', function(req, res){
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
                         results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image(req), tags: tags, results: results, show_hidden: true});
+                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
                     });
                 } else {
-                    res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image(req), tags: {}, results: results, show_hidden: true});
+                    res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
                 }
             }
         });
@@ -162,10 +170,10 @@ router.post('/resources_by_review', function(req, res){
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
                         results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image(req), tags: tags, results: results, show_hidden: true});
+                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
                     });
                 } else {
-                    res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image(req), tags: {}, results: results, show_hidden: true});
+                    res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
                 }
             }
         });
@@ -183,7 +191,8 @@ router.post('/add', function(req, res) {
         let data = {
             resource: [validate(req), req.body.title, req.body.description, req.body.text, null],
             files: req.files,
-            tags: mysplit(req.body.tags)
+            tags: mysplit(req.body.tags),
+            box: req.body.box
         };
         if (!('frontimage' in req.body)){
             console.log("Foto de portada");
@@ -193,8 +202,13 @@ router.post('/add', function(req, res) {
         resource_model.new_resource(data.resource, function (err, results) {
             data.insertId = results.insertId;
             for (tag in data.tags) {
-                resource_model.new_resource_tag([results.insertId, data.tags[tag]], function (err, result) {
-                    console.log('Se ha creado un nuevo resource tag')
+                resource_model.new_resource_tag([results.insertId, data.tags[tag], 'area'], function (err, result) {
+                    console.log('Se ha creado un nuevo resource tag');
+                });
+            }
+            for (box in data.box) {
+                resource_model.new_resource_tag([results.insertId, data.box[box], 'type'], function (err, result) {
+                    console.log('Se ha creado un nuevo resource tag');
                 });
             }
             if (req.body.idresourcedad){
@@ -202,20 +216,32 @@ router.post('/add', function(req, res) {
                     console.log('Se ha creado una review');
                 });
             }
+
             if (data.files) {
+                var extlist = [];
                 console.log('agregando archivos');
                 for (key in data.files) {
-                    file = data.files[key];
-                    console.log(file);
+                    var file = data.files[key];
+                    extlist.push(getXtension(file.name));
                     //TODO ¿Si ya existe un archivo con ese nombre en la carpeta?
+
                     file.mv('public/uploaded-files/' + validate(req) + '/' + data.insertId + '/' + file.name);
+                    console.log('aqui cago?');
                     resource_model.new_file([data.insertId, file.name], function (err, results) {
-                        console.log('Se ha insertado ' + file.name);
                     });
                 }
+                extlist = new Set(extlist);
+                extlist = Array.from(extlist);
+                console.log(extlist);
+                for (ext in extlist){
+                    console.log(extlist[ext]);
+                    resource_model.new_resource_tag([data.insertId, extlist[ext], 'file'], function (err, results) {
+                        console.log('Se han insertado tags file ' + extlist[ext]);
+                    });
+                };
             }
+            res.send('Creado!');
         });
-        res.send('Creado!');
     }
 });
 

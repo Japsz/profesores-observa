@@ -5,6 +5,7 @@ var mail = require('../public/js/sendmail');
 // Models
 var gmodel = require('../Gmodel/event_model');
 var tmodel = require('../models/teacher_model');
+var evntModel = require('../models/evento_model');
 // Controlador para acutalizar la vista del calendario
 router.get('/calendarquery', function(req, res, next) {
     // console.log(req.session.teacherData);
@@ -87,6 +88,40 @@ router.get('/getEvnt/:idgEvnt',function(req,res){
        };
    })
 });
+// Proponer Evento
+/*
+* Tipos de evento:
+*
+* 0 -> Pendiente de aceptar
+* 1 -> Aceptado
+* 2 -> Cancelado
+* 3 -> Creado por el administrador
+* */
+router.post('/proposeEvnt', function(req, res, next) {
+    // console.log(req.session.teacherData);
+    if(req.session.isteacherLogged){
+        var data = req.body;
+        data.idteacher = req.session.teacherData.idteacher;
+        data.type = 0;
+        console.log(data.start);
+        console.log(data.end);
+        data.start = data.start.split("T")[0] + " " + data.start.split("T")[1];
+        data.end= data.end.split("T")[0] + " " + data.end.split("T")[1];
+        console.log("---");
+        console.log(data.start);
+        console.log(data.end);
+        evntModel.create(data,function(err,rows){
+            if(err) {
+                res.send({err:true,errMsg:rows});
+            } else {
+                res.send({err:null,data:rows});
+            }
+        });
+    } else {
+        res.send({err:true,errMsg:"no estás logueado"});
+    }
+});
+// Modificar mi respuesta a un evento
 router.post("/updAttendee",function(req,res){
     gmodel.getEvnt('primary',req.body.idgEvnt,function (err,resEvnt){
         if(err){
@@ -95,18 +130,6 @@ router.post("/updAttendee",function(req,res){
             res.send({err:true,errMsg:"BD error"})
         } else {
             if(resEvnt.attendees){
-                var hasResponse = false;
-                resEvnt.attendees.map(function(evnt,i){
-                   if(att.email == req.session.teacherData.mail){
-                       var aux = evnt;
-                       hasResponse = true;
-                       aux.responseStatus = req.body.newStatus;
-                       return aux;
-                   } else {return evnt;}
-                });
-                if(!hasResponse){
-                    resEvnt.attendees.push({email:req.session.teacherData.mail,responseStatus:req.body.newStatus});
-                }
                 gmodel.updEvnt('primary',req.body.idgEvnt,{end:resEvnt.end,start:resEvnt.start,attendees:resEvnt.attendees},function(err,data){
                     if(err){res.send({err:true,data:data});
                     } else {
@@ -117,4 +140,5 @@ router.post("/updAttendee",function(req,res){
         };
     });
 });
+
 module.exports = router;

@@ -49,7 +49,22 @@ admin_model.valid_inscription = function(data, callback){
         callback(null, result);
       }
     });
-  }
+  } else callback(true,"Not Connected");
+};
+// Retorna los eventos propuestos por los ciudadanos
+admin_model.eventProposals = function(callback){
+    if(connection){
+        var sql = "SELECT teacher.idteacher, teacher.mail, teacher.name, event.*,DATE_FORMAT(event.start,'%d-%m-%y %H:%m') AS desde,DATE_FORMAT(event.end,'%d-%m-%y %H:%m') AS hasta FROM event"
+            + " LEFT JOIN teacher ON teacher.idteacher=event.idteacher"
+            + " WHERE event.type = 0 ORDER BY event.idevent";
+        connection.query(sql,function(err, result){
+            if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
 };
 
 module.exports = admin_model;

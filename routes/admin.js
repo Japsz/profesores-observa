@@ -6,6 +6,7 @@ var mail = require('../public/js/sendmail');
 var admin_model = require('../models/admin_model');
 var teacher_model = require('../models/teacher_model');
 var gmodel = require('../Gmodel/event_model');
+var evntModel = require('../models/evento_model');
 
 /* GET users listing. */
 router.get('/', function(req, res) {
@@ -53,6 +54,7 @@ router.get('/index', function(req, res, next) {
         res.send("No tiene acceso al sistema, inicie sesión.");
     }
 });
+
 
 // Inserta los datos de un nuevo profesor
 router.post('/newTeacher', function(req, res, next) {
@@ -172,6 +174,103 @@ router.post('/insertEvnt', function(req, res, next) {
             res.send({err:null,data:rows});
         }
     });
+});
+/* Entrega los eventos a aprobar */
+router.get('/valid_events', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        // Obtiene las propuestas de eventos.
+        admin_model.eventProposals(function(err,data){
+            if(err){
+                res.send("error");
+            } else {
+                res.render("admin/valid_event", {data: data});
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
+});
+/* Cambia el tipo de un evento y envía un mail al respecto al creador*/
+router.post('/validateProposal', function(req, res) {
+    if(typeof req.session.isAdminLogged != 'undefined' && req.session.isAdminLogged){
+        console.log(req.body);
+        evntModel.getById(req.body.idevent,function(err,event) {
+            if (err) {
+                console.log(err);
+            } else {
+                evntModel.ModifType(req.body.newtype,req.body.idevent,function(err,data){
+                    if(err){
+                        console.log(err.message);
+                        res.send("error");
+                    } else {
+                        if(parseInt(req.body.newtype) == 1){
+                            gmodel.insertEvnt('primary',event[0],function(err,gData){
+                                if(err){
+                                    console.log(err);
+                                    res.send({err:true,errMsg:"Error de Google",data:gData});
+                                } else {
+                                    evntModel.setIdgoogle(gData.id,req.body.idevent,function(err,rows){
+                                        if(err){
+                                            console.log(err);
+                                            res.send({err:true,errMsg:"Error de BDD",data:rows});
+                                        } else {
+                                            res.send({err:false,errMsg:"Exito",data:req.body});
+                                        }
+                                    });
+                                }
+                            });
+                        } else {
+                            res.send({err:false,errMsg:"Exito",data:req.body});
+                        }
+                        var estado;
+                        var subj;
+                        //Hacer algo según el tipo de respuesta
+                        /*
+                        * Tipos de evento:
+                        *
+                        * 0 -> Pendiente de aceptar
+                        * 1 -> Aceptado
+                        * 2 -> Rechazado
+                        * 3 -> Creado por el administrador
+                        * */
+                        switch(parseInt(req.body.newtype)){
+                            //Aceptado
+                            case 1:
+                                estado = "Aprobada";
+                                subj = "Tu propuesta de evento fue " + estado;
+                                break;
+                            case 2:
+                                estado = "Rechazada";
+                                subj = "Tu propuesta de evento fue " + estado;
+                                break;
+                            default:
+                                estado = "Nada";
+                                break;
+
+                        }
+                        var mails = new Array(event[0].mail); //Debe ser array!
+                        var data_mail = {
+                            view: "views\\admin\\mailTemplates\\mail_validateProposal.ejs", //Path
+                            subject: subj, //Asunto del mensaje
+                            data: {
+                                estado: estado,
+                                razon: req.body.razon,
+                                event: event[0]
+                            },
+                            //Array con informacion necesaria
+                            mails: mails }; //Array de los correos
+                        mail.send_mail(data_mail, function(err) {
+                            if(err){
+                                console.log(err.message);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    } else {
+        res.redirect('/administrador/login');
+    }
 });
 
 module.exports = router;

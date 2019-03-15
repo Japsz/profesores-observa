@@ -1,0 +1,18 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Observa Profesores</title>
+    </head>
+    <body>
+    <h3>Estimad@ <%= data.event.username%></h3>
+    <p>Tu propuesta de evento en la plataforma Observa Profesores a sido <%= data.estado%>.</p>
+    <% if(data.estado == "Aceptada"){%>
+    <p>Revisa los evento de los que eres dueño en la pestaña "Mis Eventos" cuando estés en la plataforma o haz click en el siguiente link para ir directamente allí:  <a href="http://http://159.65.184.48/teacher">Link</a> .</p>
+    <%} else {%>
+    <p>El administrador agregó esto:</p>
+    <p style="text-align: center"><%=data.razon%></p>
+    <%}%>
+    </body>
+</html>

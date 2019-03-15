@@ -1,32 +1,32 @@
 var mysql = require('mysql');
+var config = require('../database/config');
 
-var connection = mysql.createConnection({
-    host     : 'localhost',
-    user     : 'root',
-    password : '1234',
-    database : 'profesapp',
-    port: 3306
-});
+
+var connection = mysql.createConnection(config);
 connection.connect();
 
 var evento = {};
 //Modelo para Crear un evento
-evento.create = function(data,tags,callback){
+evento.create = function(data,callback){
     // data = { (Todo lo necesario para crear un evento) }
-    // tags = [ (Lista con los idtags a ligar al evento) ]
-    connection.query("INSERT INTO evento SET ?",data,function(err,data){
-       if(err){
-           console.log("Error en la creación de evento: %s",err);
-           callback(true,{err:err})
-       } else{
-           callback(null,data);
-       }
-    });
+    if(connection){
+        connection.query("INSERT INTO event SET ?",data,function(err,data){
+            if(err){
+                console.log("Error en la creación de evento: %s",err);
+                callback(true,{err:err})
+            } else{
+                callback(null,data);
+            }
+        });
+    } else {
+        callback(true,{err:"no bd conexion"});
+    }
 };
 //Modelo para conseguir todos los eventos ligado a un
-evento.get_Id = function(idevento,callback){
+evento.getById = function(idevento,callback){
     // idevento = se explica solo
-  connection.query("SELECT * FROM evento WHERE idevento = ?",[idtag],function(err,data){
+  connection.query("SELECT event.*,teacher.mail,teacher.username FROM event " +
+      "LEFT JOIN teacher ON teacher.idteacher = event.idteacher WHERE event.idevent = ?",[idevento],function(err,data){
       if(err){
           console.log("Error en la selección por idevento: %s",err);
           callback(true,{err:err});
@@ -34,6 +34,39 @@ evento.get_Id = function(idevento,callback){
           callback(null,data);
       }
   });
+};
+//Modelo para conseguir todos los eventos ligado a un
+evento.getByOwner = function(idteacher,callback){
+    // idevento = se explica solo
+    connection.query("SELECT event.*,COALESCE(GROUP_CONCAT(teacher.username,'@@',member.state),'empty') AS attendees FROM event " +
+        "LEFT JOIN member ON member.idevent = event.idevent" +
+        "LEFT JOIN teacher ON teacher.idteacher = member.idteacher" +
+        " WHERE event.idteacher = ? GROUP BY event.idevent",[idevento],function(err,data){
+        if(err){
+            console.log("Error en la selección por idevento: %s",err);
+            callback(true,{err:err});
+        } else {
+            data.map(function(idx){
+               console.log(this);
+            });
+            callback(null,data);
+        }
+    });
+};
+//Modelo para conseguir todos los eventos ligado a un
+evento.getByAttendee = function(idteacher,callback){
+    // idevento = se explica solo
+    connection.query("SELECT event.*,COALESCE(GROUP_CONCAT(teacher.username,'@@',member.state),'empty') AS attendees FROM event " +
+        "LEFT JOIN teacher ON teacher.idteacher = event.idteacher" +
+        "LEFT JOIN member ON member.idevent = event.idevent" +
+        " WHERE member.idteacher = ? AND member.state != '' GROUP BY event.idevent",[idteacher],function(err,data){
+        if(err){
+            console.log("Error en la selección por idevento: %s",err);
+            callback(true,{err:err});
+        } else {
+            callback(null,data);
+        }
+    });
 };
 evento.get_idtag = function(idtags,callback){
   //idtags = [ (Lista con idtags a buscar) ]
@@ -56,3 +89,31 @@ evento.get_idtag = function(idtags,callback){
         }
     })
 };
+// Modifica el tipo de un evento
+evento.ModifType = function(newType,idevent, callback){
+    if(connection){
+        var sql = "UPDATE event SET type = ? WHERE idevent = ?";
+        connection.query(sql,[newType,idevent],function(err, result){
+            if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
+};
+
+// Modifica el tipo de un evento
+evento.setIdgoogle = function(idgoogle,idevent, callback){
+    if(connection){
+        var sql = "UPDATE event SET idgoogle = ? WHERE idevent = ?";
+        connection.query(sql,[idgoogle,idevent],function(err, result){
+            if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
+};
+module.exports = evento;
