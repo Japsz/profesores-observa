@@ -51,9 +51,6 @@ router.post('/login_teacher_confirm', function(req, res, next) {
         }else{
             if(data.length > 0){
                 if(data[0].valid == 1){
-                    if(data[0].perfil_image == null){
-                        data[0].perfil_image = "/icons/avatar.png";
-                    }
                     req.session.isteacherLogged = true;
                     req.session.teacherData = data[0];
                     console.log(req.session.teacherData);

@@ -110,7 +110,12 @@ router.post('/get/:idresource', function(req, res){
 // Muestra los recursos del teacher
 router.post('/resources_by_teacher', function(req, res){
     if(validate(req)){
-        resource_model.resources_by_teacher(validate(req), function(err, results) {
+        var input = JSON.parse(JSON.stringify(req.body));
+        var idteacher = validate(req);
+        if(!input.session_teacher){
+            idteacher = input.idteacher;
+        }
+        resource_model.resources_by_teacher(idteacher, function(err, results) {
             if(err){
                 console.log(err.message);
             } else {

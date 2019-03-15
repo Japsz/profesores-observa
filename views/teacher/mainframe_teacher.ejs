@@ -515,6 +515,7 @@ y la columna central mainframe -->
         $(".loader").css("display","block");
         $.ajax({
             type: 'POST',
+            data: {session_teacher: true},
             url: "/resource/resources_by_teacher",
             success: function (html) {
                 $(".loader").css("display","none");
