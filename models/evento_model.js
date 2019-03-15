@@ -48,13 +48,16 @@ evento.getByOwner = function(idteacher,callback){
         } else {
             data.map(function(idx){
                 if(idx.attendees != 'empty'){
-                    idx.attendees = idx.attendees.split(',');
-                    idx.attendees.map(function(att){
+                    var aux = idx.attendees.split(',');
+                    aux.map(function(att){
                         return att.split('@@');
                     });
+                    return aux;
+                } else {
+                    return idx;
                 }
-                return idx;
             });
+            console.log(data[0].attendees);
             callback(null,data);
         }
     });

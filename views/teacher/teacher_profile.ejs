@@ -44,7 +44,52 @@
             <div class="loader" style="display: none; margin-left: 42%"></div>
         </div>
         <div class="col-md-3">
-            <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Eventos inscritos</h3>
+            <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Eventos Organizados</h3>
+            <% if(myEvnt.length){
+                myEvnt.map(function(evnt){%>
+            <!-- Insertamos aca todos los eventos -->
+            <div class="sidebar-module">
+                <div class="panel panel-default" style="min-height: 200px">
+                    <div class="panel-body">
+                        <h4 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89"><%= evnt.title %></h4>
+                        <div class="col-md-12">
+                            <div class="well">
+                            <%if(evnt.attendees != 'empty'){%><%= evnt.attendees.length %><%} else {%>0<%}%> Asistentes
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="well">
+                            <%
+                            var time = new Date(evnt.start).getTime() - new Date().getTime();
+                            if(time <= 0){
+                                if(new Date(evnt.end).getTime() - new Date().getTime() <=  0){
+                            %>
+                            Finalizado
+                            <%
+
+                                } else {
+                            %>
+                            En Curso
+                            <%
+
+                                }
+                            } else {
+                                time = (time - time%1000)/1000;
+                                time = (time - time%60)/(60);
+                                var mins = time%(60)
+                                time = (time - time%60)/(60);
+                                var hrs = time%(24);
+                                time = (time - time%24)/(24);
+                            %>
+                            En <%= time%> Dias, <%= hrs %> Hr(s) <%= mins %> Min(s)
+                            <%}%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%  });
+            } else {%>
             <!-- Insertamos aca todos los eventos -->
             <div class="sidebar-module">
                 <div class="panel panel-default" style="min-height: 200px">
@@ -53,6 +98,7 @@
                     </div>
                 </div>
             </div>
+            <%}%>
         </div>
     </div>
 </div><!-- /.container -->
