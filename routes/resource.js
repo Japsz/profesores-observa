@@ -46,7 +46,6 @@ function parse_tags(tags){
         }
         idresTags[idres] = tagsLst;
     }
-    idresTags[idres] = tagsLst;
     return idresTags;
 }
 
