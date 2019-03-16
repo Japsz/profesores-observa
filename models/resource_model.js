@@ -305,12 +305,13 @@ resource_model.get_tag = function(data, callback){
 //Recibe un array de elementos seleccionados en el filtro y algun texto
 resource_model.filter = function(data, callback){
     if(connection){
-        var sql = "SELECT * FROM resource"
-        + " LEFT JOIN file ON resource.idresource=file.idresource"
+        var sql = "SELECT resource.*, teacher.name, teacher.idteacher FROM resource"
+        + " LEFT JOIN teacher ON resource.idteacher = teacher.idteacher"
         + " WHERE resource.title LIKE '%" + data.filter + "%'";
     	var tags = JSON.parse(data.tags);
     	var suport = JSON.parse(data.suport);
     	var date = JSON.parse(data.date);
+        //Filtra tags
         if(tags.length > 0){
         	var where2 = " AND resource.idresource IN (SELECT resource_tag.idresource FROM tag LEFT JOIN resource_tag ON tag.idtag=resource_tag.idtag WHERE ("; //Filtra tags(tipo y area)
 	        for(var i=0; i<tags.length; i++){
@@ -321,8 +322,9 @@ resource_model.filter = function(data, callback){
 	        }
 	        sql += where2 + "))";
         }
+        //Filtra soporte/tipo de archivo
         if(suport.length > 0){
-		    var where3 = " AND ("; //Filtra soporte
+		    var where3 = " AND resource.idresource IN (SELECT file.idresource FROM file WHERE (";
 	        for(var i=0; i<suport.length; i++){
 	        	var sup = suport[i].split(" ");
 	        	console.log(sup);
@@ -336,10 +338,11 @@ resource_model.filter = function(data, callback){
 			        where3 += " OR ";
 	        	}
 	        }
-	        sql += where3 + ")";
+	        sql += where3 + "))";
         }
+        //Filtra fechas
         if(date.length > 0){
-		    var where4 = " AND ("; //Filtra fecha
+		    var where4 = " AND (";
 	        for(var i=0; i<date.length; i++){
 		        where4 += "resource.date LIKE '" + date[i] + "%'";
 	        	if(i + 1 != date.length) {
@@ -360,4 +363,5 @@ resource_model.filter = function(data, callback){
         });
     }
 };
+
 module.exports = resource_model;

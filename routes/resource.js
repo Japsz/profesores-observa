@@ -53,6 +53,7 @@ function parse_tags(tags){
 //Recibe una lista de resources, y saca sus idresource
 function idresource_list(resources){
     var idresources = [];
+    // console.log(resources);
     for (let resource in resources) {
         idresources.push(resources[resource].idresource);
     }
@@ -315,8 +316,10 @@ router.post('/filter', function(req, res){
                     console.log(results);
                     results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
                     var idresources = idresource_list(results);
+                    // console.log(idresources);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
+                        console.log(tags);
                         //Enviamos los recursos y los tags de aquellos recursos separados.
                         //Para adquirir un tag es tags[idresource]
                         res.render('resource/show_resources', {results: results, show_image: req.session.show_image, tags: tags, idteacher: validate(req), show_hidden: false});
