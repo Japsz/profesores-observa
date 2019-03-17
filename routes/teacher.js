@@ -5,6 +5,7 @@ var mail = require('../public/js/sendmail');
 
 // Models
 var teacher_model = require("../models/teacher_model");
+var evento_model = require("../models/evento_model");
 
 /* Inicializa variables session y renderiza mainframe */
 router.get('/', function(req, res, next) {
@@ -51,11 +52,9 @@ router.post('/login_teacher_confirm', function(req, res, next) {
         }else{
             if(data.length > 0){
                 if(data[0].valid == 1){
-                    if(data[0].perfil_image == null){
-                        data[0].perfil_image = "/icons/avatar.png";
-                    }
                     req.session.isteacherLogged = true;
                     req.session.teacherData = data[0];
+                    req.session.show_image = true;
                     console.log(req.session.teacherData);
                     res.send("ok");
                 } else {
@@ -173,6 +172,23 @@ router.get('/complete_teacher_data/:idteacher', function(req, res, next) {
             }
         }
     });
+});
+
+/* Redirije al perfil de otro usuario */
+router.get('/teacher_profile/:idteacher', function(req, res, next) {
+    if(typeof req.session.isteacherLogged != 'undefined' && req.session.isteacherLogged){
+        teacher_model.show_teacher(req.params.idteacher, function (err, data) {
+            if (err) {
+                console.log(err.message);
+            } else {
+                console.log(data[0]);
+                evento_model.getByOwner(req.params.idteacher,function(err,evnts){
+                    res.render("teacher/teacher_profile", {data: data[0],myEvnt:evnts});
+
+                });
+            }
+        });        
+    }
 });
 
 /* Envia mail a usuario con los datos de su cuenta */

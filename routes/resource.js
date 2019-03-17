@@ -46,7 +46,7 @@ function parse_tags(tags){
             }
         }
         idresTags[idres] = tagsLst;
-    };
+    }
     return idresTags;
 }
 
@@ -74,6 +74,7 @@ function parse_score(scores){
 //Recibe una lista de resources, y saca sus idresource
 function idresource_list(resources){
     var idresources = [];
+    // console.log(resources);
     for (let resource in resources) {
         idresources.push(resources[resource].idresource);
     }
@@ -139,7 +140,12 @@ router.post('/get/:idresource', function(req, res){
 // Muestra los recursos del teacher
 router.post('/resources_by_teacher', function(req, res){
     if(validate(req)){
-        resource_model.resources_by_teacher(validate(req), function(err, results) {
+        var input = JSON.parse(JSON.stringify(req.body));
+        var idteacher = validate(req);
+        if(!input.session_teacher){
+            idteacher = input.idteacher;
+        }
+        resource_model.resources_by_teacher(idteacher, function(err, results) {
             if(err){
                 console.log(err.message);
             } else {
@@ -346,8 +352,10 @@ router.post('/filter', function(req, res){
                     console.log(results);
                     results = JSON.parse(JSON.stringify(results)); //Para quitar el RowDataPacket
                     var idresources = idresource_list(results);
+                    // console.log(idresources);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
+                        console.log(tags);
                         //Enviamos los recursos y los tags de aquellos recursos separados.
                         //Para adquirir un tag es tags[idresource]
                         res.render('resource/show_resources', {results: results, show_image: req.session.show_image, tags: tags, idteacher: validate(req), show_hidden: false});

@@ -67,7 +67,8 @@ CREATE TABLE `event` (
   `description` varchar(200) COLLATE utf8_bin DEFAULT NULL,
   `text` text COLLATE utf8_bin,
   `type` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `date` datetime DEFAULT CURRENT_TIMESTAMP,
+  `start` datetime NULL,
+  `end` datetime NULL,
   `idgoogle` varchar(30) COLLATE utf8_bin DEFAULT NULL,
   PRIMARY KEY (`idevent`),
   KEY `fk_idteacher_ev_idx` (`idteacher`),
@@ -263,6 +264,7 @@ CREATE TABLE `resource_tag` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+DROP TABLE IF EXISTS `resource_point`;
 --
 -- Table structure for table `review`
 --
@@ -291,6 +293,7 @@ DROP TABLE IF EXISTS `tag`;
 CREATE TABLE `tag` (
   `idtag` int(11) NOT NULL AUTO_INCREMENT,
   `tag` varchar(45) COLLATE utf8_bin NOT NULL,
+  `type` varchar(50) NOT NULL,
   PRIMARY KEY (`idtag`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -310,7 +313,7 @@ CREATE TABLE `teacher` (
   `password` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   `rut` varchar(45) COLLATE utf8_bin DEFAULT NULL,
   `address` varchar(45) COLLATE utf8_bin DEFAULT NULL,
-  `perfil_image` varchar(200) COLLATE utf8_bin DEFAULT NULL,
+  `perfil_image` varchar(200) COLLATE utf8_bin DEFAULT '/icons/avatar.png',
   `valid` int(11) DEFAULT NULL,
   `public` varchar(45) COLLATE utf8_bin DEFAULT '1,1,0,0,1',
   `birth_date` datetime DEFAULT NULL,

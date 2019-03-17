@@ -1,45 +1,68 @@
 <div class="row">
     <section class="blog-post">
         <div class="panel panel-default">
-            <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">Eventos de los que soy Organizador</h2>
-            <br>
-            <h3 style="text-align: center;">No existen recursos solicitados.</h3>
-            <br>
+            <div class="panel-heading">
+                <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">Eventos de los que soy Organizador</h2>
+            </div>
+            <div class="panel-body">
+                <% if(mines.length){
+                mines.map(function(idx){%>
+                <div class="col-md-6 col-sm-12" style="margin: 5px">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h5 class="blog-post-title"><%= idx.title%></h5>
+                        </div>
+                        <div class="panel-body">
+                            <p>
+
+                            </p>
+                        </div>
+                        <ul class="list-group">
+                            <li class="list-group-item">Empieza: <%=idx.desde%></li>
+                            <li class="list-group-item">Termina: <%=idx.hasta%></li>
+                        </ul>
+                    </div>
+                </div>
+                <%
+                });
+                } else {
+                %>
+                <div class="well" style="margin: 5px">No hay eventos de los cuales seas organizador</div>
+                <%}%>
+            </div>
         </div>
     </section>
+
     <section class="blog-post">
         <div class="panel panel-default">
             <div class="panel-heading">
-                <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">Eventos en los que estoy inscrito</h2>
+                    <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">Eventos en los que estoy inscrito</h2>
             </div>
             <div class="panel-body">
                 <% if(atts.length){
                     atts.map(function(idx){%>
-                    <div class="col-md-">
-
+                    <div class="col-md-6 col-sm-12" style="margin: 5px">
+                        <div class="panel panel-primary">
+                            <div class="panel-heading">
+                                <h5 class="blog-post-title"><%= idx.title%></h5>
+                            </div>
+                            <div class="panel-body">
+                                <%= idx.description%>
+                            </div>
+                            <ul class="list-group">
+                                <li class="list-group-item">Creado por: <%= idx.username%></li>
+                                <li class="list-group-item">Empieza: <%=idx.desde%></li>
+                                <li class="list-group-item">Termina: <%=idx.hasta%></li>
+                            </ul>
+                        </div>
                     </div>
                 <%
                     });
                 } else {
                 %>
-                <div class="well"></div>
+                <div class="well" style="margin: 5px">No te haz inscrito en ningún evento</div>
                 <%}%>
             </div>
-            <br>
-            <h3 style="text-align: center;">No existen recursos solicitados.</h3>
-            <br>
-        </div>
-    </section>
-</div>
-<div class="row">
-    <div class="col-md-12">
-
-    </div>
-    <section class="blog-post">
-        <div class="panel panel-default">
-            <br>
-            <h3 style="text-align: center;">No existen recursos solicitados.</h3>
-            <br>
         </div>
     </section>
 </div>

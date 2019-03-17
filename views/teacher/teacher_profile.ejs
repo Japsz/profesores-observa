@@ -1,0 +1,160 @@
+<%- include ../layouts/header.ejs %>
+
+<div class="container blog-content">
+    <div class="row">
+        <div class="col-md-3">
+            <img src="<%=data.perfil_image%>" class="img-circle" style="width: 150px; height: 150px; margin-left: 18%">
+            <h3 style="text-align: center;"><%=data.username%></h3>
+        </div>
+        <div class="col-md-9">
+            <div class="sidebar-module">
+                <div class="panel panel-default" style="min-height: 200px">
+                    <div class="panel-body">
+                        <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Información de usuario</h3>
+                        <div class="row">
+                            <div class="col-md-2" id="right_info">
+                                
+                            </div>
+                            <div class="col-md-4" id="left_info">
+                                
+                            </div>
+                            <div class="col-md-3" id="left_info">
+                                <h4 style='margin-bottom: 10px'>N° Posts:</h4>
+                                <h4 style='margin-bottom: 10px'>N° Reseñas:</h4>
+                                <h4 style='margin-bottom: 10px'>N° Comentarios:</h4>
+                            </div>
+                            <div class="col-md-3" id="right_info">
+                                <h4 style='margin-bottom: 10px'>5</h4>
+                                <h4 style='margin-bottom: 10px'>3</h4>
+                                <h4 style='margin-bottom: 10px'>0</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br><br>
+        <div class="col-md-8 col-md-offset-1">
+            <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Recursos creados</h3>
+            <br>
+            <!-- Insertamos aca todos los recursos, recordar id mainframe -->
+            <div class="blog-main" id="mainframe">
+
+            </div>
+            <div class="loader" style="display: none; margin-left: 42%"></div>
+        </div>
+        <div class="col-md-3">
+            <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Eventos Organizados</h3>
+            <% if(myEvnt.length){
+                myEvnt.map(function(evnt){%>
+            <!-- Insertamos aca todos los eventos -->
+            <div class="sidebar-module">
+                <div class="panel panel-default" style="min-height: 200px">
+                    <div class="panel-body">
+                        <h4 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89"><%= evnt.title %></h4>
+                        <div class="col-md-12">
+                            <div class="well">
+                            <%if(evnt.attendees != 'empty'){%><%= evnt.attendees.length %><%} else {%>0<%}%> Asistentes
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="well">
+                            <%
+                            var time = new Date(evnt.start).getTime() - new Date().getTime();
+                            if(time <= 0){
+                                if(new Date(evnt.end).getTime() - new Date().getTime() <=  0){
+                            %>
+                            Finalizado
+                            <%
+
+                                } else {
+                            %>
+                            En Curso
+                            <%
+
+                                }
+                            } else {
+                                time = (time - time%1000)/1000;
+                                time = (time - time%60)/(60);
+                                var mins = time%(60)
+                                time = (time - time%60)/(60);
+                                var hrs = time%(24);
+                                time = (time - time%24)/(24);
+                            %>
+                            En <%= time%> Dias, <%= hrs %> Hr(s) <%= mins %> Min(s)
+                            <%}%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <%  });
+            } else {%>
+            <!-- Insertamos aca todos los eventos -->
+            <div class="sidebar-module">
+                <div class="panel panel-default" style="min-height: 200px">
+                    <div class="panel-body">
+                        <h4>No existen eventos inscritos</h4>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+        </div>
+    </div>
+</div><!-- /.container -->
+
+<style type="text/css">
+    /* Loader */
+    .loader {
+        border: 12px solid #D3D3D3;
+        border-radius: 50%;
+        border-top: 12px solid #3498db;
+        width: 90px;
+        height: 90px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% { -webkit-transform: rotate(0deg); }
+        100% { -webkit-transform: rotate(360deg); }
+    }
+
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
+
+<script type="text/javascript">
+    var info = ["Nombre:","Mail:","Rut:","Dirección:","Fecha de nacimiento:"];
+    var info_teacher = ["<%=data.name%>","<%=data.mail%>","<%=data.rut%>","<%=data.address%>","<%=data.birth_date%>"];
+    var public = "<%=data.public%>".split(",");
+    for(var i=0; i<=5; i++){
+        if(info_teacher[i] != "" && info_teacher[i] != null && public[i] == "1"){
+            $("#right_info").append("<h4 style='margin-bottom: 10px'>" + info[i] + "</h4>");
+            $("#left_info").append("<h4 style='margin-bottom: 10px'>" + info_teacher[i] + "</h4>");
+        }
+    }
+
+    // Buscar recursos del usuario
+    function resources_by_teacher() {
+        $("#mainframe").empty();
+        $(".loader").css("display","block");
+        $.ajax({
+            type: 'POST',
+            data: {session_teacher: false, idteacher: "<%=data.idteacher%>"},
+            url: "/resource/resources_by_teacher",
+            success: function (html) {
+                $(".loader").css("display","none");
+                $("#mainframe").append(html);
+            }
+        });
+    }
+
+    resources_by_teacher();
+    
+</script>
+
+<%- include ../layouts/user_footer.ejs %>

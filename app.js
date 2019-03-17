@@ -40,6 +40,7 @@ var resource = require('./routes/resource');
 var comment = require('./routes/comment');
 var reseña = require('./routes/reseña');
 var calendar = require("./routes/calendar");
+var evento = require("./routes/event");
 
 // Rutas
 app.use('/', index);
@@ -47,6 +48,7 @@ app.use('/teacher', teacher);
 app.use('/resource', resource);
 app.use('/comment', comment);
 app.use('/calendar', calendar);
+app.use('/evento', evento);
 app.use('/review', reseña);
 app.use('/administrador', admin);
 

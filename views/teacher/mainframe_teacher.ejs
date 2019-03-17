@@ -49,7 +49,7 @@ y la columna central mainframe -->
                                         <p>Mis revisiones</p>
                                     </div>
                                 </a>
-                                <a class="btn btn-default" style="width: 220px">
+                                <a class="btn btn-default" href="#" data-url="/evento/getMine" onclick="ajax_send(this,'#central_col','insert',{my:'evnt'})" id="myEvnts" style="width: 220px">
                                     <div class="col-sm-3">
                                         <img src="/icons/RRCC web-19.png" class="img-rounded" style="width: 50px">
                                     </div>
@@ -81,7 +81,7 @@ y la columna central mainframe -->
                                     <p>Crear recurso</p>
                                 </div>
                             </a>
-                            <a class="btn btn-default" style="width: 220px">
+                            <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default" style="width: 220px">
                                 <div class="col-sm-3" style="padding-left: 5%">
                                     <img src="/icons/RRCC web-14.png" class="img-rounded" style="width: 60px">
                                 </div>
@@ -138,11 +138,11 @@ y la columna central mainframe -->
                                                 </h5>
                                             </button>
                                             <div class="dropdown-content type">
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Columna Opinión">Columna de Opinión.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Libro Texto">Libro/Texto.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Opinión">Columna de Opinión.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Libro/Texto">Libro/Texto.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Imagen">Imagen.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Guía Prueba">Guía/Prueba.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Mapas Conceptual">Mapa Conceptual.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Guía/Prueba">Guía/Prueba.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Conceptual">Mapa Conceptual.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Video">Video.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Presentación">Presentación.</a>
                                             </div>
@@ -156,15 +156,15 @@ y la columna central mainframe -->
                                                 </h5>
                                             </button>
                                             <div class="dropdown-content area">
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Biología">Biología.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Fisica">Fisica.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matematica">Matematica.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Quimica">Quimica.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Inglés">Inglés.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matemática">Matemática.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Lenguaje y Comuncación">Lenguaje y Comuncación.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Tecnologica">Educación Tecnologica.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Artes Visuales">Historia, Geografía y Ciencias Sociales.</a>
-                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Física y Salud">Educación Física.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Historia, Geografía y Ciencias Sociales">Historia, Geografía y Ciencias Sociales.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Física">Física.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Inglés">Inglés.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Biología">Biología.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Química">Química.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Tecnológica">Educación Tecnológica.</a>
+                                                <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Física">Educación Física.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Filosofía y Psicología">Filosofía y Psicología.</a>
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Orientación y Consejo de Curso">Orientación y Consejo de Curso.</a>
                                             </div>
@@ -253,9 +253,7 @@ y la columna central mainframe -->
                             <div class="col-md-12">
                                 <div id="calendar"></div>
                             </div>
-                            <div class="col-md-12" style="margin-top: 5px">
-                                <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default pull-right text-white">+ Proponer evento</a>
-                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -422,6 +420,38 @@ y la columna central mainframe -->
         100% { transform: rotate(360deg); }
     }
 
+    /* Estilo de calendario */
+    .cal-month-day{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+    }
+    .cal-day-inmonth{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+    }
+    .cal-month-box .cal-cell{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+    }
+
+    .cal-row-fluid{
+        height: 58px;
+        max-height: 58px;
+        min-height: 58px;
+    }
+    .cal-cell span{
+        margin-top: 0;
+    }
+    .cal-day-today{
+        font-size: 11px;
+    }
+    .cal-day-today span{
+        margin: 5px;
+        margin-bottom: 0px;
+    }
 </style>
 
 <script type="text/javascript">
@@ -515,6 +545,7 @@ y la columna central mainframe -->
         $(".loader").css("display","block");
         $.ajax({
             type: 'POST',
+            data: {session_teacher: true},
             url: "/resource/resources_by_teacher",
             success: function (html) {
                 $(".loader").css("display","none");
