@@ -33,7 +33,6 @@ show_hidden: permite mostrar recursos bloqueados.
                             <%=title%>
                             <p class="bs-component btn-group-sm pull-right">
                                 <%if(idteacher == logged){%>
-                                    <a onclick="new_review(<%=idresource%>)" class="btn btn-success btn-fab-"><i class="material-icons">assignment</i></a>
                                     <a onclick="edit_modal(<%=idresource%>)" class="btn btn-warning btn-fab"><i class="material-icons">edit</i></a>
                                     <%if(state != 'Activo'){%>
                                         <a onclick="activate(<%=idresource%>)" class="btn btn-success btn-fab"><i class="material-icons">lock_open</i></a>
@@ -80,7 +79,7 @@ show_hidden: permite mostrar recursos bloqueados.
                             <div id="tagfile<%=idresource%>" class="col-sm-1" style="margin-top: 3px; padding: 0px"></div>
                         </div>
                         <script>
-                            <%if(tags){
+                            <%if(tags.length > 0){
                                 tags[idresource].forEach(function (tag) {
                                     if (tag[1] == 'type'){%>
                                         $('#tagtype<%=idresource%>').append('<%=tag[0]%>.<br>');
@@ -125,7 +124,7 @@ show_hidden: permite mostrar recursos bloqueados.
                         <!-- Aca comienza contenido revisiones -->
                         <div class="row" style="border-bottom: 2px deeppink solid; padding-bottom: 3px; margin-bottom: 8px">
                             <img src="/icons/RRCC web-22.png" style="width: 50px; margin: 0px; float: left">
-                            <h3 style="margin: 0px">Contribuciones</h3>
+                            <h3 style="margin: 0px">Revisiones</h3>
                             Recursos compartidos por otros usuarios/as, que se relacionan con este.
                         </div>
                         <div class="row resource-row" >
@@ -140,10 +139,12 @@ show_hidden: permite mostrar recursos bloqueados.
                             <%}
                             } else {%>
                                 <br>
-                                <h3 style="text-align: center;">Este recurso no tiene Contribuciones.</h3>
+                                <h3 style="text-align: center;">Este recurso no tiene Revisiones.</h3>
                                 <br>
                             <%}%>
+                            <a onclick="new_review(<%=idresource%>)" class="btn"><i class="material-icons">assignment</i>Contribuye con una revision </a>
                         </div>
+
                     </div>
                 </div>
 

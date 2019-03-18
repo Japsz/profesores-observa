@@ -318,6 +318,22 @@ resource_model.get_tag = function(data, callback){
     }
 };
 
+resource_model.get_sum_types = function(data, callback){
+    if (connection){
+        let sql = "SELECT *, SUM(tags) AS SUM FROM tag " +
+            "WHERE type = 'type'";
+        connection.query(sql, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
 //idteacher, idresource, score
 resource_model.score = function(data, callback){
     if (connection){
