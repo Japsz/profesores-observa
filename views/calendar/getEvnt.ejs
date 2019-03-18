@@ -1,29 +1,40 @@
 <div class="jumbotron">
     <div class="container">
         <div class="col-md-12">
-            <h3><%=data.summary%></h3>
+            <h3> <%= data.summary %> </h3>
             <p><%=data.description%></p>
         </div>
         <div class="col-md-12">
             <% if(self == "noResponse"){%>
-            <div class="btn-group">
-                <a onclick="ajax_send(this,'#evntModalBody','custom',{'idgEvnt': '<%=data.id%>','newStatus':'accepted'},function(data){$('#evntModalBody').html(data)})" data-url="/calendar/updAttendee" class="btn btn-success" >+ Asistiré</a>
-                <a href="#attCollapse" class="btn btn-primary" data-toggle="collapse"aria-expanded="false" aria-controls="attCollapse">Ver Asistentes</a>
+            <div class="btn-group pull-right">
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="yes" class="btn btn-success" >Asistiré</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="maybe" class="btn btn-warning" >Quizás Asista</a>
             </div>
             <%} else {%>
             <div class="btn-group pull-right">
-                <a href="#" data-url="/calendar/updAttendee/<%=data.id%>/accepted" class="btn btn-success" <%if(self == "accepted"){%>active<%}%>">Asistiré</a>
-                <a href="#" data-url="/calendar/updAttendee/<%=data.id%>/tentative" class="btn btn-warning <%if(self == "tentative"){%>active<%}%>">Quizás Asista</a>
-                <a href="#" data-url="/calendar/updAttendee/<%=data.id%>/declined" class="btn btn-danger <%if(self == "declined"){%>active<%}%>">No Asistiré</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="yes" class="btn btn-success <%if(self == "yes"){%>active<%}%>">Asistiré</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="maybe" class="btn btn-warning <%if(self == "maybe"){%>active<%}%>">Quizás Asista</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="remove" class="btn btn-danger">No Asistiré</a>
             </div>
             <%}%>
         </div>
-        <div class="col-md-12 collapse" id="attCollapse">
-            <div class="well">
-                <h4>Asistentes:</h4>
+        <div class="col-md-12" id="attCollapse">
+            <div class="well" style="height: 100px">
+                <h4><%= %>Asistentes:</h4>
                 <% if(attendees.si.length){
                 attendees.si.map(function(att,i){%>
-                <div class="col-md-4 col-sm-6 col-xs-12"><%= att.name || att.username || att.mail %></div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="media">
+                        <div class="media-left">
+                            <a href="/teacher/teacher_profile/<%= att.idteacher%>" >
+                                <img src="<%= att.perfil_image%>" class="media-object" alt="<%= att.username%>" style="width:64px;height:64px" class="img-circle">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><%=att.username%></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <%});
                 } else {%>
                 <div>No hay Confirmados</div>
@@ -33,7 +44,19 @@
                 <h4>Quizás Asista:</h4>
                 <% if(attendees.talvez.length){
                 attendees.talvez.map(function(att,i){%>
-                <div><%= att.name%></div>
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                    <div class="media">
+                        <div class="media-left media-middle">
+                            <a href="/teacher/teacher_profile/<%= att.idteacher%>">
+                                <img src="<%= att.perfil_image%>" class="media-object" alt="<%= att.username%>">
+                            </a>
+                            <div class="media-body">
+                                <h4 class="media-heading"><%=att.username%></h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <%});
                 } else {%>
                 <div>No hay Confirmados</div>

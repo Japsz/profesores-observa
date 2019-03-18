@@ -22,7 +22,7 @@ evento.create = function(data,callback){
         callback(true,{err:"no bd conexion"});
     }
 };
-//Modelo para conseguir todos los eventos ligado a un
+//Modelo para conseguir todos los eventos
 evento.getById = function(idevento,callback){
     // idevento = se explica solo
   connection.query("SELECT event.*,teacher.mail,teacher.username FROM event " +
@@ -57,18 +57,30 @@ evento.getByOwner = function(idteacher,callback){
                     return idx;
                 }
             });
-            console.log(data[0].attendees);
             callback(null,data);
         }
     });
 };
-//Modelo para conseguir todos los eventos ligado a un
+//Funcion para conseguir todos los eventos a los cuales (si o quizas) asista el profesor
 evento.getByAttendee = function(idteacher,callback){
     // idevento = se explica solo
     connection.query("SELECT event.*,teacher.username,DATE_FORMAT(event.start,'%d-%m-%y %H:%m') AS desde,DATE_FORMAT(event.end,'%d-%m-%y %H:%m') AS hasta FROM event " +
         "LEFT JOIN teacher ON teacher.idteacher = event.idteacher " +
         "LEFT JOIN member ON member.idevent = event.idevent " +
-        "WHERE member.idteacher = ? AND member.state != '' GROUP BY event.idevent",[idteacher],function(err,data){
+        "WHERE member.idteacher = ? GROUP BY event.idevent ORDER BY member.state DESC",[idteacher],function(err,data){
+        if(err){
+            console.log("Error en la selección por asistente: %s",err);
+            callback(true,{err:err});
+        } else {
+            callback(null,data);
+        }
+    });
+};
+//Modelo para conseguir la info de los posibles asistentes a un evento
+evento.getAttendees = function(idevent,callback){
+    connection.query("SELECT teacher.perfil_image,teacher.username,teacher.idteacher,member.state FROM member " +
+        "LEFT JOIN teacher ON teacher.idteacher = member.idteacher " +
+        "WHERE member.idevent = ? GROUP BY teacher.idteacher",[idevent],function(err,data){
         if(err){
             console.log("Error en la selección por asistente: %s",err);
             callback(true,{err:err});
@@ -112,11 +124,69 @@ evento.ModifType = function(newType,idevent, callback){
     } else callback(true,"Not Connected");
 };
 
-// Modifica el tipo de un evento
+// Setea el id de google correspondiente a un evento
 evento.setIdgoogle = function(idgoogle,idevent, callback){
     if(connection){
         var sql = "UPDATE event SET idgoogle = ? WHERE idevent = ?";
         connection.query(sql,[idgoogle,idevent],function(err, result){
+            if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
+};
+
+// Revisa si existe un evento con un idgoogle específico.
+evento.getByIdgoogle = function(idgoogle, callback){
+    if(connection){
+        var sql = "SELECT * FROM event WHERE idgoogle = ?";
+        connection.query(sql,[idgoogle],function(err, result){
+            if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
+};
+// Entrega la respuesta de un profesor a un evento (siesque tiene)
+evento.checkMember = function(idteacher,idevent, callback){
+    if(connection){
+        var sql = "SELECT * FROM member WHERE idteacher = ? AND idevent = ?";
+        connection.query(sql,[idteacher,idevent],function(err, result){
+            if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
+};
+// Modifica el estado de respuesta
+evento.setMemberState = function(state,idteacher,idevent,insert, callback){
+    if(connection){
+        var sql = ["INSERT INTO member SET ?","UPDATE member SET state = ? WHERE idteacher = ? AND idevent = ?"];
+        //insert = 1|0 segun la query que se tiene que hacer.
+        if(insert) var data = [idteacher, idevent, state];
+        else var data = {idteacher:idteacher, idevent:idevent, state:state};
+        console.log(sql[insert]);
+        console.log(data);
+        connection.query(sql[insert],data,function(err, result){
+                if(err){
+                callback(err,[]);
+            } else {
+                callback(null, result);
+            }
+        });
+    } else callback(true,"Not Connected");
+};
+// Elimina la respuesta a un evento de un profesor.
+evento.removeMember = function(idteacher,idevent, callback){
+    if(connection){
+        var sql = "DELETE FROM member WHERE idteacher = ? AND idevent = ?";
+        connection.query(sql,[idteacher,idevent],function(err, result){
             if(err){
                 callback(err,[]);
             } else {
