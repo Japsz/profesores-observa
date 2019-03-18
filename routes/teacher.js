@@ -6,6 +6,7 @@ var mail = require('../public/js/sendmail');
 // Models
 var teacher_model = require("../models/teacher_model");
 var evento_model = require("../models/evento_model");
+var resource_model = require('../models/resource_model');
 
 /* Inicializa variables session y renderiza mainframe */
 router.get('/', function(req, res, next) {
@@ -261,6 +262,47 @@ router.post('/inscription', function(req, res, next) {
             } else {
                 res.send("error");
             }
+        }
+    });
+});
+
+/* Funcion que almacena la notificacion al teacher respectivo y renderiza la notificacion 
+    Pasos del socket (se envian las notificaciones a todos, si encuentra una forma mejor de hacerlo bienvenido):
+    1) Evento emite una notificacion (ej comentario de un recurso)
+    2) Vista de usuario escucha notificacion (user_footer.ejs)
+    3) Se emite un ajax a esta ruta y se almacena la notificacion y renderiza la misma solo si el teacher debe recibir esta
+*/
+router.post('/add_notification', function(req, res) {
+    var idteacher = req.session.teacherData.idteacher;
+    // Carga las notificaciones que no se han eliminado
+    teacher_model.get_notifications(idteacher, function(err, result) {
+        if(err){
+            console.log(err.message);
+        }else{
+            // console.log(result);
+            if(result.length > 0){
+                res.render('teacher/notification', {data: result});
+            } else{
+                res.send("ignore");
+            }
+        }
+    });
+});
+
+/* Envia mail a usuario con los datos de su cuenta */
+router.post('/update_notification', function(req, res, next) {
+    var input = JSON.parse(JSON.stringify(req.body));
+    var data = {
+        idteacher: req.session.teacherData.idteacher,
+        idnotification: input.idnotification,
+        active: 0
+    };
+    teacher_model.update_notification(data, function (err, result) {
+        if (err) {
+            console.log(err.message);
+        } else {
+            console.log("notificacion eliminada");
+            res.send("ok");
         }
     });
 });

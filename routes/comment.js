@@ -1,6 +1,10 @@
 var express = require('express');
 var router = express.Router();
+
+// Models
 var comment_model = require('../models/comment_model');
+var teacher_model = require("../models/teacher_model");
+var resource_model = require('../models/resource_model');
 
 // Agrega un comentario
 router.post('/add_comment', function (req, res) { //TODO Agregar idteacher
@@ -13,14 +17,41 @@ router.post('/add_comment', function (req, res) { //TODO Agregar idteacher
     if(err){
       console.log(err.message);
     }else{
+      // Guarda la notificacion en la bd
+      resource_model.get_resource(data.idresource, function(err, result) {
+        if(err){
+            console.log(err.message);
+        }else{
+          if(result[0].idteacher != req.session.teacherData.idteacher){
+            var notif = [["El profesor " + req.session.teacherData.username + " a comentado su recurso.", "show_a_resource(" + data.idresource + ")", "comment"]];
+            teacher_model.add_notification(notif, function(err, result2){
+              if(err){
+                console.log(err.message);
+              } else{
+                var idnotif = result2.insertId;
+                var teacher_notif = [[result[0].idteacher, idnotif, 1]];
+                teacher_model.add_teacher_notification(teacher_notif, function(err, result){
+                  if(err){
+                    console.log(err.message);
+                  } else {
+                    console.log("notificacion almacenada");
+                    req.app.locals.io.emit('add_notification');
+                  }
+                });
+              }
+            });
+          }
+        }
+      });
       res.send('Comentado!');
     }
   });
 });
 
 // Retorna la vista comentarios y el idresource
-router.get('/view_comment/:idresource', function (req, res) {
-	res.render('comment/view_comment', {idresource: req.params.idresource});
+router.post('/view_comment/', function (req, res) {
+  var input = JSON.parse(JSON.stringify(req.body));
+	res.render('comment/view_comment', {data: input});
 });
 
 // Retorna los comentarios y la informacion del profesor

@@ -56,7 +56,24 @@
                 success: function(data){
                     $("#is_login").html(data);
                 }
-            });            
+            });
+
+            var socket = io.connect('http://localhost:3000', { 'forceNew': true });
+            //Escucha una nueva notificacion y envia un ajax para almacenar la misma
+            socket.on('add_notification', function(input){
+                $.ajax({
+                    type: 'POST',
+                    url: 'teacher/add_notification',
+                    success: function(data){
+                        if(data != "ignore"){
+                            $("#notifications").empty();
+                            $("#notifications").append(data);
+                            $("#nro_notifications").html($("#nro_notifications").data("nro") + 1);
+                            $("#nro_notifications").data("nro", $("#nro_notifications").data("nro")+1);
+                        }
+                    }
+                });
+            });
         });
         
     </script>

@@ -150,6 +150,68 @@ teacher_model.update_valid = function(data, callback){
   }
 };
 
+//Funcion que inserta una notificacion
+teacher_model.add_notification = function(data, callback){
+  if(connection){
+    var sql = 'INSERT INTO notification (description, link, type) VALUES ?';
+    connection.query(sql, [data], function(err, result){
+      if(err){
+        throw err;
+      } else{
+        //devolvemos la última id insertada
+        callback(null,{"insertId" : result.insertId});
+      }
+    });
+  }
+};
+
+//Funcion que inserta las notificaciones que debe tener un teacher
+teacher_model.add_teacher_notification = function(data, callback){
+  if(connection){
+    var sql = 'INSERT INTO teacher_notification (idteacher, idnotification, active) VALUES ?';
+    connection.query(sql, [data], function(err, result){
+      if(err){
+        throw err;
+      } else{
+        //devolvemos la última id insertada
+        callback(null,{"insertId" : result.insertId});
+      }
+    });
+  }
+};
+
+//Funcion que inserta una notificacion
+teacher_model.get_notifications = function(data, callback){
+  if(connection){
+    var sql = 'SELECT notification.* FROM teacher_notification as tn'
+    + ' LEFT JOIN notification ON notification.idnotification=tn.idnotification'
+    + ' WHERE tn.active=1 AND tn.idteacher = ' + connection.escape(data);
+    connection.query(sql, function(err, result){
+      if(err){
+        throw err;
+      } else{
+        //devolvemos la última id insertada
+        callback(null, result);
+      }
+    });
+  }
+};
+
+//Funcion que actualiza la notificacion de un teacher
+teacher_model.update_notification = function(data, callback){
+  if(connection){
+    var sql = 'UPDATE teacher_notification SET ? WHERE idteacher=' + connection.escape(data.idteacher) + " AND idnotification=" + connection.escape(data.idnotification) ;
+    connection.query(sql, data, function(err, result){
+      if(err){
+        throw err;
+      } else{
+        //devolvemos la última id actualizada
+        callback(null, result);
+      }
+    });
+  }
+};
+
 //exportamos el objeto para tenerlo disponible en la zona de rutas
 module.exports = teacher_model;
 

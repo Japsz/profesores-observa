@@ -158,8 +158,9 @@ show_hidden: permite mostrar recursos bloqueados.
 <script type="text/javascript">
     $(document).ready(function(){
         $.ajax({
-            type: 'GET',
-            url: '/comment/view_comment/'+<%=idresource%>,
+            type: 'POST',
+            data: {idresource: <%=idresource%>, idteacher: <%=idteacher%>},
+            url: '/comment/view_comment/',
             success: function (html) {
                 $('#view_comment').append(html);
             }

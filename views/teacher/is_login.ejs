@@ -6,16 +6,42 @@
 	    	</a>
 	    </li>
 	    <li>
-	    	<a href="#" style="padding: 0; margin-left: 5px">
-	    		<img src="/icons/RRCC web-27.png" style="width: 50px;">
-	    	</a>
+	    	<div class="dropdown" style="margin-left: 5px; top: 5px">
+                <button class="dropbtn btn" style="padding: 0; margin: 0">
+                    <h4 style="left: 21px; top: 8px; position: absolute; font-weight: 600; color: black">
+                    	<div id="nro_notifications" data-nro="0">0</div>
+                	</h4>
+                    <img src="/icons/RRCC web-27.png" class="img-rounded" style="width: 50px;">
+                </button>
+                <div id="notifications" class="dropdown-content" style="right: 0; left: -300%; min-width: 200px">
+
+                </div>
+            </div>
 	    </li>
 	    <li>
-	    	<a href="/teacher/logout" style="padding: 0;">
-	    		<img src="/icons/RRCC web-28.png" style="width: 50px;">
+	    	<a href="/teacher/logout" class="btn" style="padding: 0;">
+	    		<img src="/icons/RRCC web-28.png" class="img-rounded" style="width: 30px; margin: 5px">
 	    	</a>
 	    </li>
 	</ul>
+
+	<script type="text/javascript">
+		$(document).ready(function(){
+            $.ajax({
+                type: 'POST',
+                data: {},
+                url: '/teacher/add_notification',
+                success: function(data){
+                	if(data != "ignore"){
+	                    $("#notifications").html(data);
+	                    $("#nro_notifications").html(parseInt($("#data_length").data("length")));
+						$("#nro_notifications").data("nro", parseInt($("#data_length").data("length")));
+                	}
+                }
+            });
+        });
+	</script>
+
 <%}else{%>
 	<ul class="nav navbar-nav navbar-right">
 	    <li>
@@ -24,3 +50,4 @@
 	    </li>
 	</ul>
 <%}%>
+

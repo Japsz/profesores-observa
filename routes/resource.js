@@ -83,7 +83,7 @@ router.post('/', function(req, res){
 });
 
 //Obtener material idresource
-router.post('/get/:idresource', function(req, res){
+router.get('/get/:idresource', function(req, res){
     resource_model.get_resource(req.params.idresource, function(err, results) {
         if(err){
             console.log(err.message);
