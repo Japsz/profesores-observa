@@ -154,8 +154,16 @@ router.post('/resources_by_teacher', function(req, res){
                     var idresources = idresource_list(results);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
-                        results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            console.log(scores);
+                            //Enviamos los recursos y los tags de aquellos recursos separados, lo mismo para scores.
+                            //Para adquirir un tag es tags[idresource]
+                            res.render('resource/show_resources',
+                                {results: results, tags: tags,
+                                    idteacher: validate(req), scores: scores,
+                                    show_image: req.session.show_image, show_hidden: true});
+                        });
                     });
                 } else {
                     res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
@@ -179,8 +187,16 @@ router.post('/resources_by_comment_teacher', function(req, res){
                     var idresources = idresource_list(results);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
-                        results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            console.log(scores);
+                            //Enviamos los recursos y los tags de aquellos recursos separados, lo mismo para scores.
+                            //Para adquirir un tag es tags[idresource]
+                            res.render('resource/show_resources',
+                                {results: results, tags: tags,
+                                    idteacher: validate(req), scores: scores,
+                                    show_image: req.session.show_image, show_hidden: true});
+                        });
                     });
                 } else {
                     res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
@@ -204,8 +220,16 @@ router.post('/resources_by_review', function(req, res){
                     var idresources = idresource_list(results);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
-                        results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            console.log(scores);
+                            //Enviamos los recursos y los tags de aquellos recursos separados, lo mismo para scores.
+                            //Para adquirir un tag es tags[idresource]
+                            res.render('resource/show_resources',
+                                {results: results, tags: tags,
+                                    idteacher: validate(req), scores: scores,
+                                    show_image: req.session.show_image, show_hidden: true});
+                        });
                     });
                 } else {
                     res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
@@ -355,10 +379,16 @@ router.post('/filter', function(req, res){
                     // console.log(idresources);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
-                        console.log(tags);
-                        //Enviamos los recursos y los tags de aquellos recursos separados.
-                        //Para adquirir un tag es tags[idresource]
-                        res.render('resource/show_resources', {results: results, show_image: req.session.show_image, tags: tags, idteacher: validate(req), show_hidden: false});
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            console.log(scores);
+                            //Enviamos los recursos y los tags de aquellos recursos separados, lo mismo para scores.
+                            //Para adquirir un tag es tags[idresource]
+                            res.render('resource/show_resources',
+                                {results: results, tags: tags,
+                                    idteacher: validate(req), scores: scores,
+                                    show_image: req.session.show_image, show_hidden: false});
+                        });
                     });
                 } else {
                     res.render('resource/show_resources', {results: results, show_image: req.session.show_image, tags: {}, idteacher: validate(req), show_hidden: false});                    

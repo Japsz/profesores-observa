@@ -23,6 +23,7 @@ router.post('/add_comment', function (req, res) { //TODO Agregar idteacher
             console.log(err.message);
         }else{
           if(result[0].idteacher != req.session.teacherData.idteacher){
+            var teacher_list = [result[0].idteacher];
             var notif = [["El profesor " + req.session.teacherData.username + " a comentado su recurso.", "show_a_resource(" + data.idresource + ")", "comment"]];
             teacher_model.add_notification(notif, function(err, result2){
               if(err){
@@ -35,7 +36,7 @@ router.post('/add_comment', function (req, res) { //TODO Agregar idteacher
                     console.log(err.message);
                   } else {
                     console.log("notificacion almacenada");
-                    req.app.locals.io.emit('add_notification');
+                    req.app.locals.io.emit('add_notification', {teacher_list: teacher_list});
                   }
                 });
               }

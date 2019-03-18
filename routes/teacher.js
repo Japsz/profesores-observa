@@ -274,19 +274,25 @@ router.post('/inscription', function(req, res, next) {
 */
 router.post('/add_notification', function(req, res) {
     var idteacher = req.session.teacherData.idteacher;
-    // Carga las notificaciones que no se han eliminado
-    teacher_model.get_notifications(idteacher, function(err, result) {
-        if(err){
-            console.log(err.message);
-        }else{
-            // console.log(result);
-            if(result.length > 0){
-                res.render('teacher/notification', {data: result});
-            } else{
-                res.send("ignore");
+    var input = JSON.parse(JSON.stringify(req.body));
+    if(input.teacher_list.indexOf(idteacher) != -1 || input.teacher_list.length == 0){
+        teacher_model.get_notifications(idteacher, function(err, result) {
+            if(err){
+                console.log(err.message);
+            }else{
+                // Si existen notificaciones
+                if(result.length > 0){
+                    console.log(result);
+                    // Carga las notificaciones que no se han eliminado
+                    res.render('teacher/notification', {data: result});
+                } else{
+                    res.send("ignore");
+                }
             }
-        }
-    });
+        });
+    } else{
+        res.send("ignore");
+    }
 });
 
 /* Envia mail a usuario con los datos de su cuenta */
