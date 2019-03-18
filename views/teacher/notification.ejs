@@ -1,0 +1,33 @@
+<%for(var i=0; i< data.length; i++){%>
+	<a id="<%=data[i].idnotification%>">
+		<div class="row">
+			<div class="col-md-10" onclick="<%=data[i].link%>">
+				<%=data[i].description%>
+			</div>
+			<div class="col-md-1">
+				<span onclick="remove_notification(this)" data-idnotif="<%=data[i].idnotification%>" class="glyphicon glyphicon-remove" style="color: red;"></span>		
+			</div>			
+		</div>
+	</a>
+<%}%>
+<div id="data_length" style="display: none" data-length="<%=data.length%>"></div>
+
+<script type="text/javascript">
+
+	function remove_notification(ths){
+		var idnotif = $(ths).data("idnotif");
+		$.ajax({
+            type: 'POST',
+            data: {idnotification: idnotif},
+            url: '/teacher/update_notification',
+            success: function(data){
+            	if(data == "ok"){
+	                $("#" + $(ths).data("idnotif")).remove();
+					$("#nro_notifications").html($("#nro_notifications").data("nro") - 1);
+					$("#nro_notifications").data("nro", $("#nro_notifications").data("nro") - 1);
+            	}
+            }
+        });
+	}
+
+</script>

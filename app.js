@@ -29,7 +29,7 @@ app.use(expressFU({
 }));
 app.use(cookieSession({
     name: 'session',
-    keys: ['teacher666']
+    keys: ['teacher66']
 }));
 
 // Controladores

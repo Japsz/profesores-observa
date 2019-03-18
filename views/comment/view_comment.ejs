@@ -2,7 +2,7 @@
     <div class="col-sm-12">
         <h5>¡Agrega tu comentario, tu opinión es importante!</h5>
         <!-- Textarea para insertar comentario -->
-        <form id="comment_form" data-idresource="<%=idresource%>">
+        <form id="comment_form" data-idresource="<%=data.idresource%>">
             <textarea id="textarea" name="comment" rows="3" maxlength="1000" style="width: 100%"></textarea>
         	<button class="btn btn-success" style="float:right;">Comentar</button>
         </form>
@@ -15,10 +15,11 @@
 
 <script type="text/javascript">
 
+    // Entrega los comentarios del recurso
 	function update_comment(){
     	$.ajax({
             type: 'GET',
-            url: '/comment/show_comments/'+<%=idresource%>,
+            url: '/comment/show_comments/'+<%=data.idresource%>,
             success: function (html) {
                 $('#comments_frame').empty();
                 $('#comments_frame').append(html);
@@ -30,6 +31,7 @@
         update_comment();
     });
 
+    // Agrega un nuevo comentario
 	$('#comment_form').submit(function(e) {
         e.preventDefault();
         $(this).ajaxSubmit({
@@ -39,9 +41,8 @@
             complete: function (xhr) {
                 //Vaciar textarea
                 $("#textarea").val("");
-                //TODO actualizar los comentarios o insertar comentario nuevo
+                // Actualizar los comentarios
                 update_comment();
-                console.log(xhr);
             }
         });
         return false;
