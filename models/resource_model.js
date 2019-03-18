@@ -126,12 +126,30 @@ resource_model.new_review = function(data, callback){
 };
 
 //recibe idresourceson
-resource_model.get_reviews = function(data, callback){
+resource_model.get_reviews_by_son = function(data, callback){
     if (connection){
         let sql = 'SELECT * FROM resource ' +
             'WHERE resource.idresource IN ' +
             '(SELECT idresourcedad FROM review ' +
             'WHERE review.idresourceson = (?))';
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
+//recibe idresourceson
+resource_model.get_reviews = function(data, callback){
+    if (connection){
+        let sql = 'SELECT *, teacher.name FROM resource ' +
+            'LEFT JOIN teacher ON teacher.idteacher = resource.idteacher ' +
+            'WHERE resource.idresource IN ' +
+            '(SELECT idresourceson FROM review ' +
+            'WHERE review.idresourcedad = (?))';
         connection.query(sql, data, function (err, results) {
             if (err) {
                 console.log(err);
@@ -346,7 +364,8 @@ resource_model.get_score = function(data, callback){
 
 resource_model.get_a_score = function(data, callback){
     if (connection){
-        let sql = "SELECT * FROM resource_score WHERE idresource = ?";
+        let sql = "SELECT COUNT(idresource) AS count, SUM(score) AS sum, idresource " +
+            "FROM resource_score WHERE idresource = ?";
         connection.query(sql, data, function (err, results) {
             if (err) {
                 console.log(err);

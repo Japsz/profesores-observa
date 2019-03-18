@@ -75,7 +75,7 @@
                                     </script>
                                 </div>
 
-                                <!-- ARCHIVOS -->
+                                <!-- Revisar Recurso -->
                                 <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
                                     <!-- El param del onclick debe ser el idresource -->
                                     <a class="btn" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px; background-color: #00897B; color: white; margin: 5px">
@@ -83,8 +83,9 @@
                                     </a>
                                 </div>
 
+                                <!-- Scores -->
                                 <div class="col-sm-3" style="padding-right: 0; padding-left: 3px; padding-top: 6px">
-                                    <%for (let i = 1; i<=5; i++){
+                                    <%for ( i = 1; i<=5; i++){
                                         if (scores[resource.idresource] >= i ){ %>
                                             <input id="score" type="image" onclick="score('<%=i%>','<%=resource.idresource%>','<%=idteacher%>')"
                                                    src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
@@ -134,7 +135,6 @@
 
 <script>
 
-
     function score(score, idresource, idteacher) {
         $.ajax({
             type: 'POST',
@@ -147,9 +147,9 @@
             success: function (html) {
                 alert('Scored!')
             }
-        })
-
+        });
     }
+
 
     function deactivate(idresource) {
         if (confirm('¿Seguro que desea desactivar este recurso?')) {

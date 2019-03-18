@@ -22,6 +22,7 @@ function mysplit(str){
 function getXtension(str) {
     str = str.split('.');
     str = str[str.length-1];
+    str = str.toLowerCase();
     return str;
 }
 
@@ -123,11 +124,20 @@ router.post('/get/:idresource', function(req, res){
                 resource_model.get_tag_idresources(results.idresource, function (err, tags) {
                     tags = parse_tags(tags);
                     results.tags = tags;
-                    resource_model.get_files(results.idresource, function (err, files) {
-                        results.files = JSON.parse(JSON.stringify(files));
-                        results.logged = validate(req);
-                        // console.log(results);
-                        res.render('resource/show_a_resource', results);
+                    resource_model.get_a_score(results.idresource, function (err, score) {
+                        results.scores = parse_score(JSON.parse(JSON.stringify(score)));
+                        resource_model.get_files(results.idresource, function (err, files) {
+                            results.files = JSON.parse(JSON.stringify(files));
+                            for (file in results.files){
+                                results.files[file].ext = getXtension(results.files[file].filename)
+                            }
+                            resource_model.get_reviews(results.idresource, function (err, reviews) {
+                                results.reviews = JSON.parse(JSON.stringify(reviews));
+                                results.logged = validate(req);
+                                // console.log(results);
+                                res.render('resource/show_a_resource', results);
+                            });
+                        });
                     });
                 });
             } else {
@@ -155,10 +165,27 @@ router.post('/resources_by_teacher', function(req, res){
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
                         results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            res.render('resource/show_resources', {
+                                results: results,
+                                tags: tags,
+                                scores: scores,
+                                idteacher: validate(req),
+                                show_hidden: true,
+                                show_image: req.session.show_image
+                            });
+                        });
                     });
                 } else {
-                    res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
+                    res.render('resource/show_resources', {
+                        results: results,
+                        tags: {},
+                        scores: {},
+                        idteacher: validate(req),
+                        show_hidden: true,
+                        show_image: req.session.show_image
+                    });
                 }
             }
         });
@@ -180,10 +207,27 @@ router.post('/resources_by_comment_teacher', function(req, res){
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
                         results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            res.render('resource/show_resources', {
+                                results: results,
+                                tags: tags,
+                                scores: scores,
+                                idteacher: validate(req),
+                                show_hidden: true,
+                                show_image: req.session.show_image
+                            });
+                        });
                     });
                 } else {
-                    res.render('resource/show_resources', {idteacher: validate, show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
+                    res.render('resource/show_resources', {
+                        results: results,
+                        tags: {},
+                        scores: {},
+                        idteacher: validate(req),
+                        show_hidden: true,
+                        show_image: req.session.show_image
+                    });
                 }
             }
         });
@@ -205,10 +249,27 @@ router.post('/resources_by_review', function(req, res){
                     resource_model.get_tag_idresources(idresources, function (err, tags) {
                         tags = parse_tags(tags);
                         results.tags = tags;
-                        res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: tags, results: results, show_hidden: true});
-                    });
+                        resource_model.get_scores(idresources, function (err, scores) {
+                            scores = parse_score(scores);
+                            res.render('resource/show_resources', {
+                                results: results,
+                                tags: tags,
+                                scores: scores,
+                                idteacher: validate(req),
+                                show_hidden: true,
+                                show_image: req.session.show_image
+                            });
+                        });
+                    })
                 } else {
-                    res.render('resource/show_resources', {idteacher: validate(req), show_image: req.session.show_image, tags: {}, results: results, show_hidden: true});
+                    res.render('resource/show_resources', {
+                        results: results,
+                        tags: {},
+                        scores: {},
+                        idteacher: validate(req),
+                        show_hidden: true,
+                        show_image: req.session.show_image
+                    });
                 }
             }
         });
@@ -226,7 +287,7 @@ router.post('/add', function(req, res) {
         let data = {
             resource: [validate(req), req.body.title, req.body.description, req.body.text, null],
             files: req.files,
-            tags: mysplit(req.body.tags),
+            tags: req.body.tags,
             box: req.body.box
         };
         if (!('frontimage' in req.body)){

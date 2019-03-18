@@ -42,33 +42,42 @@ show_hidden: permite mostrar recursos bloqueados.
                                     <%}
                                 } %>
                             </p>
+                            <div class="pull-right" style="padding-right: 0; padding-left: 3px; padding-top: 5px">
+                                <% for(let i = 1; i <= 5 ; i++){
+                                    if (scores[idresource] >= i){ %>
+                                    <input id="score" type="image" onclick="score('<%=i%>','<%=idresource%>','<%=idteacher%>')"
+                                       src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <%} else {%>
+                                    <input id="score" type="image" onclick="score('<%=i%>','<%=idresource%>','<%=idteacher%>')"
+                                       src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <%}
+                                }%>
+                            </div>
                         </h2>
                         <div class="blog-post-meta" style="padding: 0;">
                             <h4>por <%=name%> - <%=date.slice(0, date.indexOf('T'))%></h4>
+
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-6">
-                                <!-- DESCRIPCION -->
-                                <p><%=description%></p>
+                            <!-- DESCRIPCION -->
+                            <p><%=description%></p>
+                            <!-- IMAGEN -->
+                            <div style="padding: 2%; float:right;">
+                                <%if(frontimage){%>
+                                    <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>" class="img-responsive" style="border: 2px solid black; width: 350px; float: right">
+                                <%}%>
                             </div>
-                            <div class="col-sm-6">
-                                <!-- IMAGEN -->
-                                <div style="padding: 2%">
-                                    <%if(frontimage){%>
-                                        <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>" class="img-responsive" style="border: 2px solid black; width: 100%">
-                                    <%}%>
-                                </div>
-                            </div>
+                            <p><%=text%></p>
                         </div>
-                        <p><%=text%></p>
+
                         <div class="row">
-                            <div class="col-sm-offset-3 col-sm-1" style="display: inline;"><img src="/icons/RRCC web-21.png" style="width: 40px"></div>
+                            <div class="col-sm-offset-4 col-sm-1" style="display: inline;"><img src="/icons/RRCC web-21.png" style="width: 40px"></div>
                             <div id="tagtype<%=idresource%>" class="col-sm-2" style="margin-top: 3px; padding: 0px"></div>
                             <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-22.png" style="width: 40px"></div>
                             <div id="tagarea<%=idresource%>" class="col-sm-2" style="margin-top: 3px; padding: 0px"></div>
                             <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-23.png" style="width: 40px"></div>
-                            <div id="tagfile<%=idresource%>" class="col-sm-2" style="margin-top: 3px; padding: 0px"></div>
+                            <div id="tagfile<%=idresource%>" class="col-sm-1" style="margin-top: 3px; padding: 0px"></div>
                         </div>
                         <script>
                             <%if(tags){
@@ -84,6 +93,7 @@ show_hidden: permite mostrar recursos bloqueados.
                                     <%}
                                 });
                             }%>
+
                         </script>
 
                         <!-- Aca comienza contenido descargas -->
@@ -92,20 +102,18 @@ show_hidden: permite mostrar recursos bloqueados.
                             <h3 style="margin: 0px">Archivos Adjuntos</h3>
                             Aca estan los archivos que se asocian a este recurso.
                         </div>
-                        <div class="row resource-row" >
+                        <div class="row resource-row" style="margin-top: 10px">
                             <%
                             if(files.length > 0){
-                                    for(file in files){%>
-                            <div class="col-xs-4 col sm-4">
-                                <div class="panel panel-primary">
-                                    <div class="panel-heading resource-head">
-                                        <h5><%=files[file].filename%></h5>
+                                for(file in files){%>
+                                    <div class="col-sm-3" style="margin-bottom: 5px; text-align: center;">
+                                        <p class="text-center">
+                                            <a class="btn" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>" style="white-space: normal" >
+                                                <img src="/icons/RRCC web_<%=files[file].ext%>.png" onerror="this.src='/icons/RRCC web_jpg.png'" style="width: 100px">
+                                                <h5 style=""><%=files[file].filename%></h5>
+                                            </a>
+                                        </p>
                                     </div>
-                                    <div class="panel-body">
-                                        <a class="btn btn-primary" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>" style="float: left">Descargar</a>
-                                    </div>
-                                </div>
-                            </div>
                             <%}
                             } else {%>
                                 <br>
@@ -115,15 +123,27 @@ show_hidden: permite mostrar recursos bloqueados.
                         </div>
 
                         <!-- Aca comienza contenido revisiones -->
-
-                    </div>
-
-                    <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
-                        <img src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
-                        <img src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
-                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                        <div class="row" style="border-bottom: 2px deeppink solid; padding-bottom: 3px; margin-bottom: 8px">
+                            <img src="/icons/RRCC web-22.png" style="width: 50px; margin: 0px; float: left">
+                            <h3 style="margin: 0px">Contribuciones</h3>
+                            Recursos compartidos por otros usuarios/as, que se relacionan con este.
+                        </div>
+                        <div class="row resource-row" >
+                            <%
+                            if(reviews.length > 0){
+                                for(review in reviews){%>
+                                    <a onclick="show_a_resource(<%=reviews[review].idresource%>)" style="cursor: pointer">
+                                        <h3 style="display: inline"><img src="/icons/RRCC web-07.png" style="width: 35px"><%=reviews[review].title%> por <%=reviews[review].name%>
+                                            <h4 style="display: inline"><%=reviews[review].date.slice(0, date.indexOf('T'))%></h4>
+                                        </h3>
+                                    </a>
+                            <%}
+                            } else {%>
+                                <br>
+                                <h3 style="text-align: center;">Este recurso no tiene Contribuciones.</h3>
+                                <br>
+                            <%}%>
+                        </div>
                     </div>
                 </div>
 
@@ -173,5 +193,20 @@ show_hidden: permite mostrar recursos bloqueados.
     function new_review(idresource) {
         $('#modal_new_resource').modal('toggle');
         $('#idresourcedad').attr('value', idresource);
+    }
+
+    function score(score, idresource, idteacher) {
+        $.ajax({
+            type: 'POST',
+            url: '/resource/score',
+            data: {
+                score: score,
+                idresource: idresource,
+                idteacher: idteacher
+            },
+            success: function (html) {
+                alert('Scored!')
+            }
+        });
     }
 </script>
