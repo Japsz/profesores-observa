@@ -3,20 +3,14 @@
 <div class="container blog-content">
     <div class="row">
         <form id="form_update_teacher">
-        <div id="leftframe" class="col-md-5 col-md-offset-1 blog-sidebar">
+        <div id="leftframe" class="col-md-6 blog-sidebar">
             <div class="sidebar-module">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Información de Usuario</h3>
-                    </div>
                     <div class="panel-body">
+                        <h1 class="panel-title" style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #00897B; font-size: 20px; font-weight: 400">Información de Usuario</h1>
+                        <br>
                         <div class="form-group">
-                            <img src="<%=data.perfil_image%>" class="img-circle" style="width: 50px; height: 50px">
-                            <label>Editar imagen</label>
-                            <input name="perfil_image" type="file" accept="image/*">
-                        </div>
-                        <div class="form-group">
-                            <label>Nombre</label>
+                            <label>Nombre y Apellidos</label>
                             <input class="form-control" name="name" id="name" type="text" value="<%= data.name%>" required>
                         </div>
                         <div class="form-group">
@@ -50,16 +44,46 @@
                     </div>
                 </div>
             </div>
+            <div style="text-align: center;">
+                <button type="submit" style="padding: 5px; background-color: #00897B; color: white; margin: 5px;" class="btn">Actualizar información</button>
+                <img src="/icons/actualizar_perfil.png" class="img-rounded" style="width: 40px; height: 40px; display: inline-block;">
+            </div>
         </div>
-        <div id="leftframe" class="col-md-5 blog-sidebar">
+        <div id="leftframe" class="col-md-6 blog-sidebar">
             <div class="sidebar-module">
                 <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Privacidad</h3>
+                    <div class="panel-heading" style="background-color: #00897B">
+                        <h3 style="font-size: 20px; font-weight: 400; color: white" class="panel-title">Foto de Perfil</h3>
                     </div>
                     <div class="panel-body">
-                        <h4>Selecciona tu información de usuario que estará pública ante otros usuarios:</h4>
-                        <table class="table table-bordered table-hover table-striped" >
+                        <img src="<%=data.perfil_image%>" class="img-circle" style="width: 90px; height: 90px; display: inline-block;">
+                        <input style="display: inline-block; margin-left: 10px" name="perfil_image" type="file" accept="image/*">
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: #00897B">
+                        <h3 style="font-size: 20px; font-weight: 400; color: white" class="panel-title">Institución</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h3 style="font-size: 18px; font-weight: 400;" class="panel-title">Institución Correspondiente</h3>
+                        <h4>Estas asociado/a a esta institución, para modificarla haz click en solicitar modificacion</h4>
+                        <div class="pull-right">
+                            <a class="btn" style="padding: 5px; background-color: #00897B; color: white; margin: 5px">Solicitar modificación</a>
+                            <img src="/icons/RRCC web_solicitud cambio institucion.png" class="img-circle" style="width: 50px; height: 50px; display: inline-block;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="sidebar-module">
+                <div class="panel panel-default">
+                    <div class="panel-heading" style="background-color: #00897B">
+                        <h3 style="font-size: 20px; font-weight: 400; color: white" class="panel-title">Privacidad</h3>
+                    </div>
+                    <div class="panel-body">
+                        <h4>Selecciona la información de tu perfil que desees que se encuentre pública para que otros usuarios puedan ver</h4>
+                        <table class="table table-bordered table-hover table-striped" style="margin: 0">
                         <thead>
                           <tr>
                             <th>Información</th>
@@ -69,29 +93,29 @@
                         </thead>
                         <tbody>
                         <tr>
-                            <td>Nombre</td>
-                            <td><input class="form-control" id="name1" value="1" name="name_r" type="radio"></td>
-                            <td><input class="form-control" id="name0" value="0" name="name_r" type="radio"></td>
+                            <td style="padding: 3px;">Nombre</td>
+                            <td style="padding: 3px;"><input class="form-control" id="name1" value="1" name="name_r" type="radio"></td>
+                            <td style="padding: 3px;"><input class="form-control" id="name0" value="0" name="name_r" type="radio"></td>
                         </tr>
                         <tr>
-                            <td>Mail</td>
-                            <td><input class="form-control" id="mail1" value="1" name="mail_r" type="radio"></td>
-                            <td><input class="form-control" id="mail0" value="0" name="mail_r" type="radio"></td>
+                            <td style="padding: 3px;">Mail</td>
+                            <td style="padding: 3px;"><input class="form-control" id="mail1" value="1" name="mail_r" type="radio"></td>
+                            <td style="padding: 3px;"><input class="form-control" id="mail0" value="0" name="mail_r" type="radio"></td>
                         </tr>
                         <tr>
-                            <td>Rut</td>
-                            <td><input class="form-control" id="rut1" value="1" name="rut_r" type="radio"></td>
-                            <td><input class="form-control" id="rut0" value="0" name="rut_r" type="radio"></td>
+                            <td style="padding: 3px;">Rut</td>
+                            <td style="padding: 3px;"><input class="form-control" id="rut1" value="1" name="rut_r" type="radio"></td>
+                            <td style="padding: 3px;"><input class="form-control" id="rut0" value="0" name="rut_r" type="radio"></td>
                         </tr>
                         <tr>
-                            <td>Dirección</td>
-                            <td><input class="form-control" id="address1" value="1" name="address_r" type="radio"></td>
-                            <td><input class="form-control" id="address0" value="0" name="address_r" type="radio"></td>
+                            <td style="padding: 3px;">Dirección</td>
+                            <td style="padding: 3px;"><input class="form-control" id="address1" value="1" name="address_r" type="radio"></td>
+                            <td style="padding: 3px;"><input class="form-control" id="address0" value="0" name="address_r" type="radio"></td>
                         </tr>
                         <tr>
-                            <td>Fecha Nacimiento</td>
-                            <td><input class="form-control" id="b_date1" value="1" name="b_date_r" type="radio"></td>
-                            <td><input class="form-control" id="b_date0" value="0" name="b_date_r" type="radio"></td>
+                            <td style="padding: 3px;">Fecha Nacimiento</td>
+                            <td style="padding: 3px;"><input class="form-control" id="b_date1" value="1" name="b_date_r" type="radio"></td>
+                            <td style="padding: 3px;"><input class="form-control" id="b_date0" value="0" name="b_date_r" type="radio"></td>
                         </tr>
                         </tbody>
                         </table>
@@ -99,18 +123,41 @@
                     </div>
                 </div>
             </div>
-            <button type="submit" class="btn btn-lg btn-success btn-block">Actualizar información <i class="glyphicon glyphicon-pencil"></i></button>
         </div>
         </form>
     </div>
 </div><!-- /.container -->
 
 <style type="text/css">
+
+    .form-control{
+        padding: 0;
+        margin-bottom: 0;
+    }
+
+    .form-group{
+        padding: 0;
+    }
+
+    .panel-body{
+        padding: 10px;
+    }
+
+    .panel-heading{
+        padding: 8px;
+        padding-top: 4px;
+        padding-bottom: 4px;
+    }
+
+    label{
+        margin: 0;
+    }
+
     input[type="radio"]{
-        width: 20px;
-        height: 20px;
+        width: 15px;
+        height: 15px;
         margin-right: 0px;
-        margin-left: 28px;
+        margin-left: 40%;
     }
 </style>
 
