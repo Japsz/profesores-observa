@@ -126,12 +126,30 @@ resource_model.new_review = function(data, callback){
 };
 
 //recibe idresourceson
-resource_model.get_reviews = function(data, callback){
+resource_model.get_reviews_by_son = function(data, callback){
     if (connection){
         let sql = 'SELECT * FROM resource ' +
             'WHERE resource.idresource IN ' +
             '(SELECT idresourcedad FROM review ' +
             'WHERE review.idresourceson = (?))';
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else return callback(data, results);
+        });
+    }
+};
+
+//recibe idresourceson
+resource_model.get_reviews = function(data, callback){
+    if (connection){
+        let sql = 'SELECT *, teacher.name FROM resource ' +
+            'LEFT JOIN teacher ON teacher.idteacher = resource.idteacher ' +
+            'WHERE resource.idresource IN ' +
+            '(SELECT idresourceson FROM review ' +
+            'WHERE review.idresourcedad = (?))';
         connection.query(sql, data, function (err, results) {
             if (err) {
                 console.log(err);
@@ -300,17 +318,112 @@ resource_model.get_tag = function(data, callback){
     }
 };
 
+resource_model.get_sum_types = function(data, callback){
+    if (connection){
+        let sql = "SELECT *, SUM(tags) AS SUM FROM tag " +
+            "WHERE type = 'type'";
+        connection.query(sql, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+//idteacher, idresource, score
+resource_model.score = function(data, callback){
+    if (connection){
+        resource_model.get_score([data[0],data[1]], function (err, results) {
+            var sql;
+            if (results.length > 0){
+                sql = 'UPDATE resource_score ' +
+                    'SET score = (?) ' +
+                    'WHERE idresource = (?) AND idteacher = (?)';
+                data = [data[2], data[1], data[0]];
+            } else {
+                sql = 'INSERT INTO resource_score (idteacher, idresource, score) ' +
+                    'VALUES (?)';
+                data = [data];
+            }
+            console.log(data);
+            connection.query(sql, data, function (err, results) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+                else {
+                    return callback(err, results);
+                }
+            });
+        })
+    }
+};
+
+resource_model.get_score = function(data, callback){
+    if (connection){
+        let sql = "SELECT * FROM resource_score WHERE idteacher = ? AND idresource = ?";
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+resource_model.get_a_score = function(data, callback){
+    if (connection){
+        let sql = "SELECT COUNT(idresource) AS count, SUM(score) AS sum, idresource " +
+            "FROM resource_score WHERE idresource = ?";
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+resource_model.get_scores = function(data, callback){
+    if (connection){
+        let sql = "SELECT COUNT(idresource) AS count, SUM(score) AS sum, idresource " +
+            "FROM resource_score GROUP BY idresource";
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+
+
 
 
 //Recibe un array de elementos seleccionados en el filtro y algun texto
 resource_model.filter = function(data, callback){
     if(connection){
-        var sql = "SELECT * FROM resource"
-        + " LEFT JOIN file ON resource.idresource=file.idresource"
+        var sql = "SELECT resource.*, teacher.name, teacher.idteacher FROM resource"
+        + " LEFT JOIN teacher ON resource.idteacher = teacher.idteacher"
         + " WHERE resource.title LIKE '%" + data.filter + "%'";
     	var tags = JSON.parse(data.tags);
     	var suport = JSON.parse(data.suport);
     	var date = JSON.parse(data.date);
+        //Filtra tags
         if(tags.length > 0){
         	var where2 = " AND resource.idresource IN (SELECT resource_tag.idresource FROM tag LEFT JOIN resource_tag ON tag.idtag=resource_tag.idtag WHERE ("; //Filtra tags(tipo y area)
 	        for(var i=0; i<tags.length; i++){
@@ -321,8 +434,9 @@ resource_model.filter = function(data, callback){
 	        }
 	        sql += where2 + "))";
         }
+        //Filtra soporte/tipo de archivo
         if(suport.length > 0){
-		    var where3 = " AND ("; //Filtra soporte
+		    var where3 = " AND resource.idresource IN (SELECT file.idresource FROM file WHERE (";
 	        for(var i=0; i<suport.length; i++){
 	        	var sup = suport[i].split(" ");
 	        	console.log(sup);
@@ -336,10 +450,11 @@ resource_model.filter = function(data, callback){
 			        where3 += " OR ";
 	        	}
 	        }
-	        sql += where3 + ")";
+	        sql += where3 + "))";
         }
+        //Filtra fechas
         if(date.length > 0){
-		    var where4 = " AND ("; //Filtra fecha
+		    var where4 = " AND (";
 	        for(var i=0; i<date.length; i++){
 		        where4 += "resource.date LIKE '" + date[i] + "%'";
 	        	if(i + 1 != date.length) {
@@ -360,4 +475,5 @@ resource_model.filter = function(data, callback){
         });
     }
 };
+
 module.exports = resource_model;

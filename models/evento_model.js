@@ -57,6 +57,7 @@ evento.getByOwner = function(idteacher,callback){
                     return idx;
                 }
             });
+
             callback(null,data);
         }
     });

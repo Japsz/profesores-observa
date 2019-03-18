@@ -61,7 +61,6 @@
                                     <script>
                                         <%if (tags[resource.idresource]){
                                             tags[resource.idresource].forEach(function (tag) {
-                                                console.log(tag[0]);
                                                 if (tag[1] == 'type'){%>
                                                     $('#tagtype<%=resource.idresource%>').append('<%=tag[0]%>.<br>');
                                                 <%}
@@ -76,7 +75,7 @@
                                     </script>
                                 </div>
 
-                                <!-- ARCHIVOS -->
+                                <!-- Revisar Recurso -->
                                 <div class="col-sm-3 col-sm-offset-6" style="padding: 0">
                                     <!-- El param del onclick debe ser el idresource -->
                                     <a class="btn" onclick="show_a_resource(<%=resource.idresource%>)" style="padding: 5px; background-color: #00897B; color: white; margin: 5px">
@@ -84,12 +83,17 @@
                                     </a>
                                 </div>
 
-                                <div class="col-sm-3" style="padding-right: 0; padding-left: 3px">
-                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
-                                    <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                <!-- Scores -->
+                                <div class="col-sm-3" style="padding-right: 0; padding-left: 3px; padding-top: 6px">
+                                    <%for ( i = 1; i<=5; i++){
+                                        if (scores[resource.idresource] >= i ){ %>
+                                            <input id="score" type="image" onclick="score('<%=i%>','<%=resource.idresource%>','<%=idteacher%>')"
+                                                   src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <%} else {%>
+                                        <input id="score" type="image" onclick="score('<%=i%>','<%=resource.idresource%>','<%=idteacher%>')"
+                                               src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                    <%  }
+                                    }%>
                                 </div>
                             </div>
                         </div>
@@ -125,9 +129,28 @@
         width: 20px; 
         display: inline;
     }
+
+
 </style>
 
 <script>
+
+    function score(score, idresource, idteacher) {
+        $.ajax({
+            type: 'POST',
+            url: '/resource/score',
+            data: {
+                score: score,
+                idresource: idresource,
+                idteacher: idteacher
+            },
+            success: function (html) {
+                alert('Scored!')
+            }
+        });
+    }
+
+
     function deactivate(idresource) {
         if (confirm('¿Seguro que desea desactivar este recurso?')) {
             $.ajax({
@@ -159,12 +182,12 @@
 
     function show_a_resource(idresource) {
         $.ajax({
-            type: 'POST',
-            url: "/resource/get/"+idresource,
+            type: 'GET',
+            url: "/resource/get/" + idresource,
             success: function (html) {
                 $("#mainframe").empty();
-                $("#full_filter").empty();
-                $("#right_col").empty();
+                $("#full_filter").css("display", "none");
+                $("#right_col").css("display", "none");
                 $("#central_col").removeClass();
                 $("#central_col").addClass("col-sm-9");
                 $("#mainframe").append(html);
