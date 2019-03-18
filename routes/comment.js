@@ -22,6 +22,7 @@ router.post('/add_comment', function (req, res) { //TODO Agregar idteacher
         if(err){
             console.log(err.message);
         }else{
+          // Si mi comentario no es en un recurso mio entonces guardo y emito notif
           if(result[0].idteacher != req.session.teacherData.idteacher){
             var teacher_list = [result[0].idteacher];
             var notif = [["El profesor " + req.session.teacherData.username + " a comentado su recurso.", "show_a_resource(" + data.idresource + ")", "comment"]];

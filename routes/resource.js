@@ -280,6 +280,34 @@ router.post('/add', function(req, res) {
             }
             if (req.body.idresourcedad){
                 resource_model.new_review([req.body.idresourcedad, results.insertId], function (err, results) {
+                    // Se almacenan las notificaciones
+                    resource_model.get_resource(req.body.idresourcedad, function(err, result_resource) {
+                        if(err){
+                            console.log(err.message);
+                        }else{
+                            // Si mi review no es de un recurso mio entonces guardo y emito notif
+                            if(result_resource[0].idteacher != req.session.teacherData.idteacher){
+                                var teacher_list = [result_resource[0].idteacher];
+                                var notif = [["El profesor " + req.session.teacherData.username + " a comentado su recurso.", "show_a_resource(" + data.idresource + ")", "comment"]];
+                                teacher_model.add_notification(notif, function(err, result2){
+                                    if(err){
+                                        console.log(err.message);
+                                    } else{
+                                        var idnotif = result2.insertId;
+                                        var teacher_notif = [[result_resource[0].idteacher, idnotif, 1]];
+                                        teacher_model.add_teacher_notification(teacher_notif, function(err, result){
+                                            if(err){
+                                                console.log(err.message);
+                                            } else {
+                                                console.log("notificacion de review almacenada y enviada");
+                                                req.app.locals.io.emit('add_notification', {teacher_list: teacher_list});
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+                        }
+                    });
                     console.log('Se ha creado una review');
                 });
             }

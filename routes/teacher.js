@@ -270,7 +270,7 @@ router.post('/inscription', function(req, res, next) {
     Pasos del socket (se envian las notificaciones a todos, si encuentra una forma mejor de hacerlo bienvenido):
     1) Evento emite una notificacion (ej comentario de un recurso)
     2) Vista de usuario escucha notificacion (user_footer.ejs)
-    3) Se emite un ajax a esta ruta y se almacena la notificacion y renderiza la misma solo si el teacher debe recibir esta
+    3) Se emite un ajax a esta ruta y se renderiza las notificaciones solo si el teacher debe recibir estas
 */
 router.post('/add_notification', function(req, res) {
     var idteacher = req.session.teacherData.idteacher;
@@ -282,7 +282,7 @@ router.post('/add_notification', function(req, res) {
             }else{
                 // Si existen notificaciones
                 if(result.length > 0){
-                    console.log(result);
+                    // console.log(result);
                     // Carga las notificaciones que no se han eliminado
                     res.render('teacher/notification', {data: result});
                 } else{
