@@ -300,6 +300,83 @@ resource_model.get_tag = function(data, callback){
     }
 };
 
+//idteacher, idresource, score
+resource_model.score = function(data, callback){
+    if (connection){
+        resource_model.get_score([data[0],data[1]], function (err, results) {
+            var sql;
+            if (results.length > 0){
+                sql = 'UPDATE resource_score ' +
+                    'SET score = (?) ' +
+                    'WHERE idresource = (?) AND idteacher = (?)';
+                data = [data[2], data[1], data[0]];
+            } else {
+                sql = 'INSERT INTO resource_score (idteacher, idresource, score) ' +
+                    'VALUES (?)';
+                data = [data];
+            }
+            console.log(data);
+            connection.query(sql, data, function (err, results) {
+                if (err) {
+                    console.log(err);
+                    throw err;
+                }
+                else {
+                    return callback(err, results);
+                }
+            });
+        })
+    }
+};
+
+resource_model.get_score = function(data, callback){
+    if (connection){
+        let sql = "SELECT * FROM resource_score WHERE idteacher = ? AND idresource = ?";
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+resource_model.get_a_score = function(data, callback){
+    if (connection){
+        let sql = "SELECT * FROM resource_score WHERE idresource = ?";
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+resource_model.get_scores = function(data, callback){
+    if (connection){
+        let sql = "SELECT COUNT(idresource) AS count, SUM(score) AS sum, idresource " +
+            "FROM resource_score GROUP BY idresource";
+        connection.query(sql, data, function (err, results) {
+            if (err) {
+                console.log(err);
+                throw err;
+            }
+            else {
+                return callback(err, results);
+            }
+        });
+    }
+};
+
+
+
 
 
 //Recibe un array de elementos seleccionados en el filtro y algun texto
