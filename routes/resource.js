@@ -30,7 +30,6 @@ function getXtension(str) {
 //Retorna un diccionario con estructura {idresource: [tags, type]}
 function parse_tags(tags){
     tags = JSON.parse(JSON.stringify(tags));
-    console.log(tags);
     tagsLst = [];
     idresTags = {};
     if(tags.length > 0){
@@ -124,6 +123,7 @@ router.get('/get/:idresource', function(req, res){
                 resource_model.get_tag_idresources(results.idresource, function (err, tags) {
                     tags = parse_tags(tags);
                     results.tags = tags;
+                    console.log(results.tags);
                     resource_model.get_a_score(results.idresource, function (err, score) {
                         results.scores = parse_score(JSON.parse(JSON.stringify(score)));
                         resource_model.get_files(results.idresource, function (err, files) {
@@ -134,7 +134,7 @@ router.get('/get/:idresource', function(req, res){
                             resource_model.get_reviews(results.idresource, function (err, reviews) {
                                 results.reviews = JSON.parse(JSON.stringify(reviews));
                                 results.logged = validate(req);
-                                // console.log(results);
+                                console.log(results);
                                 res.render('resource/show_a_resource', results);
                             });
                         });
@@ -294,24 +294,23 @@ router.post('/add', function(req, res) {
             console.log("Foto de portada");
             data.resource[4] = data.files.frontimage.name;
         }
-        console.log('agregandorecurso');
+        console.log('Agregando un Recurso');
         resource_model.new_resource(data.resource, function (err, results) {
             data.insertId = results.insertId;
-            for (tag in data.tags) {
-                resource_model.new_resource_tag([results.insertId, data.tags[tag], 'area'], function (err, result) {
-                    console.log('Se ha creado un nuevo resource tag');
-                });
-            }
-            console.log(data.box);
+
+            resource_model.new_resource_tag([results.insertId, data.tags, 'area'], function (err, result) {
+                console.log('Se ha creado un nuevo resource tag '+ data.tags);
+            });
+
             if (typeof data.box == 'string'){
                 resource_model.new_resource_tag([results.insertId, data.box, 'type'], function (err, result) {
-                    console.log('Se ha creado un nuevo resource tag');
+                    console.log('Se ha creado un nuevo resource tag box');
                 });
             } else {
                 for (box in data.box) {
                     console.log(data.box[box]);
                     resource_model.new_resource_tag([results.insertId, data.box[box], 'type'], function (err, result) {
-                        console.log('Se ha creado un nuevo resource tag');
+                        console.log('Se ha creado un nuevo resource tag raro');
                     });
                 }
             }

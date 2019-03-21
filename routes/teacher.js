@@ -1,4 +1,5 @@
 var express = require('express');
+var fs = require('fs');
 var router = express.Router();
 //Importar la funcion para enviar mail
 var mail = require('../public/js/sendmail');
@@ -158,6 +159,7 @@ router.get('/complete_teacher_data/:idteacher', function(req, res, next) {
                 req.session.isteacherLogged = true;
                 data[0].valid = 1;
                 console.log(data[0]);
+                fs.mkdir('public/uploaded-files/'+req.params.idteacher, function () {});
                 // Cambia valid a 1
                 teacher_model.update_valid(data[0], function(err,data){
                     if(err){
