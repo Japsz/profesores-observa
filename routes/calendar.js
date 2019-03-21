@@ -25,68 +25,75 @@ router.get('/calendarquery', function(req, res, next) {
 //Vista de cargar un único evento en modal
 router.get('/getEvnt/:idgEvnt',function(req,res){
     //Conseguir la info del evento
-   gmodel.getEvnt('primary',req.params.idgEvnt,function(err,rows){
-       if(err){
-           res.send({err:true,errMsg:rows})
+   gmodel.getEvnt('primary',req.params.idgEvnt,function(err,gEvnt){
+       if(err) {
+           res.render('jumbotronError',{errMsg:err})
        } else {
-           if(rows.attendees){
-               var si = [];
-               var talvez = [];
-               var no = [];
-               var pendiente = [];
-               // Considerar que el user logueado aún no ha respondido
-               var selfResponse = "noResponse";
-               //Agruparlos segun respuesta
-               rows.attendees.map(function(att,i){
-                   //Si el user logueado ha respondido alguna vez, cambiar el estado de "respuesta"
-                   if(att.email == req.session.teacherData.mail){
-                       self = att.responseStatus;
-                   }
-                   switch(att.responseStatus){
-                       case "accepted":
-                           si.push(att.email);
-                           break;
-                       case "tentative":
-                           talvez.push(att.email);
-                           break;
-                       case "needsAction":
-                           pendiente.push(att.email);
-                           break;
-                       case "declined":
-                           no.push(att.email);
-                           break;
-                       default:
-                           break
-                   };
-               });
-               //Buscar usuarios registrados segun email
-               tmodel.getByMail(si,function(err,siList){
-                   if(err){ res.send({err:true,errMsg:"BD error"});
+           if(gEvnt){
+               evntModel.getByIdgoogle(gEvnt.id,function(err,evntRows){
+                   if(err){
+                       res.render('jumbotronError',{errMsg:err});
                    } else {
-                       tmodel.getByMail(no,function(err,noList){
-                           if(err){ res.send({err:true,errMsg:"BD error"});
-                           } else {
-                               tmodel.getByMail(talvez,function(err,talvezList){
-                                   if(err){ res.send({err:true,errMsg:"BD error"});
+                       if(evntRows.length){
+                           evntModel.getAttendees(evntRows[0].idevent,function(err,attendees){
+                               if(err) {
+                                   res.render('jumbotronError',{errMsg:err});
+                               } else {
+                                   if(attendees.length){
+                                       var si = [];
+                                       var talvez = [];
+                                       // Considerar que el user logueado aún no ha respondido
+                                       var selfResponse = "noResponse";
+                                       //Agruparlos segun respuesta
+                                       for(var i = 0;i<attendees.length;i++){
+                                           //Si el user logueado ha respondido alguna vez, cambiar el estado de "respuesta"
+                                           if(attendees[i].idteacher == req.session.teacherData.idteacher){
+                                               selfResponse = attendees[i].state;
+                                           };
+                                           switch(attendees[i].state){
+                                               case "yes":
+                                                   si.push(attendees[i]);
+                                                   break;
+                                               case "maybe":
+                                                   talvez.push(attendees[i]);
+                                                   break;
+                                               default:
+                                                   break
+                                           };
+                                       }
+                                       res.render("calendar/getEvnt",{data:gEvnt,bdEvnt:evntRows[0],self:selfResponse,attendees:{si:si,talvez:talvez}});
                                    } else {
-                                       tmodel.getByMail(pendiente,function(err,pendienteList){
-                                           if(err){ res.send({err:true,errMsg:"BD error"});
-                                           } else {
-                                               res.render("calendar/getEvnt",{data:rows,self:selfResponse,attendees:{no:noList,pendiente:pendienteList,si:siList,talvez:talvezList}});
-                                           }
-                                       });
+                                       res.render("calendar/getEvnt",{data:gEvnt,bdEvnt:evntRows[0],self:"noResponse",attendees:{si:[],talvez:[]}});
                                    }
-                               });
-                           }
-                       });
+                               }
+                           });
+                       } else {
+                           evntModel.create({
+                               title: gEvnt.summary,
+                               description: gEvnt.description,
+                               start: new Date(gEvnt.start.dateTime),
+                               end: new Date(gEvnt.end.dateTime),
+                               idteacher: 1,
+                               idgoogle:gEvnt.id,
+                               type:1
+                           },function(err,resEvnt){
+                               if(err){
+                                   res.render('jumbotronError',{errMsg:err});
+                               } else {
+                                   evntModel.getById(resEvnt.insertId,function(err,evnt){
+                                       if(err) res.render('jumbotronError',{errMsg:err});
+                                       else res.render("calendar/getEvnt",{data:gEvnt,bdEvnt:evnt[0],self:"noResponse",attendees:{no:[],pendiente:[],si:[],talvez:[]}});
+                                   });
+                               }
+                           });
+                       }
                    }
                });
            } else {
-               rows.attendees = [];
-               res.render("calendar/getEvnt",{data:rows,self:"noResponse",attendees:{no:[],pendiente:[],si:[],talvez:[]}});
+               res.render('jumbotronError',{errMsg:err});
            }
        };
-   })
+   });
 });
 // Proponer Evento
 /*
@@ -118,22 +125,36 @@ router.post('/proposeEvnt', function(req, res, next) {
 });
 // Modificar mi respuesta a un evento
 router.post("/updAttendee",function(req,res){
-    gmodel.getEvnt('primary',req.body.idgEvnt,function (err,resEvnt){
-        if(err){
-            console.log(req.body);
-            console.log(resEvnt);
-            res.send({err:true,errMsg:"BD error"})
-        } else {
-            if(resEvnt.attendees){
-                gmodel.updEvnt('primary',req.body.idgEvnt,{end:resEvnt.end,start:resEvnt.start,attendees:resEvnt.attendees},function(err,data){
-                    if(err){res.send({err:true,data:data});
+    if(req.session.isteacherLogged){
+        switch(req.body.state){
+            case "remove":
+                evntModel.removeMember(req.session.teacherData.idteacher,req.body.idevent, function(err,resEvnt){
+                    if(err) res.send({err:true,errMsg:"BD error",data:err});
+                    else res.send({err:false,data:resEvnt});
+                });
+                break;
+            case "yes":
+            case "maybe":
+                evntModel.checkMember(req.session.teacherData.idteacher,req.body.idevent,function (err,resEvnt){
+                    if(err){
+                        console.log(req.body);
+                        console.log(resEvnt);
+                        res.send({err:true,errMsg:"BD error"});
                     } else {
-                        res.redirect("/calendar/getEvnt/" + req.body.idgEvnt);
+                        evntModel.setMemberState(req.body.state,req.session.teacherData.idteacher,req.body.idevent,resEvnt.length,function(err,data){
+                            if(err){res.send({err:true,errMsg:err.message,data:data});
+                            } else {
+                                res.send({err:false,data:data});
+                            };
+                        });
                     };
                 });
-            }
-        };
-    });
+                break;
+            default:
+                res.send({err:true,errMsg:"Respuesta a evento inválida"});
+                break
+        }
+    } else res.send({err:true,errMsg:"No estás logueado, maldito jaker"});
 });
 
 module.exports = router;

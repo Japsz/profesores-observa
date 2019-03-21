@@ -76,4 +76,15 @@ function disable_teacher(yo){
             }
         }
     });
+};
+// Carga el Evnt en el modal
+function getModalEvnt(idgoogle){
+    $.ajax({
+        type: 'GET',
+        url: '/calendar/getEvnt/' + idgoogle,
+        success: function(data){
+            $("#evntModalBody").html(data);
+        }
+    });
 }
+
