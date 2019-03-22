@@ -45,10 +45,10 @@
     <script type="text/javascript" src="/js/calendar.js"></script>
     <script type="text/javascript" src="/js/language/es-MX.js"></script>
     <script type="text/javascript" src="/js/jstz.min.js"></script>
+
     <script type="text/javascript">
         $.material.init();
         $('body').materialScrollTop();
-
         $(document).ready(function(){
             $.ajax({
                 type: 'POST',
@@ -122,6 +122,39 @@
             var $this = $(esto);
             calendar.view($this.data('calendar-view'));
         };
+
+        function graph(){
+            $.ajax({
+                type: 'POST',
+                url: '/resource/resources_graph',
+                success: function (types) {
+                    types.forEach(function (type) {
+                        console.log(type);
+                        if (type.tag == 'Columna de Opinión'){
+                            $('#opinion').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                        if (type.tag == 'Guía/Prueba'){
+                            $('#guide').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                        if (type.tag == 'Imagen'){
+                            $('#image').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                        if (type.tag == 'Libro/Texto'){
+                            $('#texts').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                        if (type.tag == 'Video'){
+                            $('#video').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                        if (type.tag == 'Mapa Conceptual'){
+                            $('#conceptual').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                        if (type.tag == 'Presentación'){
+                            $('#presentation').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                        }
+                    });
+                }
+            });
+        }
     </script>
     </body>
 </html>

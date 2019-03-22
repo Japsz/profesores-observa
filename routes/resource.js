@@ -474,4 +474,19 @@ router.post('/show_image', function(req, res){
     res.redirect('/');
 });
 
+router.post('/resources_graph',function (req,res) {
+   resource_model.get_tags_type(0, function (err, results) {
+       results = JSON.parse(JSON.stringify(results));
+       total = 0;
+       results.forEach(function (result) {
+           total += result.count;
+       });
+       for (result in results){
+           results[result].count = results[result].count / total;
+       }
+       console.log(results);
+       res.send(results);
+   });
+});
+
 module.exports = router;

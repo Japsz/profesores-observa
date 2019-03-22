@@ -96,7 +96,7 @@
                             </label>
                             <div class="col-sm-6">
                                 <label>Foto de Portada</label>
-                                <input name="frontimage" type="file" value="empty" accept="">
+                                <input name="frontimage" type="file" value="empty" accept="image/*">
                             </div>
                             <div class="col-sm-6">
                                 <label>Subir archivo 1</label>
@@ -156,6 +156,7 @@
                 $('#resource_form').each(function(){
                     this.reset();
                 });
+                restart_col();
                 show_resources();
             }
         });

@@ -318,11 +318,13 @@ resource_model.get_tag = function(data, callback){
     }
 };
 
-resource_model.get_sum_types = function(data, callback){
+resource_model.get_tags_type = function(data, callback){
     if (connection){
-        let sql = "SELECT *, SUM(tags) AS SUM FROM tag " +
-            "WHERE type = 'type'";
-        connection.query(sql, function (err, results) {
+        let sql = "SELECT tag.tag, COUNT(tag.tag) AS count FROM resource_tag " +
+            "LEFT JOIN tag ON resource_tag.idtag = tag.idtag " +
+            "WHERE tag.type = 'type' " +
+            "GROUP BY tag.tag";
+        connection.query(sql, 0, function (err, results) {
             if (err) {
                 console.log(err);
                 throw err;
@@ -333,6 +335,7 @@ resource_model.get_sum_types = function(data, callback){
         });
     }
 };
+
 
 //idteacher, idresource, score
 resource_model.score = function(data, callback){
