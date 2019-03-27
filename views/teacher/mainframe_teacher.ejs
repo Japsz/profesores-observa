@@ -263,83 +263,88 @@ y la columna central mainframe -->
                 <div class="panel panel-default">
                     <h4 style="font-weight: 600; padding: 10px; margin-left: 5px; margin-right: 5px; margin-bottom: 3px; text-align: center; padding-bottom: 0px; border-bottom: solid #289B89"><img src="/icons/RRCC web-16.png" class="img-rounded img_30" style="width: 25px"> Recursos de la plataforma</h4>
                     <div class="panel-body" style="padding-top: 0">
-                        <div class="row" style="margin-top: 2%">
+                        <!-- Barra -->
+                        <div class="progress" style="height: 3px">
+                            <div class="progress-bar" role="progressbar" style="width:100%">
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 5%">
                             <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-sm-3 col_rc_1">
-                                        <img src="/icons/RRCC web-07.png" class="img-rounded img_40">
-                                    </div>
-                                    <div class="col-sm-9 col_rc_0">
-                                        <div class="progress" style="width: 60%;">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">50%</div>
-                                        </div>
-                                        <h4 style="margin-bottom: 5px">Columna de opinión/libros /textos</h4>
-                                    </div>
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 100%;">
                                 </div>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-sm-3 col_rc_1">
-                                        <img src="/icons/RRCC web-12.png" class="img-rounded img_40">
+                                <div class="col-sm-9 col_rc_0">
+                                    <div class="progress" style="width: 100%;">
+                                        <div id="texts" class="progress-bar" role="progressbar" style="width:100%">0%</div>
                                     </div>
-                                    <div class="col-sm-9 col_rc_0">
-                                        <div class="progress" style="width: 20%">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #E89525">10%</div>
-                                        </div>
-                                        <h4 style="margin-bottom: 5px">Mapas conceptuales</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6" style="margin-right: 1%">
-                                <div class="row">
-                                    <div class="col-sm-3 col_rc_1">
-                                        <img src="/icons/RRCC web-08.png" class="img-rounded img_40 img_40">
-                                    </div>
-                                    <div class="col-sm-7 col_rc_0">
-                                        <div class="progress" style="width: 40%">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #6EA4CA">20%</div>
-                                        </div>
-                                        <h4 style="margin-bottom: 5px">Imagen</h4>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm-6" style="margin-left: -1%">
-                                <div class="row">
-                                    <div class="col-sm-3 col_rc_1">
-                                        <img src="/icons/RRCC web-11.png" class="img-rounded img_40">
-                                    </div>
-                                    <div class="col-sm-7 col_rc_0">
-                                        <div class="progress" style="width: 40%">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #6EA4CA">20%</div>
-                                        </div>
-                                        Video
-                                    </div>
+                                    Libros/textos
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-sm-3 col_rc_1">
-                                        <img src="/icons/RRCC web-10.png" class="img-rounded img_40">
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 100%">
+                                </div>
+                                <div class="col-sm-9 col_rc_0">
+                                    <div class="progress" style="width: 100%;">
+                                        <div id="opinion" class="progress-bar" role="progressbar" style="width:0%">0%</div>
                                     </div>
-                                    <div class="col-sm-7 col_rc_0">
-                                        <div class="progress" style="width: 23%">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #E71D67">3%</div>
-                                        </div>
-                                        <h4 style="margin-bottom: 5px">Guías/pruebas</h4>
-                                    </div>
+                                    Columna de opinión
                                 </div>
                             </div>
                             <div class="col-sm-6">
-                                <div class="row">
-                                    <div class="col-sm-3 col_rc_1">
-                                        <img src="/icons/RRCC web-13.png" class="img-rounded img_40">
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-12.png" class="img-rounded" style="width: 100%">
+                                </div>
+                                <div class="col-sm-9 col_rc_0">
+                                    <div  class="progress" style="width: 100%">
+                                        <div id="conceptual" class="progress-bar progress-bar-warning" style="width:0%">0%</div>
                                     </div>
-                                    <div class="col-sm-7 col_rc_0">
-                                        <div class="progress" style="width: 30%">
-                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #E89525">10%</div>
-                                        </div>
-                                        <h4 style="margin-bottom: 5px">Presentación</h4>
+                                    Mapas conceptuales
+                                </div>
+                            </div>
+                            <div class="col-sm-6" style="">
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-08.png" class="img-rounded" style="width: 100%">
+                                </div>
+                                <div class="col-sm-9 col_rc_0">
+                                    <div class="progress" style="width: 100%">
+                                        <div id="image" class="progress-bar progress-bar-info" role="progressbar" style="width:0%">0%</div>
                                     </div>
+                                    Imagen
+                                </div>
+                            </div>
+                            <div class="col-sm-6" style="">
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-11.png" class="img-rounded" style="width: 100%">
+                                </div>
+                                <div class="col-sm-9 col_rc_0">
+                                    <div class="progress" style="width: 100%">
+                                        <div id="video" class="progress-bar progress-bar-info" style="width:0%">0%</div>
+                                    </div>
+                                    Video
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-10.png" class="img-rounded" style="width: 100%">
+                                </div>
+                                <div class="col-sm-9 col_rc_0">
+                                    <div class="progress" style="width: 100%;">
+                                        <div id="guide" class="progress-bar progress-bar-danger" style="width:0%">0%</div>
+                                    </div>
+                                    Guías/pruebas
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="col-sm-3 col_rc_1">
+                                    <img src="/icons/RRCC web-13.png" class="img-rounded" style="width: 100%">
+                                </div>
+                                <div class="col-sm-9 col_rc_0">
+                                    <div class="progress" style="width: 100%">
+                                        <div id="presentation" class="progress-bar progress-bar-warning" role="progressbar" style="width:0%">0%</div>
+                                    </div>
+                                    Presentación
                                 </div>
                             </div>
                         </div>
@@ -460,6 +465,9 @@ y la columna central mainframe -->
     for(var i=2019; i < year + 1; i++){
         $(".year").append('<a onclick="select_data(this)" class="filter_date" data-select="false" data-filter="' + i + '">' + i + '.</a>');
     }
+    //Carga el grafico de tipos de recurso
+    $(document).ready(graph());
+
     // Verifica si desea mostrar imagenes al cargar la vista
     if(<%=show_image%>) {
         // Ver imagenes activado
@@ -586,6 +594,37 @@ y la columna central mainframe -->
                 restart_col();
                 $(".loader").css("display","none");
                 $("#mainframe").append(html);
+            }
+        });
+    }
+    function graph(){
+        $.ajax({
+            type: 'POST',
+            url: '/resource/resources_graph',
+            success: function (types) {
+                types.forEach(function (type) {
+                    if (type.tag == 'Columna de Opinión'){
+                        $('#opinion').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                    if (type.tag == 'Guía/Prueba'){
+                        $('#guide').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                    if (type.tag == 'Imagen'){
+                        $('#image').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                    if (type.tag == 'Libro/Texto'){
+                        $('#texts').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                    if (type.tag == 'Video'){
+                        $('#video').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                    if (type.tag == 'Mapa Conceptual'){
+                        $('#conceptual').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                    if (type.tag == 'Presentación'){
+                        $('#presentation').width(Math.floor(type.count*100)+'%').html(Math.floor(type.count*100)+'%');
+                    }
+                });
             }
         });
     }

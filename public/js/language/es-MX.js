@@ -49,8 +49,8 @@ window.calendar_languages['es-MX'] = {
 
 	d0: 'D',
 	d1: 'L',
-	d2: 'M',
-	d3: 'M',
+	d2: 'Ma',
+	d3: 'Mi',
 	d4: 'J',
 	d5: 'V',
 	d6: 'S',

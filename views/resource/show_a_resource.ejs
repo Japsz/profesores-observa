@@ -53,7 +53,7 @@ function formatDate(date) {
                                     <%}
                                 } %>
                             </p>
-                            <div class="pull-right" style="padding-right: 0; padding-left: 3px; padding-top: 5px">
+                            <div id="scores<%=idresource%>" class="pull-right" style="padding-right: 0; padding-left: 3px; padding-top: 5px; padding-right: 4px">
                                 <% for(let i = 1; i <= 5 ; i++){
                                     if (scores[idresource] >= i){ %>
                                     <input id="score" type="image" onclick="score('<%=i%>','<%=idresource%>','<%=idteacher%>')"
@@ -83,16 +83,18 @@ function formatDate(date) {
                         </div>
 
                         <div class="row">
-                            <div class="col-sm-offset-4 col-sm-1" style="display: inline;"><img src="/icons/RRCC web-21.png" style="width: 40px"></div>
-                            <div id="tagtype<%=idresource%>" class="col-sm-2" style="margin-top: 3px; padding: 0px"></div>
+                            <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-21.png" style="width: 40px; font-size: 5px"></div>
+                            <div id="tagtype<%=idresource%>" class="col-sm-3" style="margin-top: 3px; padding: 0px"></div>
                             <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-22.png" style="width: 40px"></div>
-                            <div id="tagarea<%=idresource%>" class="col-sm-2" style="margin-top: 3px; padding: 0px"></div>
+                            <div id="tagarea<%=idresource%>" class="col-sm-3" style="margin-top: 3px; padding: 0px"></div>
                             <div class="col-sm-1" style="display: inline;"><img src="/icons/RRCC web-23.png" style="width: 40px"></div>
-                            <div id="tagfile<%=idresource%>" class="col-sm-1" style="margin-top: 3px; padding: 0px"></div>
+                            <div id="tagfile<%=idresource%>" class="col-sm-3" style="margin-top: 3px; padding: 0px"></div>
                         </div>
                         <script>
-                            <%if(tags.length > 0){
+                            <%
+                            if(tags[idresource].length > 0){
                                 tags[idresource].forEach(function (tag) {
+                                    console.log(tag);
                                     if (tag[1] == 'type'){%>
                                         $('#tagtype<%=idresource%>').append('<%=tag[0]%>.<br>');
                                     <%}
@@ -120,8 +122,8 @@ function formatDate(date) {
                                     <div class="col-sm-3" style="margin-bottom: 5px; text-align: center;">
                                         <p class="text-center">
                                             <a class="btn" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>" style="white-space: normal" >
-                                                <img src="/icons/RRCC web_<%=files[file].ext%>.png" onerror="this.src='/icons/RRCC web_jpg.png'" style="width: 100px">
-                                                <h4 style=""><%=files[file].filename%></h4>
+                                                <img src="/icons/RRCC web_<%=files[file].ext%>.png" onerror="this.src='/icons/RRCC web_file.png'" style="width: 100px">
+                                                <h5 style=""><%=files[file].filename%></h5>
                                             </a>
                                         </p>
                                     </div>
@@ -217,7 +219,7 @@ function formatDate(date) {
                 idteacher: idteacher
             },
             success: function (html) {
-                alert('Scored!')
+                show_a_resource(idresource);
             }
         });
     }
