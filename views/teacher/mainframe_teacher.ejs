@@ -11,52 +11,52 @@ y la columna central mainframe -->
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h3 style="color: #FFCC00; font-weight: 400; margin-top: 0"> ¡Bienvenido/a!</h3>
+                        <h2 style="color: #E89525; margin-top: 0; font-size: 20px"> ¡Bienvenido/a!</h2>
                         <div class="row">
                             <div class="col-md-4" style="padding: 5px; margin-left: 5%">
-                                <a>
-                                    <img src="<%=data.perfil_image%>" class="img-circle" style="width: 80px; height: 80px">
-                                </a>
+                                <img src="<%=data.perfil_image%>" class="img-circle" style="width: 80px; height: 80px">
                             </div>
                             <div class="col-md-7" style="padding: 0">
-                                <h5 style="margin-bottom: 10px; margin-top: 20px; font-size: 20px;margin-left: 5%"><%=data.name%></h5>
+                                <h2 style="font-size: 20px; margin-bottom: 10px; margin-top: 20px; margin-left: 5%"><%=data.name%></h2>
                                 <!-- <h5>Institucion AIEP</h5> -->
                             </div>
                         </div>
                         <div class="btn-group-vertical" role="group" style="width: 100%">
-                            <div class="row" style="margin-left: 4%">
-                                <a class="btn btn-default" onclick="resources_by_teacher()" style="width: 220px">
-                                    <div class="col-sm-3" style="padding-left: 5%">
-                                        <img src="/icons/RRCC web-16.png" class="img-rounded" style="width: 60px">
-                                    </div>
-                                    <div class="col-sm-7" style="margin-top: 10%;">
-                                        <p>Mis recursos</p>
-                                    </div>
-                                </a>
-                                <a class="btn btn-default" onclick="resources_by_comment_teacher()" style="width: 220px">
-                                    <div class="col-sm-3">
-                                        <img src="/icons/RRCC web-17.png" class="img-rounded" style="width: 50px">
-                                    </div>
-                                    <div class="col-sm-7" style="margin-top: 7%;">
-                                        <p>Mis comentarios</p>
-                                    </div>
-                                </a>
-                                <a class="btn btn-default" onclick="resources_by_review()" style="width: 220px">
-                                    <div class="col-sm-3">
-                                        <img src="/icons/RRCC web-18.png" class="img-rounded" style="width: 50px">
-                                    </div>
-                                    <div class="col-sm-7" style="margin-top: 7%;">
-                                        <p>Mis revisiones</p>
-                                    </div>
-                                </a>
-                                <a class="btn btn-default" href="#" data-url="/evento/getMine" onclick="ajax_send(this,'#central_col','insert',{my:'evnt'})" id="myEvnts" style="width: 220px">
-                                    <div class="col-sm-3">
-                                        <img src="/icons/RRCC web-19.png" class="img-rounded" style="width: 50px">
-                                    </div>
-                                    <div class="col-sm-7" style="margin-top: 7%;">
-                                        <p>Mis eventos</p>
-                                    </div>
-                                </a>
+                            <div class="row">
+                                <div style="text-align: center;">
+                                    <a class="btn btn-default" onclick="resources_by_teacher()" style="max-width: 175px">
+                                        <div class="col-sm-3">
+                                            <img src="/icons/RRCC web-16.png" class="img-rounded img_30" style="width: 25px">
+                                        </div>
+                                        <div class="col-sm-7 txt_left_panel">
+                                            <h4>Mis recursos</h4>
+                                        </div>
+                                    </a>                                    
+                                    <a class="btn btn-default" onclick="resources_by_comment_teacher()" style="max-width: 175px">
+                                        <div class="col-sm-3">
+                                            <img src="/icons/RRCC web-17.png" class="img-rounded img_25">
+                                        </div>
+                                        <div class="col-sm-7 txt_left_panel">
+                                            <h4>Mis comentarios</h4>
+                                        </div>
+                                    </a>
+                                    <a class="btn btn-default" onclick="resources_by_review()" style="max-width: 175px">
+                                        <div class="col-sm-3">
+                                            <img src="/icons/RRCC web-18.png" class="img-rounded img_25">
+                                        </div>
+                                        <div class="col-sm-7 txt_left_panel">
+                                            <h4>Mis revisiones</h4>
+                                        </div>
+                                    </a>
+                                    <a class="btn btn-default" href="#" data-url="/evento/getMine" onclick="ajax_send(this,'#central_col','insert',{my:'evnt'})" id="myEvnts" style="max-width: 175px">
+                                        <div class="col-sm-3">
+                                            <img src="/icons/RRCC web-19.png" class="img-rounded img_30" style="height: 20px;">
+                                        </div>
+                                        <div class="col-sm-7 txt_left_panel">
+                                            <h4>Mis eventos</h4>
+                                        </div>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -66,29 +66,26 @@ y la columna central mainframe -->
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h5 style="text-align: center"><img src="/icons/RRCC web-20.png" class="img-circle img_40">Crea y comparte</h5>
-                        <!-- Barra -->
-                        <div class="progress" style="height: 3px">
-                            <div class="progress-bar" role="progressbar" style="width:100%">
+                        <h3 style="font-weight: 400; text-align: center; margin-bottom: 10px; padding-bottom: 7px; border-bottom: solid #289B89"><img src="/icons/RRCC web-20.png" class="img-circle img_40">Crea y comparte</h3>
+                        <div class="row">
+                            <div style="text-align: center;">
+                                <a class="btn btn-default" onclick="new_resource()" style="max-width: 175px">
+                                    <div class="col-sm-3">
+                                        <img src="/icons/RRCC web-15.png" class="img-rounded" style="width: 45px">
+                                    </div>
+                                    <div class="col-sm-7 txt_left_panel" style="margin-top: 5%; text-decoration: underline;">
+                                        <h4>Agrega recursos</h4>
+                                    </div>
+                                </a>
+                                <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default" style="max-width: 175px">
+                                    <div class="col-sm-3">
+                                        <img src="/icons/RRCC web-14.png" class="img-rounded" style="width: 45px">
+                                    </div>
+                                    <div class="col-sm-7 txt_left_panel" style="margin-top: 7%; text-decoration: underline;">
+                                        <h4>Agrega eventos</h4>
+                                    </div>
+                                </a>                                
                             </div>
-                        </div>
-                        <div class="row" style="margin-left: 4%">
-                            <a class="btn btn-default" onclick="new_resource()" style="width: 220px">
-                                <div class="col-sm-3" style="padding-left: 5%">
-                                    <img src="/icons/RRCC web-15.png" class="img-rounded" style="width: 60px">
-                                </div>
-                                <div class="col-sm-7" style="margin-top: 10%;">
-                                    <p>Crear recurso</p>
-                                </div>
-                            </a>
-                            <a href="#modalProposeEvnt" data-toggle="modal" class="btn btn-default" style="width: 220px">
-                                <div class="col-sm-3" style="padding-left: 5%">
-                                    <img src="/icons/RRCC web-14.png" class="img-rounded" style="width: 60px">
-                                </div>
-                                <div class="col-sm-7" style="margin-top: 10%;">
-                                    <p>Crear evento</p>
-                                </div>
-                            </a>
                         </div>
                     </div>
                 </div>
@@ -114,13 +111,13 @@ y la columna central mainframe -->
                         <div class="sidebar-module">
                             <div class="panel panel-default" id="show_image" style="opacity: 0.8">
                                 <div class="dropdown">
-                                    <button class="dropbtn btn" onclick="show_image()" style="width: 101%; padding: 0">
-                                        <h5 class="filter_text" id="msj_show_image" data-toggle="tooltip" data-placement="bottom" style="left: -10px">
+                                    <button class="dropbtn btn" onclick="show_image()">
+                                        <h4 class="filter_text" id="msj_show_image" data-toggle="tooltip" data-placement="bottom" style="margin-bottom: 0;">
                                             <img src="/icons/RRCC web-05.png" class="img-rounded filter_img" style="display: inline-block;">
                                             <div id="state_img" style="display: inline-block;">
                                                 Ver imagen
                                             </div>
-                                        </h5>
+                                        </h4>
                                     </button>
                                 </div>
                             </div>
@@ -130,12 +127,12 @@ y la columna central mainframe -->
                         <div class="sidebar-module">
                             <div class="panel panel-default">
                                 <div class="row">
-                                    <div class="col-sm-3" style="padding-right: 0;">
+                                    <div class="col-sm-3" style="padding: 0;">
                                         <div class="dropdown">
-                                            <button class="dropbtn btn" style="width: 110%">
-                                                <h5 class="filter_text">
+                                            <button class="dropbtn2 btn">
+                                                <h4 class="filter_text" style="margin-bottom: 0;">
                                                     <img src="/icons/RRCC web-21.png" class="img-rounded filter_img">Tipo
-                                                </h5>
+                                                </h4>
                                             </button>
                                             <div class="dropdown-content type">
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Opinión">Columna de Opinión.</a>
@@ -148,12 +145,13 @@ y la columna central mainframe -->
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-3" style="padding: 0;">
                                         <div class="dropdown">
-                                            <button class="dropbtn btn" style="width: 120%">
-                                                <h5 class="filter_text">
+                                            <button class="dropbtn2 btn">
+                                                <h4 class="filter_text" style="margin-bottom: 0;">
                                                     <img src="/icons/RRCC web-22.png" class="img-rounded filter_img">Área
-                                                </h5>
+                                                </h4>
                                             </button>
                                             <div class="dropdown-content area">
                                                 <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matemática">Matemática.</a>
@@ -170,12 +168,13 @@ y la columna central mainframe -->
                                             </div>
                                         </div>
                                     </div>
+
                                     <div class="col-sm-3" style="padding: 0;">
                                         <div class="dropdown">
-                                            <button class="dropbtn btn">
-                                                <h5 class="filter_text">
+                                            <button class="dropbtn2 btn">
+                                                <h4 class="filter_text" style="margin-bottom: 0;">
                                                     <img src="/icons/RRCC web-23.png" class="img-rounded filter_img">Soporte
-                                                </h5>
+                                                </h4>
                                             </button>
                                             <div class="dropdown-content suport">
                                                 <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="pdf">PDF.</a>
@@ -187,12 +186,13 @@ y la columna central mainframe -->
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-sm-2" style="padding: 0;">
+
+                                    <div class="col-sm-3" style="padding: 0;">
                                         <div class="dropdown">
-                                            <button class="dropbtn btn" style="width: 112%">
-                                                <h5 class="filter_text">
+                                            <button class="dropbtn2 btn">
+                                                <h4 class="filter_text" style="margin-bottom: 0;">
                                                     <img src="/icons/RRCC web-26.png" class="img-rounded filter_img">Año
-                                                </h5>
+                                                </h4>
                                             </button>
                                             <div class="dropdown-content year">
                                                 <!-- <a>2019.</a> -->
@@ -208,9 +208,9 @@ y la columna central mainframe -->
                             <div class="panel panel-default">
                                 <div class="dropdown">
                                     <button class="dropbtn btn" onclick="filter()" style="width: 102 %">
-                                        <h5 class="filter_text">
+                                        <h4 class="filter_text" style="margin-bottom: 0;">
                                             <img src="/icons/RRCC web-06.png" class="img-rounded filter_img">Filtrar
-                                        </h5>
+                                        </h4>
                                     </button>
                                 </div>
                             </div>
@@ -231,21 +231,22 @@ y la columna central mainframe -->
             <!-- Calendario -->
             <div class="sidebar-module">
                 <div class="panel panel-default">
-                    <div class="panel-body">
+                    <h4 style="font-weight: 600; padding: 10px; margin-left: 5px; margin-right: 5px; margin-bottom: 3px; text-align: center; padding-bottom: 0px; border-bottom: solid #289B89"><img src="/icons/RRCC web-16.png" class="img-rounded img_30" style="width: 25px">Calendario de eventos</h4>
+                    <div class="panel-body" style="padding: 5px; padding-top: 0">
                         <div class="row">
                             <div class="col-md-12">
-                                <div class="btn-group" style="width: 100%">
-                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="month">Mes</a>
-                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year">Año</a>
-                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week">Semana</a>
-                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day">Día</a>
+                                <div class="btn-group" style="width: 100%; margin: 0">
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default" data-calendar-view="month"><h3 style="margin: 0; font-size: 15px">Mes</h3></a>
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="year"><h3 style="margin: 0; font-size: 15px">Año</h3></a>
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="week"><h3 style="margin: 0; font-size: 15px">Semana</h3></a>
+                                    <a style="width: 25%" onclick="vista(this)" class="btn btn-default text-white" data-calendar-view="day"><h3 style="margin: 0; font-size: 15px">Día</h3></a>
                                 </div>
                             </div>
                             <div class="col-md-1">
                                 <a onclick="navegar(this)" class="btn btn-default text-white" data-calendar-nav="prev"><i class="glyphicon glyphicon-triangle-left"></i></a>
                             </div>
                             <div class="col-md-9">
-                                <h5 id="calendarTitle" class="text-center text-white "></h5>
+                                <h3 id="calendarTitle" class="text-center text-white" style="margin: 0; font-size: 15px"></h3>
                             </div>
                             <div class="col-md-1">
                                 <a onclick="navegar(this)" class="btn btn-default float-right text-white" data-calendar-nav="next"><i class="glyphicon glyphicon-triangle-right"></i></a>
@@ -260,14 +261,9 @@ y la columna central mainframe -->
             </div>
             <div class="sidebar-module">
                 <div class="panel panel-default">
-                    <h5><img src="/icons/RRCC web-16.png" class="img-circle" style="width: 60px; height: 60px">Recursos de la plataforma</h5>
+                    <h4 style="font-weight: 600; padding: 10px; margin-left: 5px; margin-right: 5px; margin-bottom: 3px; text-align: center; padding-bottom: 0px; border-bottom: solid #289B89"><img src="/icons/RRCC web-16.png" class="img-rounded img_30" style="width: 25px"> Recursos de la plataforma</h4>
                     <div class="panel-body" style="padding-top: 0">
-                        <!-- Barra -->
-                        <div class="progress" style="height: 3px">
-                            <div class="progress-bar" role="progressbar" style="width:100%">
-                            </div>
-                        </div>
-                        <div class="row" style="margin-top: 5%">
+                        <div class="row" style="margin-top: 2%">
                             <div class="col-sm-6">
                                 <div class="row">
                                     <div class="col-sm-3 col_rc_1">
@@ -277,7 +273,7 @@ y la columna central mainframe -->
                                         <div class="progress" style="width: 60%;">
                                             <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">50%</div>
                                         </div>
-                                        Columna de opinión/libros /textos
+                                        <h4 style="margin-bottom: 5px">Columna de opinión/libros /textos</h4>
                                     </div>
                                 </div>
                             </div>
@@ -288,9 +284,9 @@ y la columna central mainframe -->
                                     </div>
                                     <div class="col-sm-9 col_rc_0">
                                         <div class="progress" style="width: 20%">
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">10%</div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #E89525">10%</div>
                                         </div>
-                                        Mapas conceptuales
+                                        <h4 style="margin-bottom: 5px">Mapas conceptuales</h4>
                                     </div>
                                 </div>
                             </div>
@@ -301,9 +297,9 @@ y la columna central mainframe -->
                                     </div>
                                     <div class="col-sm-7 col_rc_0">
                                         <div class="progress" style="width: 40%">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">20%</div>
+                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #6EA4CA">20%</div>
                                         </div>
-                                        Imagen
+                                        <h4 style="margin-bottom: 5px">Imagen</h4>
                                     </div>
                                 </div>
                             </div>
@@ -314,7 +310,7 @@ y la columna central mainframe -->
                                     </div>
                                     <div class="col-sm-7 col_rc_0">
                                         <div class="progress" style="width: 40%">
-                                            <div class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">20%</div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #6EA4CA">20%</div>
                                         </div>
                                         Video
                                     </div>
@@ -327,9 +323,9 @@ y la columna central mainframe -->
                                     </div>
                                     <div class="col-sm-7 col_rc_0">
                                         <div class="progress" style="width: 23%">
-                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">3%</div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #E71D67">3%</div>
                                         </div>
-                                        Guías/pruebas
+                                        <h4 style="margin-bottom: 5px">Guías/pruebas</h4>
                                     </div>
                                 </div>
                             </div>
@@ -340,9 +336,9 @@ y la columna central mainframe -->
                                     </div>
                                     <div class="col-sm-7 col_rc_0">
                                         <div class="progress" style="width: 30%">
-                                            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">10%</div>
+                                            <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%; background-color: #E89525">10%</div>
                                         </div>
-                                        Presentación
+                                        <h4 style="margin-bottom: 5px">Presentación</h4>
                                     </div>
                                 </div>
                             </div>
@@ -363,14 +359,19 @@ y la columna central mainframe -->
       display: inline-block;
     }
     .dropbtn{
-        padding: 0;
         margin: 0;
+        padding: 0;
+    }
+    .dropbtn2{
+        margin: 0;
+        margin-left: 10px;
+        padding: 0;
         padding-right: 10px;
     }
     .dropdown-content {
       display: none;
       position: absolute;
-      left: 0;
+      left: 10px;
       background-color: #f9f9f9;
       min-width: 160px;
       box-shadow: 0px 8px 16px 0px black;
@@ -378,7 +379,7 @@ y la columna central mainframe -->
     }
     .dropdown-content a {
       color: black;
-      padding: 12px 16px;
+      padding: 10px 16px;
       text-decoration: none;
       display: block;
     }
@@ -422,35 +423,32 @@ y la columna central mainframe -->
 
     /* Estilo de calendario */
     .cal-month-day{
-        height: 58px;
-        max-height: 58px;
-        min-height: 58px;
+        height: 54px;
+        max-height: 54px;
+        min-height: 54px;
     }
     .cal-day-inmonth{
-        height: 58px;
-        max-height: 58px;
-        min-height: 58px;
+        height: 54px;
+        max-height: 54px;
+        min-height: 54px;
     }
     .cal-month-box .cal-cell{
-        height: 58px;
-        max-height: 58px;
-        min-height: 58px;
-    }
-
-    .cal-row-fluid{
-        height: 58px;
-        max-height: 58px;
-        min-height: 58px;
+        height: 54px;
+        max-height: 54px;
+        min-height: 54px;
     }
     .cal-cell span{
         margin-top: 0;
     }
     .cal-day-today{
-        font-size: 11px;
+        margin-left: 2px;
+        font-size: 10px;
     }
     .cal-day-today span{
-        margin: 5px;
         margin-bottom: 0px;
+    }
+    .events-list{
+        max-height: 30px;
     }
 </style>
 
@@ -468,7 +466,7 @@ y la columna central mainframe -->
         $("#show_image").css("background-color","");
         $("#msj_show_image").prop("title","¡Visualizar imagenes activado!");
     } else {
-        $("#show_image").css("background-color","#f44336");
+        $("#show_image").css("background-color","#E71D67");
         $("#msj_show_image").prop("title","¡Visualizar imagenes desactivado!");
     }
 

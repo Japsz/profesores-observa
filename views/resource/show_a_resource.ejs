@@ -5,16 +5,28 @@ idteacher id profesor logeado, o false.
 show_hidden: permite mostrar recursos bloqueados.
 
 -->
+<%
+function formatDate(date) {
+  var date = date.slice(0, date.indexOf('T')).replace("-","/").replace("-","/").split("/");
 
+  var day = date[2];
+  var month = date[1];
+  var year = date[0];
+
+  return day + '/' + month + '/' + year;
+}
+ %>
 <div class="row">
     <div class="col-xs-12 col-sm-12">
         <section>
             <div class="row">
                 <div style="margin: 1.6%">
-                    <div class="col-sm-12" style="border-bottom: 2px gray solid; padding: 0; padding-bottom: 3px; margin-bottom: 5px">
-                        <h4 style="display: inline-block; margin: 0">Estas en el recurso/<%=title%></h4>
-                        <div class="pull-right" style="display: inline-block;">
-                            <a class="btn btn_obs" href="/teacher" style="">Volver a Inicio</a>
+                    <div class="col-sm-12" style="border-bottom: 2px #878787 solid; padding: 0; padding-bottom: 3px; margin-bottom: 5px">
+                        <h4 style="color: #878787; display: inline-block; margin: 0; padding-top: 10px">Estas en el recurso/</h4><h4 style="color: #878787; display: inline-block; margin: 0; padding-top: 10px; font-weight: 600"><%=title%></h4>
+                        <div class="pull-right" style="display: inline-block;margin: 3px;">
+                            <a class="btn_obs" href="/">
+                                <img src="/icons/RRCC web_flechavolver.png" class="img-rounded" style="width: 25px; height: 25px"> Volver a Inicio
+                            </a>
                         </div>
                     </div>
                 </div>
@@ -25,11 +37,11 @@ show_hidden: permite mostrar recursos bloqueados.
         <section class="blog-post">
             <div class="panel panel-default" style="padding: 10px">
                 <div class="row">
-                    <div class="col-sm-1">
+                    <div class="col-sm-1" style="margin-right: 15px">
                         <img src="/icons/RRCC web-07.png" class="img-rounded" style="width: 60px">
                     </div>
-                    <div class="col-sm-10" style="margin-left: 10px">
-                        <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">
+                    <div class="col-sm-10" style="margin: 0; padding: 0">
+                        <h1 class="blog-post-title" style="margin: 0; margin-top: 10px">
                             <%=title%>
                             <p class="bs-component btn-group-sm pull-right">
                                 <%if(idteacher == logged){%>
@@ -52,22 +64,22 @@ show_hidden: permite mostrar recursos bloqueados.
                                     <%}
                                 }%>
                             </div>
-                        </h2>
+                        </h1>
                         <div class="blog-post-meta" style="padding: 0;">
-                            <h4>por <%=name%> - <%=date.slice(0, date.indexOf('T'))%></h4>
+                            <h4>por <a href="/teacher/teacher_profile/<%=idteacher%>"><%=username%></a> - <%=formatDate(date)%></h4>
 
                         </div>
 
                         <div class="row">
                             <!-- DESCRIPCION -->
-                            <p><%=description%></p>
+                            <h4><%=description%></h4>
                             <!-- IMAGEN -->
                             <div style="padding: 2%; float:right;">
                                 <%if(frontimage){%>
                                     <img src="/uploaded-files/<%=idteacher%>/<%=idresource%>/<%=frontimage%>" class="img-responsive" style="border: 2px solid black; width: 350px; float: right">
                                 <%}%>
                             </div>
-                            <p><%=text%></p>
+                            <h5><%=text%></h5>
                         </div>
 
                         <div class="row">
@@ -99,7 +111,7 @@ show_hidden: permite mostrar recursos bloqueados.
                         <div class="row" style="border-bottom: 2px orange solid; padding-bottom: 3px; margin-bottom: 5px">
                             <img src="/icons/RRCC web-23.png" style="width: 50px; margin: 0px; float: left">
                             <h3 style="margin: 0px">Archivos Adjuntos</h3>
-                            Aca estan los archivos que se asocian a este recurso.
+                            <h4>Archivos que se asocian a este recurso.</h4>
                         </div>
                         <div class="row resource-row" style="margin-top: 10px">
                             <%
@@ -109,7 +121,7 @@ show_hidden: permite mostrar recursos bloqueados.
                                         <p class="text-center">
                                             <a class="btn" href="resource/download/<%=idteacher%>/<%=idresource%>/<%=files[file].filename%>" style="white-space: normal" >
                                                 <img src="/icons/RRCC web_<%=files[file].ext%>.png" onerror="this.src='/icons/RRCC web_jpg.png'" style="width: 100px">
-                                                <h5 style=""><%=files[file].filename%></h5>
+                                                <h4 style=""><%=files[file].filename%></h4>
                                             </a>
                                         </p>
                                     </div>
@@ -125,7 +137,7 @@ show_hidden: permite mostrar recursos bloqueados.
                         <div class="row" style="border-bottom: 2px deeppink solid; padding-bottom: 3px; margin-bottom: 8px">
                             <img src="/icons/RRCC web-22.png" style="width: 50px; margin: 0px; float: left">
                             <h3 style="margin: 0px">Revisiones</h3>
-                            Recursos compartidos por otros usuarios/as, que se relacionan con este.
+                            <h4>Recursos compartidos por otros usuarios/as, que se relacionan con este. </h4>
                         </div>
                         <div class="row resource-row" >
                             <%
@@ -142,7 +154,11 @@ show_hidden: permite mostrar recursos bloqueados.
                                 <h3 style="text-align: center;">Este recurso no tiene Revisiones.</h3>
                                 <br>
                             <%}%>
-                            <a onclick="new_review(<%=idresource%>)" class="btn"><i class="material-icons">assignment</i>Contribuye con una revision </a>
+                            <a onclick="new_review(<%=idresource%>)" class="btn">
+                                <h4 style="margin: 0">
+                                    <i class="material-icons">assignment</i>Contribuye con una revisión
+                                </h4>
+                            </a>
                         </div>
 
                     </div>
@@ -169,12 +185,6 @@ show_hidden: permite mostrar recursos bloqueados.
 </div>
 
 <%- include modal/edit_resource.ejs %>
-
-<style type="text/css">
-    .btn_obs{
-
-    }
-</style>
 
 <script type="text/javascript">
     $(document).ready(function(){

@@ -69,7 +69,7 @@ resource_model.resources_by_review = function(id, callback){
 resource_model.get_resources = function(data, callback){
     if (connection){
         let sql;
-        sql = 'SELECT resource.*, teacher.name, teacher.idteacher FROM resource ' +
+        sql = 'SELECT resource.*, teacher.username, teacher.idteacher FROM resource ' +
               'LEFT JOIN teacher ON resource.idteacher = teacher.idteacher ' +
               'ORDER BY idresource DESC';
         connection.query(sql,data, function (err,results) {
@@ -84,7 +84,7 @@ resource_model.get_resources = function(data, callback){
 //Query obtener un recurso segun data = idresource
 resource_model.get_resource = function(data, callback){
     if (connection){
-        let sql = 'SELECT resource.*, teacher.name, teacher.idteacher FROM resource ' +
+        let sql = 'SELECT resource.*, teacher.username, teacher.idteacher FROM resource ' +
                   'LEFT JOIN teacher ON resource.idteacher = teacher.idteacher ' +
                   'WHERE idresource = ?';
         connection.query(sql, data, function (err, results) {
@@ -145,7 +145,7 @@ resource_model.get_reviews_by_son = function(data, callback){
 //recibe idresourceson
 resource_model.get_reviews = function(data, callback){
     if (connection){
-        let sql = 'SELECT *, teacher.name FROM resource ' +
+        let sql = 'SELECT * FROM resource ' +
             'LEFT JOIN teacher ON teacher.idteacher = resource.idteacher ' +
             'WHERE resource.idresource IN ' +
             '(SELECT idresourceson FROM review ' +
@@ -417,7 +417,7 @@ resource_model.get_scores = function(data, callback){
 //Recibe un array de elementos seleccionados en el filtro y algun texto
 resource_model.filter = function(data, callback){
     if(connection){
-        var sql = "SELECT resource.*, teacher.name, teacher.idteacher FROM resource"
+        var sql = "SELECT resource.*, teacher.username, teacher.idteacher FROM resource"
         + " LEFT JOIN teacher ON resource.idteacher = teacher.idteacher"
         + " WHERE resource.title LIKE '%" + data.filter + "%'";
     	var tags = JSON.parse(data.tags);

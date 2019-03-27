@@ -125,7 +125,6 @@ router.post('/update_teacher', function(req, res) {
             name: input.name,
             username: input.username,
             rut: input.rut,
-            mail: input.mail,
             password: input.password,
             address: input.address,
             birth_date: birth_date,

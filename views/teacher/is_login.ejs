@@ -1,14 +1,15 @@
 <%if(is_login){%>
-	<ul class="nav navbar-nav navbar-right">
+	<ul class="nav navbar-nav navbar-right" style="height: 50px">
 	    <li>
-	    	<a href="/teacher/info_teacher" style="padding: 0; padding-top: 3px; font-weight: 500; font-size: 20px;text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;">
-	    		<img src="<%=data.perfil_image%>" class="img-circle" style="width: 50px; height: 50px"> <%=data.username %>
+	    	<a href="/teacher/info_teacher" style="padding: 0;">
+	    		<img src="<%=data.perfil_image%>" class="img-circle" style="width: 50px; height: 50px; padding: 3px; margin-right: <%=data.username.length+1 %>0px">
+	    		<h2 class="vertical_center" style="left: 55px; margin: 0; font-size: 20px"><%=data.username %></h2>
 	    	</a>
 	    </li>
 	    <li>
 	    	<div class="dropdown" style="margin-left: 5px; top: 5px">
                 <button class="dropbtn btn" style="padding: 0; margin: 0">
-                    <h4 style="left: 21px; top: 8px; position: absolute; font-weight: 600; color: black">
+                    <h4 class="vertical_center" style="left: 21px; font-weight: 600; color: black">
                     	<div id="nro_notifications" data-nro="0">0</div>
                 	</h4>
                     <img src="/icons/RRCC web-27.png" class="img-rounded" style="width: 50px;">
@@ -20,7 +21,7 @@
 	    </li>
 	    <li>
 	    	<a href="/teacher/logout" class="btn" style="padding: 0;">
-	    		<img src="/icons/RRCC web-28.png" class="img-rounded" style="width: 30px; margin: 5px">
+	    		<img src="/icons/RRCC web-28.png" class="img-rounded" style="width: 30px; margin: 7px">
 	    	</a>
 	    </li>
 	</ul>

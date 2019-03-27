@@ -325,7 +325,7 @@ router.post('/add', function(req, res) {
                             // Si mi review no es de un recurso mio entonces guardo y emito notif
                             if(result_resource[0].idteacher != req.session.teacherData.idteacher){
                                 var teacher_list = [result_resource[0].idteacher];
-                                var notif = [["El profesor " + req.session.teacherData.username + " a comentado su recurso.", "show_a_resource(" + data.idresource + ")", "comment"]];
+                                var notif = [["El profesor " + req.session.teacherData.username + " a revisado su recurso.", "show_a_resource(" + req.body.idresourcedad + ")", "review"]];
                                 teacher_model.add_notification(notif, function(err, result2){
                                     if(err){
                                         console.log(err.message);

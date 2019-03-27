@@ -58,12 +58,12 @@ comment_model.remove = function(data, callback){
 //Funcion que muestra los comentarios de un recurso
 comment_model.show_comments = function(data, callback){
     if(connection){
-        var sql = "SELECT resource_comment.*, teacher.username, "
+        var sql = "SELECT resource_comment.*, teacher.username, teacher.idteacher, teacher.perfil_image, "
         + " (SELECT COALESCE(SUM(cp.point),0) FROM comment_point as cp WHERE cp.idcomment=resource_comment.idcomment) as points,"
        	+ " (SELECT COALESCE(cp.point,0) FROM comment_point as cp WHERE cp.idteacher=? AND cp.idcomment=resource_comment.idcomment) as point_teacher FROM resource_comment"
        	+ " LEFT JOIN teacher ON resource_comment.idteacher = teacher.idteacher"
        	+ " WHERE resource_comment.idresource = ?"
-       	+ " ORDER BY resource_comment.date DESC";
+       	+ " ORDER BY resource_comment.date ASC";
         connection.query(sql, data, function(err, result){
             if(err){
                 throw err;
