@@ -13,9 +13,17 @@
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Contraseña" id="password" type="password" required value="">
                                 </div>
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Iniciar Sesión <i class="fa fa-sign-in"></i></button>
-                                <a style="margin-left: 14%" data-toggle="modal" data-target="#inscription">¿Eres nuevo? Solicita una inscripción aquí</a>
-                                <a style="margin-left: 20%" data-toggle="modal" data-target="#recover_password">¿Deseas recuperar tu contraseña?</a>
+                                <button style="margin-left: 30%" type="submit" class="btn-block btn_obs">Iniciar Sesión <i class="fa fa-sign-in"></i></button>
+                                <div style="text-align: center;">
+                                    <a data-toggle="modal" data-target="#inscription">
+                                        <p>¿Eres nuevo? Solicita una inscripción aquí.
+                                        </p>
+                                    </a>
+                                    <a data-toggle="modal" data-target="#recover_password">
+                                        <p>¿Deseas recuperar tu contraseña?
+                                        </p>
+                                    </a>                                    
+                                </div>
                             </form>
                         </div>
                     </div>
@@ -90,12 +98,7 @@
             </div>
         </div>
     </div>
-
-    <script src="/js/bootstrap.min.js"></script>
-    <script src="/js/ripples.min.js"></script>
-    <script src="/js/material.min.js"></script>
-    <script src="/js/material-scrolltop.js"></script>
-    <script src="/js/main.js"></script>
+    <div style="margin-bottom: 18%"></div>
 
     <script type="text/javascript">
 
@@ -160,5 +163,4 @@
 
     </script>
 
-</body>
-</html>
+<%- include ../layouts/user_footer.ejs %>

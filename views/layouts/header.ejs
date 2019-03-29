@@ -20,13 +20,14 @@
     <link href="/css/bootstrap-material-design.css" rel="stylesheet">
     <link href="/css/ripples.min.css" rel="stylesheet">
     <link href="/css/material-scrolltop.css" rel="stylesheet">
-    <link href="/css/our-styles.css" rel="stylesheet">
     <link rel="stylesheet" href="/css/calendar.css">
 
     <!-- Custom styles for this template -->
     <link href="/css/material-blog.css" rel="stylesheet">
     <script src="/js/jquery-1.11.3.min.js"></script>
 
+    <link href="/css/our-styles.css" rel="stylesheet">
+    
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -53,7 +54,7 @@
 
     <div class="navbar navbar-material-blog navbar-inverse navbar-absolute-top" style="background-color: #009688">
 
-        <div class="navbar-image" style="background-image: url('/img/music/unsplash-5.jpg');background-position: center 45%;"></div>
+        <div class="navbar-image" style="background-image: url('/img/music/unsplash-5.jpg');background-position: center 45%; max-height: 230px"></div>
 
 
         <div class="navbar-wrapper container" style="margin-right: 0; margin-left: 5%; width: 90%">
@@ -63,14 +64,34 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/" style="font-weight: 600; font-size: 24px"><i class="material-icons">&#xE871;</i> ProfeCiudadan@</a>
+                <a class="navbar-brand" href="/" style="padding: 0px; max-height: 50px">
+                    <h2 style="margin: 0; padding: 5px">
+                        <i class="material-icons">&#xE871;</i> ProfeCiudadan@
+                    </h2>
+                </a>
             </div>
             <div class="navbar-collapse collapse navbar-responsive-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a href="/">Inicio</a></li>
-                    <li><a onclick="help()">La Plataforma</a></li>
-                    <li><a href="#">ObservaCiudadanía</a></li>
-                    <li><a href="#">Involúcrate</a></li>
+                <ul class="nav navbar-nav" style="max-height: 50px">
+                    <li>
+                        <a href="/" style="padding: 10px; padding-top: 10px">
+                            <h4>| Inicio |</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a onclick="help()" style="padding: 10px; padding-top: 10px">
+                            <h4>| La Plataforma |</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://app.observaciudadania.org/" target="_blank" style="padding: 10px; padding-top: 10px">
+                            <h4>| ObservaCiudadanía |</h4>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" style="padding: 10px; padding-top: 10px">
+                            <h4>| Involúcrate |</h4>
+                        </a>
+                    </li>
                 </ul>
                 <div id="is_login">
                     <!-- Renderiza el menu de usuario en caso de estar logeado -->

@@ -4,13 +4,13 @@
     <div class="row">
         <div class="col-md-3">
             <img src="<%=data.perfil_image%>" class="img-circle" style="width: 150px; height: 150px; margin-left: 18%">
-            <h3 style="text-align: center;"><%=data.username%></h3>
+            <h2 style="text-align: center;"><%=data.username%></h2>
         </div>
         <div class="col-md-9">
             <div class="sidebar-module">
                 <div class="panel panel-default" style="min-height: 200px">
                     <div class="panel-body">
-                        <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Información de usuario</h3>
+                        <h2 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Información de usuario</h2>
                         <div class="row">
                             <div class="col-md-2" id="right_info">
                                 
@@ -19,9 +19,9 @@
                                 
                             </div>
                             <div class="col-md-3" id="left_info">
-                                <h4 style='margin-bottom: 10px'>N° Posts:</h4>
-                                <h4 style='margin-bottom: 10px'>N° Reseñas:</h4>
-                                <h4 style='margin-bottom: 10px'>N° Comentarios:</h4>
+                                <h3 style='margin: 6px'>N° Posts:</h3>
+                                <h3 style='margin: 6px'>N° Reseñas:</h3>
+                                <h3 style='margin: 6px'>N° Comentarios:</h3>
                             </div>
                             <div class="col-md-3" id="right_info">
                                 <h4 style='margin-bottom: 10px'>5</h4>
@@ -35,7 +35,7 @@
         </div>
         <br><br>
         <div class="col-md-8 col-md-offset-1">
-            <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Recursos creados</h3>
+            <h2 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Recursos creados</h2>
             <br>
             <!-- Insertamos aca todos los recursos, recordar id mainframe -->
             <div class="blog-main" id="mainframe">
@@ -44,7 +44,7 @@
             <div class="loader" style="display: none; margin-left: 42%"></div>
         </div>
         <div class="col-md-3">
-            <h3 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Eventos Organizados</h3>
+            <h2 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #289B89">Eventos creados</h2>
             <% if(myEvnt.length){
                 myEvnt.map(function(evnt){%>
             <!-- Insertamos aca todos los eventos -->
@@ -133,7 +133,7 @@
     var public = "<%=data.public%>".split(",");
     for(var i=0; i<=5; i++){
         if(info_teacher[i] != "" && info_teacher[i] != null && public[i] == "1"){
-            $("#right_info").append("<h4 style='margin-bottom: 10px'>" + info[i] + "</h4>");
+            $("#right_info").append("<h3 style='margin: 6px'>" + info[i] + "</h3>");
             $("#left_info").append("<h4 style='margin-bottom: 10px'>" + info_teacher[i] + "</h4>");
         }
     }

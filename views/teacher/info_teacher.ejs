@@ -7,45 +7,42 @@
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-body">
-                        <h1 class="panel-title" style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #00897B; font-size: 20px; font-weight: 400">Información de Usuario</h1>
+                        <h2 style="margin-top: 0; padding-bottom: 5px; margin-bottom: 3px; border-bottom: solid #00897B;">Información de Usuario</h2>
                         <br>
+
                         <div class="form-group">
-                            <label>Nombre y Apellidos</label>
+                            <h3 style="margin:0">Nombre y Apellidos</h3>
                             <input class="form-control" name="name" id="name" type="text" value="<%= data.name%>" required>
                         </div>
                         <div class="form-group">
-                            <label>Nombre de Usuario</label>
+                            <h3 style="margin:0">Nombre de Usuario</h3>
                             <input class="form-control" name="username" id="username" type="text" value="<%= data.username%>" required>
                         </div>
                         <div class="form-group">
-                            <label>Rut</label>
+                            <h3 style="margin:0">Rut</h3>
                             <input class="form-control" name="rut" id="rut" type="text" value="<%= data.rut%>">
                         </div>
                         <div class="form-group">
-                            <label>Mail</label>
-                            <input class="form-control" name="mail" id="mail" type="text" value="<%= data.mail%>" required>
-                        </div>
-                        <div class="form-group">
-                            <label>Contraseña</label>
+                            <h3 style="margin:0">Contraseña</h3>
                             <input class="form-control" name="password" id="password" type="password" value="<%= data.password%>" required>
                         </div>
                         <div class="form-group">
-                            <label>Repita su Contraseña</label>
+                            <h3 style="margin:0">Repita su Contraseña</h3>
                             <input class="form-control" name="" id="password2" type="password" value="<%= data.password%>" required>
                         </div>
                         <div class="form-group">
-                            <label>Dirección</label>
-                            <input class="form-control" name="addess" id="address" type="text" value="<%= data.address%>">
+                            <h3 style="margin:0">Dirección</h3>
+                            <input class="form-control" name="address" id="address" type="text" value="<%= data.address%>">
                         </div>
                         <div class="form-group">
-                            <label>Fecha de Nacimiento</label>
+                            <h3 style="margin:0">Fecha de Nacimiento</h3>
                             <input class="form-control" name="b_date" id="b_date" type="date" value="<%=data.birth_date%>">
                         </div>
                     </div>
                 </div>
             </div>
             <div style="text-align: center;">
-                <button type="submit" style="padding: 5px; background-color: #00897B; color: white; margin: 5px;" class="btn">Actualizar información</button>
+                <button type="submit" class="btn_obs">Actualizar Información</button>
                 <img src="/icons/actualizar_perfil.png" class="img-rounded" style="width: 40px; height: 40px; display: inline-block;">
             </div>
         </div>
@@ -53,9 +50,10 @@
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background-color: #00897B">
-                        <h3 style="font-size: 20px; font-weight: 400; color: white" class="panel-title">Foto de Perfil</h3>
+                        <h3 style="color: white">Foto de Perfil</h3>
                     </div>
                     <div class="panel-body">
+
                         <img src="<%=data.perfil_image%>" class="img-circle" style="width: 90px; height: 90px; display: inline-block;">
                         <input style="display: inline-block; margin-left: 10px" name="perfil_image" type="file" accept="image/*">
                     </div>
@@ -64,13 +62,14 @@
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background-color: #00897B">
-                        <h3 style="font-size: 20px; font-weight: 400; color: white" class="panel-title">Institución</h3>
+                        <h3 style="color: white">Institución</h3>
                     </div>
                     <div class="panel-body">
-                        <h3 style="font-size: 18px; font-weight: 400;" class="panel-title">Institución Correspondiente</h3>
-                        <h4>Estas asociado/a a esta institución, para modificarla haz click en solicitar modificacion</h4>
+
+                        <h4 style="margin-bottom: 5px">Institución Correspondiente</h4>
+                        <h5 style="margin:0; color: #878787">Estas asociado/a a esta institución, para modificarla haz click en solicitar modificacion</h5>
                         <div class="pull-right">
-                            <a class="btn" style="padding: 5px; background-color: #00897B; color: white; margin: 5px">Solicitar modificación</a>
+                            <a class="btn_obs" style="padding: 5px; background-color: #00897B; color: white; margin: 5px">Solicitar modificación</a>
                             <img src="/icons/RRCC web_solicitud cambio institucion.png" class="img-circle" style="width: 50px; height: 50px; display: inline-block;">
                         </div>
                     </div>
@@ -79,40 +78,41 @@
             <div class="sidebar-module">
                 <div class="panel panel-default">
                     <div class="panel-heading" style="background-color: #00897B">
-                        <h3 style="font-size: 20px; font-weight: 400; color: white" class="panel-title">Privacidad</h3>
+                        <h3 style="color: white">Privacidad</h3>
                     </div>
                     <div class="panel-body">
-                        <h4>Selecciona la información de tu perfil que desees que se encuentre pública para que otros usuarios puedan ver</h4>
-                        <table class="table table-bordered table-hover table-striped" style="margin: 0">
+
+                        <h5 style="color: #878787">Selecciona la información de tu perfil que desees que se encuentre pública para que otros usuarios puedan ver</h5>
+                        <table class="table table-hover" style="margin: 0;">
                         <thead>
-                          <tr>
+                          <tr style="border: hidden;">
                             <th>Información</th>
                             <th style="text-align: center;">Si</th>
                             <th style="text-align: center;">No</th>
                           </tr>
                         </thead>
                         <tbody>
-                        <tr>
+                        <tr style="border: hidden;">
                             <td style="padding: 3px;">Nombre</td>
                             <td style="padding: 3px;"><input class="form-control" id="name1" value="1" name="name_r" type="radio"></td>
                             <td style="padding: 3px;"><input class="form-control" id="name0" value="0" name="name_r" type="radio"></td>
                         </tr>
-                        <tr>
+                        <tr style="border: hidden;">
                             <td style="padding: 3px;">Mail</td>
                             <td style="padding: 3px;"><input class="form-control" id="mail1" value="1" name="mail_r" type="radio"></td>
                             <td style="padding: 3px;"><input class="form-control" id="mail0" value="0" name="mail_r" type="radio"></td>
                         </tr>
-                        <tr>
+                        <tr style="border: hidden;">
                             <td style="padding: 3px;">Rut</td>
                             <td style="padding: 3px;"><input class="form-control" id="rut1" value="1" name="rut_r" type="radio"></td>
                             <td style="padding: 3px;"><input class="form-control" id="rut0" value="0" name="rut_r" type="radio"></td>
                         </tr>
-                        <tr>
+                        <tr style="border: hidden;">
                             <td style="padding: 3px;">Dirección</td>
                             <td style="padding: 3px;"><input class="form-control" id="address1" value="1" name="address_r" type="radio"></td>
                             <td style="padding: 3px;"><input class="form-control" id="address0" value="0" name="address_r" type="radio"></td>
                         </tr>
-                        <tr>
+                        <tr style="border: hidden;">
                             <td style="padding: 3px;">Fecha Nacimiento</td>
                             <td style="padding: 3px;"><input class="form-control" id="b_date1" value="1" name="b_date_r" type="radio"></td>
                             <td style="padding: 3px;"><input class="form-control" id="b_date0" value="0" name="b_date_r" type="radio"></td>
@@ -129,7 +129,12 @@
 </div><!-- /.container -->
 
 <style type="text/css">
-
+    h3{
+        margin: 0;
+    }
+    h4{
+        margin: 0;
+    }
     .form-control{
         padding: 0;
         margin-bottom: 0;
@@ -147,10 +152,6 @@
         padding: 8px;
         padding-top: 4px;
         padding-bottom: 4px;
-    }
-
-    label{
-        margin: 0;
     }
 
     input[type="radio"]{
