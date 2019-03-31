@@ -201,6 +201,7 @@
             url: "/resource/get/" + idresource,
             success: function (html) {
                 $("#mainframe").empty();
+                $("#right_col_on_left").html($(".right_col").html());
                 $("#full_filter").css("display", "none");
                 $("#right_col").css("display", "none");
                 $("#central_col").removeClass();

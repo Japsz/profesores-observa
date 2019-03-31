@@ -24,9 +24,9 @@
                                 <h3 style='margin: 6px'>N° Comentarios:</h3>
                             </div>
                             <div class="col-md-3" id="right_info">
-                                <h4 style='margin-bottom: 10px'>5</h4>
-                                <h4 style='margin-bottom: 10px'>3</h4>
-                                <h4 style='margin-bottom: 10px'>0</h4>
+                                <h4 style='margin-bottom: 10px'><%=data.count_resource%></h4>
+                                <h4 style='margin-bottom: 10px'><%=data.count_review%></h4>
+                                <h4 style='margin-bottom: 10px'><%=data.count_comment%></h4>
                             </div>
                         </div>
                     </div>
@@ -127,6 +127,8 @@
     }
 </style>
 
+<%- include ../layouts/user_footer.ejs %>
+
 <script type="text/javascript">
     var info = ["Nombre:","Mail:","Rut:","Dirección:","Fecha de nacimiento:"];
     var info_teacher = ["<%=data.name%>","<%=data.mail%>","<%=data.rut%>","<%=data.address%>","<%=data.birth_date%>"];
@@ -156,5 +158,3 @@
     resources_by_teacher();
     
 </script>
-
-<%- include ../layouts/user_footer.ejs %>

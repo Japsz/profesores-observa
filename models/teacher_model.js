@@ -10,7 +10,10 @@ var teacher_model = {};
 //Funcion que retorna la info de un teacher segun idteacher
 teacher_model.show_teacher = function(id, callback){
   if(connection){
-    var sql = 'SELECT * FROM teacher WHERE idteacher=' + connection.escape(id);
+    var sql = 'SELECT *, (SELECT COUNT(resource.idresource) FROM resource WHERE resource.idteacher=teacher.idteacher) as count_resource,'
+    + ' (SELECT COUNT(idresourceson) FROM review LEFT JOIN resource ON resource.idresource=review.idresourceson WHERE resource.idteacher=teacher.idteacher) as count_review, '
+    + ' (SELECT COUNT(resource_comment.idcomment) FROM resource_comment WHERE resource_comment.idteacher=teacher.idteacher) as count_comment'
+    + ' FROM teacher WHERE idteacher=' + connection.escape(id);
     connection.query(sql, function(err, result){
       if(err){
         throw err;

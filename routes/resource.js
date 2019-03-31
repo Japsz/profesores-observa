@@ -159,7 +159,9 @@ router.post('/resources_by_teacher', function(req, res){
             if(err){
                 console.log(err.message);
             } else {
+                console.log("idteacher: " + idteacher);
                 if(results.length > 0){
+                    console.log(results);
                     results = JSON.parse(JSON.stringify(results));
                     var idresources = idresource_list(results);
                     resource_model.get_tag_idresources(idresources, function (err, tags) {

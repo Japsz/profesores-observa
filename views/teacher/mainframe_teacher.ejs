@@ -90,6 +90,10 @@ y la columna central mainframe -->
                     </div>
                 </div>
             </div>
+
+            <div id="right_col_on_left">
+                <!-- En esta parte se mueve la columna derecha a la izquierda en vistas de un solo recurso -->
+            </div>
         </div>
 
         <!-- Columna del medio -->
@@ -229,7 +233,7 @@ y la columna central mainframe -->
         <!-- Columna derecha -->
         <div class="col-sm-3 blog-sidebar" id="right_col">
             <!-- Calendario -->
-            <div class="sidebar-module">
+            <div class="sidebar-module right_col">
                 <div class="panel panel-default">
                     <h4 style="font-weight: 600; padding: 10px; margin-left: 5px; margin-right: 5px; margin-bottom: 3px; text-align: center; padding-bottom: 0px; border-bottom: solid #289B89"><img src="/icons/RRCC web-16.png" class="img-rounded img_30" style="width: 25px">Calendario de eventos</h4>
                     <div class="panel-body" style="padding: 5px; padding-top: 0">
@@ -259,7 +263,7 @@ y la columna central mainframe -->
                     </div>
                 </div>
             </div>
-            <div class="sidebar-module">
+            <div class="sidebar-module right_col">
                 <div class="panel panel-default">
                     <h4 style="font-weight: 600; padding: 10px; margin-left: 5px; margin-right: 5px; margin-bottom: 3px; text-align: center; padding-bottom: 0px; border-bottom: solid #289B89"><img src="/icons/RRCC web-16.png" class="img-rounded img_30" style="width: 25px"> Recursos de la plataforma</h4>
                     <div class="panel-body" style="padding-top: 0">
@@ -453,6 +457,10 @@ y la columna central mainframe -->
 </style>
 
 <script type="text/javascript">
+
+    //onready
+    $(document).ready(show_resources);
+    
     // Funciones filtro
     // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
     var year = new Date();
@@ -542,6 +550,7 @@ y la columna central mainframe -->
     function restart_col(){
         $("#full_filter").css("display", "block");
         $("#right_col").css("display", "block");
+        $("#right_col_on_left").empty();
         $("#central_col").removeClass();
         $("#central_col").addClass("col-sm-6");
     }
