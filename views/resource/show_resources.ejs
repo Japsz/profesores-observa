@@ -100,11 +100,9 @@
                                 <div class="col-sm-3" style="padding-right: 0; padding-left: 3px;">
                                     <%for ( i = 1; i<=5; i++){
                                         if (scores[resource.idresource] >= i ){ %>
-                                            <input id="score" type="image" onclick="score('<%=i%>','<%=resource.idresource%>','<%=idteacher%>')"
-                                                   src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
+                                            <img id="score" src="/icons/RRCC web-24.png" class="img-rounded" style="width: 20px; display: inline;">
                                     <%} else {%>
-                                        <input id="score" type="image" onclick="score('<%=i%>','<%=resource.idresource%>','<%=idteacher%>')"
-                                               src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
+                                        <img src="/icons/RRCC web-25.png" class="img-rounded" style="width: 20px; display: inline;">
                                     <%  }
                                     }%>
                                 </div>

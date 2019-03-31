@@ -78,7 +78,7 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#" style="padding: 10px; padding-top: 10px">
+                        <a onclick="help()" style="padding: 10px; padding-top: 10px">
                             <h4>| La Plataforma |</h4>
                         </a>
                     </li>
@@ -99,6 +99,21 @@
             </div>
         </div>
     </div>
-
+    <script>
+        function help() {
+            $.ajax({
+                url: '/help',
+                success: function (html) {
+                    console.log(html);
+                    $("#mainframe").empty();
+                    $("#full_filter").css("display", "none");
+                    $("#right_col").css("display", "none");
+                    $("#central_col").removeClass();
+                    $("#central_col").addClass("col-sm-9");
+                    $("#mainframe").append(html);
+                }
+            });
+        }
+    </script>
 
 <!-- <body> cierra en footer -->
