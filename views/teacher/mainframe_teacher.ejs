@@ -458,8 +458,10 @@ y la columna central mainframe -->
 
 <script type="text/javascript">
 
-    //onready
-    $(document).ready(show_resources);
+    //Carga los recursos
+    $(document).ready(show_resources());
+    //Carga el grafico de tipos de recurso
+    $(document).ready(graph());
     
     // Funciones filtro
     // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
@@ -468,8 +470,6 @@ y la columna central mainframe -->
     for(var i=2019; i < year + 1; i++){
         $(".year").append('<a onclick="select_data(this)" class="filter_date" data-select="false" data-filter="' + i + '">' + i + '.</a>');
     }
-    //Carga el grafico de tipos de recurso
-    $(document).ready(graph());
 
     // Verifica si desea mostrar imagenes al cargar la vista
     if(<%=show_image%>) {
