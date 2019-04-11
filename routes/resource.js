@@ -432,7 +432,8 @@ router.post('/filter', function(req, res){
             filter: input.filter,
             tags: input.tags, 
             suport: input.suport,
-            date: input.date
+            date: input.date,
+            star: parseInt(input.star)
         };
         resource_model.filter(data, function(err, results) {
             if(err){

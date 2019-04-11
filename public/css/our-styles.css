@@ -4,6 +4,7 @@
 }
 .panel {
     position:relative;
+    width: 100%;
 }
 .panel>.panel-heading:after,.panel>.panel-heading:before{
     position:absolute;
@@ -214,10 +215,121 @@ img.img_40{
     transform: translateY(-50%);
 }
 
-/*Colores
+/* Filter */
+
+.dropdown {
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
+.dropbtn{
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  left: 0;
+  background-color: #f9f9f9;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px black;
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown-content a:hover {
+    background-color: #ccc;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+.dropdown:hover .dropbtn {
+    background-color: #f1f1f1;
+}
+.filter_text{        
+    text-transform: capitalize;
+    margin-right: 5px;
+}
+.filter_stars{
+    width: 20px; 
+    display: inline;
+}
+.filter_img{
+    width: 30px;
+}
+.filter_col{
+    display: inline-block;
+    padding-right: 2.5%;
+}
+.filter_col2{
+    display: inline-block;
+    padding-right: 0;
+}
+
+/* Loader */
+
+.loader {
+    border: 12px solid #D3D3D3;
+    border-radius: 50%;
+    border-top: 12px solid #3498db;
+    width: 90px;
+    height: 90px;
+    -webkit-animation: spin 2s linear infinite; /* Safari */
+    animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Estilo de calendario */
+
+.cal-month-day{
+    height: 54px;
+    max-height: 54px;
+    min-height: 54px;
+}
+.cal-day-inmonth{
+    height: 54px;
+    max-height: 54px;
+    min-height: 54px;
+}
+.cal-month-box .cal-cell{
+    height: 54px;
+    max-height: 54px;
+    min-height: 54px;
+}
+.cal-cell span{
+    margin-top: 0;
+}
+.cal-day-today{
+    margin-left: 2px;
+    font-size: 10px;
+}
+.cal-day-today span{
+    margin-bottom: 0px;
+}
+.events-list{
+    max-height: 30px;
+}
+
+/* Colores
 azul: #6EA4CA
 fucsia: #E71D67
 gris_ #878787
 verde: #289B89
 naranjo: #E89525
 */
+

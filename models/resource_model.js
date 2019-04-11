@@ -426,6 +426,7 @@ resource_model.filter = function(data, callback){
     	var tags = JSON.parse(data.tags);
     	var suport = JSON.parse(data.suport);
     	var date = JSON.parse(data.date);
+        var star = JSON.parse(data.star);
         //Filtra tags
         if(tags.length > 0){
         	var where2 = " AND resource.idresource IN (SELECT resource_tag.idresource FROM tag LEFT JOIN resource_tag ON tag.idtag=resource_tag.idtag WHERE ("; //Filtra tags(tipo y area)
@@ -465,6 +466,10 @@ resource_model.filter = function(data, callback){
 	        	}
 	        }
 	        sql += where4 + ")";
+        }
+        if(star > 0){
+            console.log("funciona");
+            sql += " AND resource.idresource IN (SELECT rs.idresource FROM resource_score as rs GROUP BY rs.idresource HAVING FLOOR(AVG(rs.score)) = " + star + ")";
         }
         console.log(sql);
         connection.query(sql, function(err, results) {
