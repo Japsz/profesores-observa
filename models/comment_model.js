@@ -39,6 +39,21 @@ comment_model.comment_point = function(data, callback){
     }
 };
 
+//Funcion que actualiza la información de la puntuacion del comentario
+comment_model.update_comment_point = function(data, callback){
+  if(connection){
+    var sql = 'UPDATE comment_point SET ? WHERE idcomment=' + connection.escape(data.idcomment) + 'AND idteacher=' + connection.escape(data.idteacher);
+    connection.query(sql, data, function(err, result){
+      if(err){
+        throw err;
+      } else{
+        //devolvemos la última id actualizada
+        callback(null, result);
+      }
+    });
+  }
+};
+
 //Funcion que elimina comentario
 comment_model.remove = function(data, callback){
     if(connection){

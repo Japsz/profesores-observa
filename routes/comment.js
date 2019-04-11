@@ -85,6 +85,24 @@ router.post('/comment_point', function (req, res) {
   });
 });
 
+// Controlador que actualiza un punto en el comentario votado
+router.post('/update_comment_point', function (req, res) {
+  var input = JSON.parse(JSON.stringify(req.body));
+  console.log(input);
+  var data = {
+    idteacher: req.session.teacherData.idteacher,
+    idcomment: input.idcomment,
+    point: input.point
+  };
+  comment_model.update_comment_point(data, function(err) {
+    if(err){
+      console.log(err.message);
+    }else{
+      res.send('ok');
+    }
+  });
+});
+
 // Controlador que elimina un comentario. Deberia borrar en cascada en la tabla resource_comment
 router.post('/remove', function (req, res) {
 	var input = JSON.parse(JSON.stringify(req.body));

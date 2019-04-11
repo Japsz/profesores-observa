@@ -23,13 +23,21 @@ data.forEach(function (comment){%>
             <div class="panel panel-default">
                 <div class="panel-heading">
                     <div class="row">
-                        <div class="col-sm-8">
+                        <div class="col-sm-9">
                             <h4>Por <a href="/teacher/teacher_profile/<%=comment.idteacher%>"><%=comment.username%></a> - <%=formatDate(comment.date)%></h4>
                         </div>
-                        <div class="col-sm-2" style="margin-left: 6%">
-                            <%if(comment.point_teacher){
+                        <div class="pull-right" style="margin-right: 10px">
+                            <%if(comment.idteacher == teacher.idteacher){%>
+                                <button class="btn btn-danger btn-md" data-idcomment="<%=comment.idcomment%>" onclick="remove_comment(this)" style="margin: 0; padding: 0;">
+                                    <span class="glyphicon glyphicon-remove"></span>
+                                </button>
+                            <%}%>
+                        </div>
+                        <div class="pull-right" style="margin-right: 10px">
+                            <!-- Define las variables para decidir que flecha mostrar -->
+                            <%if(comment.point_teacher){ <!-- Variable que contiene la votacion del usuario en este comentario -->
                                 if(comment.point_teacher > 0){
-                                    <!-- Define si el profesor presiono el boton arrow_up -->
+                                    <!-- State define si el profesor presiono el boton arrow_up para no permitir volver a presionarla -->
                                     var state = 1;
                                     var arrow_up = "btn-info";
                                     var arrow_down = "btn-default";
@@ -43,20 +51,13 @@ data.forEach(function (comment){%>
                                 var arrow_up = "btn-default";
                                 var arrow_down = "btn-default";
                             } %>
-                            <button class="btn <%=arrow_up%> btn-md" data-idcomment="<%=comment.idcomment%>" data-state="<%=state%>" data-type="1" onclick="comment_point(this)" style="margin: 0; padding: 0; position: relative;">
+                            <button class="btn <%=arrow_up%> btn-md" data-idcomment="<%=comment.idcomment%>" data-state="<%=state%>" data-type="1" data-teacher_point="<%=comment.point_teacher%>" onclick="comment_point(this)" style="margin: 0; padding: 0; position: relative;">
                                 <span class="glyphicon glyphicon-arrow-up"></span>
                             </button>
-                            <button class="btn <%=arrow_down%> btn-md" data-idcomment="<%=comment.idcomment%>" data-state="<%=state%>" data-type="-1" onclick="comment_point(this)" style="margin: 0; padding: 0; position: relative; top: 20px; left: -17px">
+                            <button class="btn <%=arrow_down%> btn-md" data-idcomment="<%=comment.idcomment%>" data-teacher_point="<%=comment.point_teacher%>" data-state="<%=state%>" data-type="-1" onclick="comment_point(this)" style="margin: 0; padding: 0; position: relative; top: 20px; left: -17px">
                                 <span class="glyphicon glyphicon-arrow-down"></span>
                             </button>
                             <h5 id="points<%=comment.idcomment%>" style="margin: 0; position: relative; top: -10px; left: 17px"><%=comment.points%></h5>
-                        </div>
-                        <div class="col-sm-1">
-                            <%if(comment.idteacher == teacher.idteacher){%>
-                                <button class="btn btn-danger btn-md" data-idcomment="<%=comment.idcomment%>" onclick="remove_comment(this)" style="margin: 0; padding: 0;">
-                                    <span class="glyphicon glyphicon-remove"></span>
-                                </button>
-                            <%}%>
                         </div>
                     </div>
                 </div>
@@ -82,10 +83,8 @@ data.forEach(function (comment){%>
 
     // Al puntuar comentario
     function comment_point(yo){
-        if($(yo).data("state") == 1 || $(yo).data("state") == -1){
-            return;
-        } else{
-            var point = parseInt($(yo).data("type"));
+        var point = parseInt($(yo).data("type"));
+        if($(yo).data("state") == 0){
             $.ajax({
                 type: 'POST',
                 data: { idcomment: $(yo).data("idcomment"), point: point },
@@ -96,6 +95,19 @@ data.forEach(function (comment){%>
                     }
                 }
             });
+        } else{
+            if($(yo).data("teacher_point") != $(yo).data("type")){
+               $.ajax({
+                type: 'POST',
+                data: { idcomment: $(yo).data("idcomment"), point: point},
+                url: '/comment/update_comment_point',
+                success: function(data){
+                    if(data == "ok"){
+                        update_comment(); //Esta funcion se encuentra en view_comment
+                    }
+                }
+            }); 
+            }
         }
     }    
 
