@@ -111,6 +111,10 @@ router.post('/', function(req, res){
         }
     });
 });
+//Cargar filtros y barra de busqueda
+router.get('/getSearchbox',function(req,res){
+    res.render("resource/searchbox");
+});
 
 //Obtener material idresource
 router.get('/get/:idresource', function(req, res){

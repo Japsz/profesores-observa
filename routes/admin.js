@@ -167,11 +167,33 @@ router.get('/listEvnt', function(req, res, next) {
 // Insertar Evento
 router.post('/insertEvnt', function(req, res, next) {
     // console.log(req.session.teacherData);
-    gmodel.insertEvnt('primary',req.body,function(err,rows){
-        if(err) {
-            res.send({err:true,data:rows});
+    req.body.idteacher = "1";
+    evntModel.create({
+        idteacher: 1,
+        title: req.body.title,
+        description:req.body.summary,
+        start:req.body.start,
+        end:req.body.end,
+        type:1},function(err,rows){
+        if(err){
+            console.log(err);
+            res.send({err:true,errMsg:err});
         } else {
-            res.send({err:null,data:rows});
+            req.body.idevent = rows.insertId;
+            gmodel.insertEvnt('primary',req.body,function(err,grows){
+                if(err) {
+                    res.send({err:true,data:err});
+                } else {
+                    evntModel.setIdgoogle(grows.id,req.body.idevent,function(err,rows){
+                        if(err){
+                            console.log(err);
+                            res.send({err:true,errMsg:err});
+                        } else {
+                            res.send({err:null,data:grows});
+                        }
+                    });
+                }
+            });
         }
     });
 });

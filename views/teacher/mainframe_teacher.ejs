@@ -31,7 +31,7 @@ y la columna central mainframe -->
                                         <div class="col-sm-7 txt_left_panel">
                                             <h4>Mis recursos</h4>
                                         </div>
-                                    </a>                                    
+                                    </a>
                                     <a class="btn btn-default" onclick="resources_by_comment_teacher()" style="max-width: 175px">
                                         <div class="col-sm-3">
                                             <img src="/icons/RRCC web-17.png" class="img-rounded img_25">
@@ -48,7 +48,7 @@ y la columna central mainframe -->
                                             <h4>Mis revisiones</h4>
                                         </div>
                                     </a>
-                                    <a class="btn btn-default" href="#" data-url="/evento/getMine" onclick="ajax_send(this,'#central_col','insert',{my:'evnt'})" id="myEvnts" style="max-width: 175px">
+                                    <a class="btn btn-default" href="#" onclick="listEvents('',true)" id="myEvnts" style="max-width: 175px">
                                         <div class="col-sm-3">
                                             <img src="/icons/RRCC web-19.png" class="img-rounded img_30" style="height: 20px;">
                                         </div>
@@ -266,7 +266,9 @@ y la columna central mainframe -->
                             <div class="col-md-12">
                                 <div id="calendar"></div>
                             </div>
-
+                            <div class="col-md-12">
+                                <a onclick="listEvents('',false)" class="btn btn-default"><i class="glyphicon glyphicon-search"></i> Buscar Eventos</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -365,11 +367,6 @@ y la columna central mainframe -->
 
 <script type="text/javascript">
 
-    //Carga los recursos
-    $(document).ready(show_resources());
-    //Carga el grafico de tipos de recurso
-    $(document).ready(graph());
-    
     // Funciones filtro
     // Obtiene el año actual para agregar los años a filtro AÑO (desde 2019 hasta este año)
     var year = new Date();
@@ -378,6 +375,35 @@ y la columna central mainframe -->
         $(".year").append('<a onclick="select_data(this)" class="filter_date" data-select="false" data-filter="' + i + '">' + i + '.</a>');
     }
 
+    var sBox = "resources";
+    //Carga el grafico de tipos de recurso
+    $(document).ready(function(){
+        //Carga los recursos
+        show_resources();
+        graph();
+    });
+    //Cambiar caja de busqueda según evento o recurso
+    function setSbox(type){
+        if(type == 'resources'){
+            $.ajax({
+                type:'get',
+                url:'/resource/getSearchbox',
+                success:function(data){
+                    $("#full_filter").html(data);
+                }
+            });
+            sBox = 'resources';
+        } else {
+            $.ajax({
+                type:'get',
+                url:'/evento/getSearchbox',
+                success:function(data){
+                    $("#full_filter").html(data);
+                }
+            });
+            sBox = 'evento';
+        }
+    }
     // Verifica si desea mostrar imagenes al cargar la vista
     if(<%=show_image%>) {
         // Ver imagenes activado
@@ -422,6 +448,34 @@ y la columna central mainframe -->
         console.log(filter_star);
     }
 
+    //Funcion que pone lo necesario para buscar eventos en el centra_col
+    function listEvents(query,mine){
+        var url = "/calendar/getQuery";
+        var data = {
+            timeMin: new Date().toISOString()
+        };
+        //Si busco eventos míos
+        if(mine) url = "/evento/getMine";
+        // Si hay alguna query
+        if(query != "") data.q = query;
+        $.ajax({
+            type: 'post',
+            url: url,
+            data: data,
+            success: function(data){
+                if(!data.err){
+                    $("#mainframe").html(data.html);
+                } else {
+                    alert(data);
+                }
+            }
+        });
+        if(sBox != "evento") setSbox('evento');
+    };
+    //Ejecutar los filtros
+    function eventFilter(){
+        listEvents($("#evntQuery").val(),$("#mineQuery").prop('checked'));
+    };
     // Funcion que activa/desactiva imagenes
     function show_image() {
         $("#mainframe").empty();
@@ -434,9 +488,11 @@ y la columna central mainframe -->
                 $("#mainframe").append(html);
             }
         });
+        if(sBox != "resources") setSbox('resources');
     }
 
     // Funcion que muestra y quita la seleccion de un dato del filtro
+
     function select_data(ths){
         if($(ths).data("select") == false){
             $(ths).css("background-color", "#009688");
@@ -449,8 +505,7 @@ y la columna central mainframe -->
             $(ths).find("i").remove();
             $(ths).data("select", false);
         }
-    }
-
+    };
     function filter(){
         $("#mainframe").empty();
         $(".loader").css("display","block");
@@ -487,6 +542,7 @@ y la columna central mainframe -->
                 $("#mainframe").append(html);
             }
         });
+        if(sBox != "resources") setSbox('resources');
     }
 
     function restart_col(){
@@ -512,6 +568,7 @@ y la columna central mainframe -->
                 $("#mainframe").append(html);
             }
         });
+        if(sBox != "resources") setSbox('resources');
     }
 
     // Buscar recursos del usuario
@@ -527,6 +584,7 @@ y la columna central mainframe -->
                 $("#mainframe").append(html);
             }
         });
+        if(sBox != "resources") setSbox('resources');
     }
 
     // Buscar recursos del usuario
@@ -542,6 +600,7 @@ y la columna central mainframe -->
                 $("#mainframe").append(html);
             }
         });
+        if(sBox != "resources") setSbox('resources');
     }
     function graph(){
         $.ajax({
