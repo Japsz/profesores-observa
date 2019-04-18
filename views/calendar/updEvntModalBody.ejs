@@ -1,0 +1,62 @@
+<div class="row">
+    <form id="modifEvntForm-<%=bdEvnt.idevent%>" data-url="/calendar/updEvnt">
+        <div class="form-group">
+            <h3 class="modal-title">Modificando evento: <a onclick="refresh('<%=data.id%>')" class="btn btn-info pull-right">Volver</a></h3>
+        </div>
+        <div class="form-group">
+            <div class="col-md-12">
+                <label for="summary">Título:</label>
+                <input type="text" class="form-control" name="summary" value="<%= data.summary%>">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-md-6">
+                <label for="start">Desde:</label>
+                <input type="datetime-local" class="form-control" name="start" value="<%=data.start.dateTime.replace(/-\d\d:\d\d/g,'')%>">
+            </div>
+            <div class="col-md-6">
+                <label for="end">Hasta:</label>
+                <input type="datetime-local" class="form-control" name="end" value="<%=data.end.dateTime.replace(/-\d\d:\d\d/g,'')%>">
+
+            </div>
+        </div>
+        <div class="form-group pull-right">
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary"> Guardar Cambios</button>
+            </div>
+        </div>
+        <input type="hidden" name="idgoogle" value="<%=data.id%>">
+        <input type="hidden" name="idevent" value="<%=bdEvnt.idevent%>">
+    </form>
+    <script type="text/javascript">
+        $("#modifEvntForm-<%=bdEvnt.idevent%>").on('submit',function(e){
+            e.preventDefault();
+            var data = {};
+            $("#modifEvntForm-<%=bdEvnt.idevent%> input").each(function(idx){
+                data[$(this).attr('name')] = $(this).val();
+            });
+            if(data.end != '<%= data.end.dateTime%>'){
+                data.end = data.end + ":00";
+            } else if(data.start != '<%= data.start.dateTime%>'){
+                data.start = data.start + ":00";
+            }
+            ajax_send(this,'','custom',data,function(resData){
+                if(!resData.err){
+                    alert('Modificado con éxito');
+                    refresh(data.idgoogle);
+                } else {
+                    alert("Ocurrió un problema al modificar");
+                }
+            });
+        });
+        function refresh(idgoogle){
+            $.ajax({
+                type:'get',
+                url: '/calendar/getEvnt/' + idgoogle,
+                success: function(data){
+                    $("#evntModalBody").html(data);
+                }
+            });
+        };
+    </script>
+</div>

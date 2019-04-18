@@ -1,28 +1,41 @@
 <div class="jumbotron">
     <div class="container">
         <div class="col-md-12">
-            <h3> <%= data.summary %> </h3>
+            <h3> <%= data.title %> </h3>
             <p><%=data.description%></p>
         </div>
         <div class="col-md-12">
-            <% if(self == "noResponse"){%>
+            <% if(new Date(data.start.dateTime).getTime() > new Date().getTime()){%>
+                <% if(logged && !owner){%>
+                    <% if(self == "noResponse"){%>
             <div class="btn-group pull-right">
-                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="yes" class="btn btn-success" >Asistiré</a>
-                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="maybe" class="btn btn-warning" >Quizás Asista</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" data-url="/calendar/updAttendee" data-idevent="<%= data.extendedProperties.private.idevent%>" data-state="yes" class="btn btn-success" >Asistiré</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" data-url="/calendar/updAttendee" data-idevent="<%= data.extendedProperties.private.idevent%>" data-state="maybe" class="btn btn-warning" >Quizás Asista</a>
             </div>
-            <%} else {%>
+                    <%} else {%>
             <div class="btn-group pull-right">
-                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="yes" class="btn btn-success <%if(self == "yes"){%>active<%}%>">Asistiré</a>
-                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="maybe" class="btn btn-warning <%if(self == "maybe"){%>active<%}%>">Quizás Asista</a>
-                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%=bdEvnt.idevent%>" data-state="remove" class="btn btn-danger">No Asistiré</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%= data.extendedProperties.private.idevent%>" data-state="yes" class="btn btn-success <%if(self == "yes"){%>active<%}%>">Asistiré</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%= data.extendedProperties.private.idevent%>" data-state="maybe" class="btn btn-warning <%if(self == "maybe"){%>active<%}%>">Quizás Asista</a>
+                <a onclick="ajax_send(this,'#evntModalBody','custom',{},function(data){getModalEvnt('<%= data.id %>')})" href="#" data-url="/calendar/updAttendee" data-idevent="<%= data.extendedProperties.private.idevent%>" data-state="remove" class="btn btn-danger">No Asistiré</a>
             </div>
+                    <%}%>
+                <%} else if(owner){%>
+            <div class="btn-group pull-right">
+                <a onclick="ajax_send(this,'#evntModalBody','insert',{})" data-url="/calendar/updEvntModal" data-idgoogle="<%= data.id%>" class="btn btn-primary" >Modificar</a>
+            </div>
+                <%} else {%>
+            <div class="btn-group pull-right">
+                <a class="btn btn-success" disabled>Asistiré</a>
+                <a class="btn btn-warning" disabled>Quizás Asista</a>
+            </div>
+                <%}%>
             <%}%>
         </div>
         <div class="col-md-12" id="attCollapse">
             <div class="well" style="height: 100px">
-                <h4><%= %>Asistentes:</h4>
-                <% if(attendees.si.length){
-                attendees.si.map(function(att,i){%>
+                <h4><%= data.attendees.confirmed.length%> Asistentes:</h4>
+                <% if(data.attendees.confirmed.length){
+                data.attendees.confirmed.map(function(att,i){%>
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="media">
                         <div class="media-left">
@@ -41,9 +54,9 @@
                 <%}%>
             </div>
             <div class="well">
-                <h4>Quizás Asista:</h4>
-                <% if(attendees.talvez.length){
-                attendees.talvez.map(function(att,i){%>
+                <h4><%= data.attendees.maybe.length%> Quizás Asista:</h4>
+                <% if(data.attendees.maybe.length){
+                data.attendees.maybe.map(function(att,i){%>
                 <div class="col-md-4 col-sm-6 col-xs-12">
                     <div class="media">
                         <div class="media-left media-middle">

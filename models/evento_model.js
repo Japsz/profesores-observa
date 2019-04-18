@@ -1,6 +1,6 @@
 var mysql = require('mysql');
 var config = require('../database/config');
-
+var gmodel = require('../Gmodel/event_model');
 
 var connection = mysql.createConnection(config);
 connection.connect();
@@ -25,40 +25,79 @@ evento.create = function(data,callback){
 //Modelo para conseguir todos los eventos
 evento.getById = function(idevento,callback){
     // idevento = se explica solo
-  connection.query("SELECT event.*,teacher.mail,teacher.username FROM event " +
-      "LEFT JOIN teacher ON teacher.idteacher = event.idteacher " +
-      "WHERE event.idevent = ?",[idevento],function(err,data){
-      if(err){
+    connection.query("SELECT event.*,teacher.mail,teacher.username FROM event " +
+        "LEFT JOIN teacher ON teacher.idteacher = event.idteacher " +
+        "WHERE event.idevent = ?",[idevento],function(err,data){
+        if(err){
           console.log("Error en la selección por idevento: %s",err);
           callback(true,{err:err});
-      } else {
+        } else {
           callback(null,data);
-      }
-  });
+        }
+    });
 };
 //Modelo para conseguir todos los eventos ligado a un
 evento.getByOwner = function(idteacher,callback){
-    connection.query("SELECT event.*,COALESCE(GROUP_CONCAT(teacher.username,'@@',member.state),'empty') AS attendees,DATE_FORMAT(event.start,'%d-%m-%y %H:%m') AS desde,DATE_FORMAT(event.end,'%d-%m-%y %H:%m') AS hasta FROM event " +
-        "LEFT JOIN member ON member.idevent = event.idevent " +
-        "LEFT JOIN teacher ON teacher.idteacher = member.idteacher " +
-        "WHERE event.idteacher = ? GROUP BY event.idevent",[idteacher],function(err,data){
-        if(err){
-            console.log("Error en la selección por dueño: %s",err);
-            callback(true,{err:err});
-        } else {
-            data.map(function(idx){
-                if(idx.attendees != 'empty'){
-                    var aux = idx.attendees.split(',');
-                    aux.map(function(att){
-                        return att.split('@@');
+    console.log('idteacher=' + idteacher);
+    gmodel.listEvents({
+        calendarId: 'primary',
+        privateExtendedProperty: ['idteacher=' + idteacher],
+        showDeleted: true,
+        orderBy: 'startTime',
+        singleEvents:true
+        },function(err,rows){
+            console.log("?");
+            if(err){
+                console.log(rows);
+                callback(err,{data:rows});
+            } else {
+                console.log(rows);
+                if(rows.length){
+                    var ideventList = [];
+                    for(var i = 0;i<rows.length;i++){
+                        console.log(rows[i].idevent);
+                        if(rows[i].idevent != 'undefined'){
+                            //rows[i].members = members;
+                            //console.log(rows[i].members);
+                            ideventList.push(rows[i].idevent);
+                        }
+                    };
+                    evento.getMemberInfo(ideventList,rows,function(err,rows){
+                        if(err){
+                            console.log(err);
+                            console.log(rows);
+                            callback(true,rows)
+                        } else {
+                            console.log(rows);
+                            callback(null,rows);
+                        }
                     });
-                    return aux;
                 } else {
-                    return idx;
+                    callback(null,rows);
+                }
+            }
+    });
+    console.log(gmodel);
+};
+evento.getByProposed = function(idteacher,callback){
+    gmodel.listEvents({
+        calendarId:'primary',
+        privateExtendedProperty: "idteacher=" + idteacher
+    },function (err,rows) {
+        if(err){
+            console.log(err);
+            callback(err,rows);
+        } else {
+            console.log(rows);
+            evento.getAttendees(rows,function(err,attendees){
+                if(err){
+                    console.log(err);
+                    callback(err,rows);
+                } else {
+                    console.log(attendees);
+                    callback(null,rows);
                 }
             });
-
-            callback(null,data);
         }
     });
 };
@@ -79,9 +118,10 @@ evento.getByAttendee = function(idteacher,callback){
 };
 //Modelo para conseguir la info de los posibles asistentes a un evento
 evento.getAttendees = function(idevent,callback){
+    console.log(typeof idevent);
     connection.query("SELECT teacher.perfil_image,teacher.username,teacher.idteacher,member.state FROM member " +
         "LEFT JOIN teacher ON teacher.idteacher = member.idteacher " +
-        "WHERE member.idevent = ? GROUP BY teacher.idteacher",[idevent],function(err,data){
+        "WHERE member.idevent IN (?) GROUP BY teacher.idteacher",[idevent],function(err,data){
         if(err){
             console.log("Error en la selección por asistente: %s",err);
             callback(true,{err:err});
@@ -90,6 +130,100 @@ evento.getAttendees = function(idevent,callback){
         }
     });
 };
+evento.getMemberInfo = function(ideventList,objArray,callback){
+    if(connection){
+        if(ideventList.length){
+            connection.query("SELECT event.idevent,teacher.username,teacher.idteacher,COALESCE(memtokens.mtoken,NULL) AS mtoken FROM event " +
+                "LEFT JOIN  (SELECT event.idevent,GROUP_CONCAT(teacher.perfil_image,'@@',teacher.username,'@@',teacher.idteacher,'@@',member.state) AS mtoken FROM event " +
+                "LEFT JOIN member ON member.idevent = event.idevent " +
+                "LEFT JOIN teacher ON teacher.idteacher = member.idteacher " +
+                "GROUP BY event.idevent) AS memtokens ON memtokens.idevent = event.idevent " +
+                "LEFT JOIN teacher ON teacher.idteacher = event.idteacher " +
+                "WHERE event.idevent IN ( ? ) GROUP BY event.idevent",[ideventList],function(err,rows){
+                if(err){
+                    console.log(err);
+                    callback(err,"Error");
+                } else {
+                    var mList;
+                    var confList = [];
+                    var maybeList = [];
+                    var flag = false;
+                    if(rows.length){
+                        for(var j = 0;j<objArray.length;j++){
+                            for(var i = 0;i<rows.length;i++){
+                                if(parseInt(objArray[j].idevent) == parseInt(rows[i].idevent)){
+                                    if(rows[i].mtoken != null){
+                                        objArray[j].mtoken = rows[i].mtoken;
+                                        mList = rows[i].mtoken.split(",");
+                                        mList.map(function(member){
+                                            member = member.split('@@');
+                                            if(member[3] == "yes"){
+                                                confList.push({
+                                                    idteacher: member[2],
+                                                    perfil_image: member[0],
+                                                    username: member[1]
+                                                });
+                                            } else {
+                                                maybeList.push({
+                                                    idteacher: member[2],
+                                                    perfil_image: member[0],
+                                                    username: member[1]
+                                                });
+                                            }
+                                        });
+                                    } else {
+                                        confList = [];
+                                        maybeList = [];
+                                        objArray[j].mtoken = "";
+                                    }
+                                    objArray[j].attendees = {
+                                        confirmed: confList,
+                                        maybe: maybeList
+                                    };
+                                    objArray[j].username = rows[i].username;
+                                    confList = [];
+                                    maybeList = [];
+                                    flag = true;
+                                    break;
+                                }
+                            }
+                            if(!flag){
+                                objArray[j].attendees = {
+                                    confirmed: [],
+                                    maybe: []
+                                };
+                                objArray[j].mtoken = "";
+                            }
+                            flag = false;
+                        }
+                    } else {
+                        for(var j = 0;j<objArray.length;j++){
+                            objArray[j].attendees = {
+                                confirmed: [],
+                                maybe: []
+                            };
+                            objArray[j].mtoken = "";
+                        }
+                    }
+                    callback(null,objArray);
+                }
+            });
+        } else {
+            for(var j = 0;j<objArray.length;j++){
+                objArray[j].attendees = {
+                    confirmed: [],
+                    maybe: []
+                };
+                objArray[j].mtoken = "";
+            }
+            callback(null,objArray);
+        }
+
+    } else {
+        callback(true,"Not connected to BD");
+    }
+};
+
 evento.get_idtag = function(idtags,callback){
   //idtags = [ (Lista con idtags a buscar) ]
     connection.query("SELECT evento.*,GROUP_CONCAT(tag.nomtag) AS tags FROM evento" +
@@ -126,6 +260,7 @@ evento.ModifType = function(newType,idevent, callback){
 };
 
 // Setea el id de google correspondiente a un evento
+
 evento.setIdgoogle = function(idgoogle,idevent, callback){
     if(connection){
         var sql = "UPDATE event SET idgoogle = ? WHERE idevent = ?";
@@ -170,7 +305,7 @@ evento.setMemberState = function(state,idteacher,idevent,insert, callback){
     if(connection){
         var sql = ["INSERT INTO member SET ?","UPDATE member SET state = ? WHERE idteacher = ? AND idevent = ?"];
         //insert = 1|0 segun la query que se tiene que hacer.
-        if(insert) var data = [idteacher, idevent, state];
+        if(insert) var data = [state,idteacher, idevent];
         else var data = {idteacher:idteacher, idevent:idevent, state:state};
         console.log(sql[insert]);
         console.log(data);

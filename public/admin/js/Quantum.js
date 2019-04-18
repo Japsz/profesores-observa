@@ -77,6 +77,39 @@ function disable_teacher(yo){
         }
     });
 };
+function updResponse(idevent,response){
+    /*
+    ajax_send(this,'','custom',{},function(data){
+        ;
+    })*/
+    if(response == 'remove'){
+        $("#delResponse" + idevent).addClass('hidden');
+    } else {
+        $("#delResponse" + idevent).removeClass('hidden');
+    }
+    console.log(response);
+    $("#attResponse" + idevent + " a").each(function(idx){
+        $(this).removeClass('active');
+        console.log($(this).data('state'));
+        if($(this).data('state') == response){
+            if(response != 'remove'){
+                $(this).addClass('active');
+            }
+        }
+    });
+    $.ajax({
+        url: '/evento/getMembers/' + idevent,
+        type: 'get',
+        success: function(data){
+            if(!data.err){
+                $("#att" + idevent).html(data.html);
+                $("#attCount" + idevent).html(data.count);
+            } else {
+                alert(data.errMsg);
+            }
+        }
+    })
+};
 // Carga el Evnt en el modal
 function getModalEvnt(idgoogle){
     $.ajax({

@@ -7,22 +7,109 @@
             <div class="panel-body">
                 <% if(mines.length){
                 mines.map(function(idx){%>
-                <div class="col-md-6 col-sm-12" style="padding: 5px">
-                    <div class="panel panel-primary">
-                        <div class="panel-heading">
-                            <h5 class="blog-post-title"><%= idx.title%></h5>
-                        </div>
-                        <div class="panel-body">
-                            <p>
+                <section class="blog-post">
+                    <div class="col-md-12 col-xl-6 col-sm-12" style="padding: 4px">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <div class="blog-post-meta">
+                                    <h5 class="blog-post-title"><%= idx.title%>
+                                        <p class="blog-post-date pull-right">
+                                            <%
+                                                var time = new Date(parseInt(idx.start)).getTime() - new Date().getTime();
+                                            if(time <= 0){
+                                            if(new Date(parseInt(idx.end)).getTime() - new Date().getTime() <  0){
+                                            %>
+                                            Finalizado
+                                            <%
+                                            } else {
+                                            %>
+                                            En Curso
+                                            <%
+                                            }
+                                            } else {
+                                                time = (time - time%1000)/1000;
+                                                time = (time - time%60)/(60);
+                                                var mins = time%(60);
+                                                time = (time - time%60)/(60);
+                                                var hrs = time%(24);
+                                                time = (time - time%24)/(24);
+                                            %>
 
-                            </p>
+                                            Faltan
+                                            <% if(time >= 1){%>
+                                            <%= time%> Dias
+                                            <%} else if(hrs >=1){%>
+                                            <%= hrs %> Hr(s)
+                                            <%} else {%>
+                                            <%= mins %> Min(s)
+                                            <%}%>
+                                            <%}%>
+                                        </p>
+                                    </h5>
+                                </div>
+                                <div class="blog-post-content">
+                                    <%= idx.description%>
+                                </div>
+                                <div class="blog-post-share">
+                                    <ul class="list-group">
+                                        <li class="list-group-item">Empieza: <%= new Date(parseInt(idx.start)).toLocaleDateString()%></li>
+                                        <li class="list-group-item">Termina: <%= new Date(parseInt(idx.end)).toLocaleDateString()%></li>
+                                        <div class="btn-group pull-right">
+                                            <a onclick="ajax_send(this,'#evntModalBody','insert',{})" data-url="/calendar/updEvntModal" data-toggle="modal" data-target="#evntModal" data-idgoogle="<%= idx.id%>" class="btn btn-primary" >Modificar</a>
+                                            <a href="#att<%= idx.idevent%>" class="btn btn-info" data-toggle="collapse">Ver Asistentes</a>
+                                        </div>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="panel-footer blog-comments">
+                                <div class="collapse" id="att<%=idx.idevent%>">
+                                    <div class="col-md-12">
+                                        <h4><%= idx.attendees.confirmed.length%> Asistentes Confirmados:</h4>
+                                    </div>
+                                    <% if(idx.attendees.confirmed.length){
+                                    idx.attendees.confirmed.map(function(att,i){%>
+                                    <div class="col-md-4 col-sm-6 col-xs-12 well">
+                                        <div class="media">
+                                            <div class="media-left media-middle">
+                                                <a href="/teacher/teacher_profile/<%= att.idteacher%>" >
+                                                    <img src="<%= att.perfil_image%>" class="media-object" alt="<%= att.username%>" style="width:64px;height:64px" class="img-circle">
+                                                </a>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><%=att.username%></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%});
+                                    } else {%>
+                                    <div class="col-md-12 well">No hay Confirmados</div>
+                                    <%}%>
+                                    <div class="col-md-12">
+                                        <h4><%= idx.attendees.maybe.length%> Quizás Asista:</h4>
+                                    </div>
+                                    <% if(idx.attendees.maybe.length){
+                                    idx.attendees.maybe.map(function(att,i){%>
+                                    <div class="col-md-4 col-sm-6 col-xs-12 well">
+                                        <div class="media">
+                                            <div class="media-left media-middle">
+                                                <a href="/teacher/teacher_profile/<%= att.idteacher%>">
+                                                    <img src="<%= att.perfil_image%>" class="media-object" style="width:64px;height:64px" alt="<%= att.username%>">
+                                                </a>
+                                                <div class="media-body">
+                                                    <h4 class="media-heading"><%=att.username%></h4>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <%});
+                                    } else {%>
+                                    <div class="col-md-12 well">No hay Confirmados</div>
+                                    <%}%>
+                                </div>
+                            </div>
                         </div>
-                        <ul class="list-group">
-                            <li class="list-group-item">Empieza: <%=idx.desde%></li>
-                            <li class="list-group-item">Termina: <%=idx.hasta%></li>
-                        </ul>
                     </div>
-                </div>
+                </section>
                 <%
                 });
                 } else {
@@ -33,36 +120,4 @@
         </div>
     </section>
 
-    <section class="blog-post">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                    <h2 class="blog-post-title" style="font-weight: 500; margin-top: 10px">Eventos en los que estoy inscrito</h2>
-            </div>
-            <div class="panel-body">
-                <% if(atts.length){
-                    atts.map(function(idx){%>
-                    <div class="col-md-6 col-sm-12" style="padding: 5px">
-                        <div class="panel panel-primary">
-                            <div class="panel-heading">
-                                <h5 class="blog-post-title"><%= idx.title%></h5>
-                            </div>
-                            <div class="panel-body">
-                                <%= idx.description%>
-                            </div>
-                            <ul class="list-group">
-                                <li class="list-group-item">Creado por: <%= idx.username%></li>
-                                <li class="list-group-item">Empieza: <%=idx.desde%></li>
-                                <li class="list-group-item">Termina: <%=idx.hasta%></li>
-                            </ul>
-                        </div>
-                    </div>
-                <%
-                    });
-                } else {
-                %>
-                <div class="well" style="margin: 5px">No te haz inscrito en ningún evento</div>
-                <%}%>
-            </div>
-        </div>
-    </section>
 </div>

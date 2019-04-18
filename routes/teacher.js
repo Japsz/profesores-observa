@@ -8,7 +8,7 @@ var mail = require('../public/js/sendmail');
 var teacher_model = require("../models/teacher_model");
 var evento_model = require("../models/evento_model");
 var resource_model = require('../models/resource_model');
-
+const ejsLint = require('ejs-lint');
 /* Inicializa variables session y renderiza mainframe */
 router.get('/', function(req, res, next) {
     // req.session.isteacherLogged = false;
@@ -183,10 +183,8 @@ router.get('/teacher_profile/:idteacher', function(req, res, next) {
             if (err) {
                 console.log(err.message);
             } else {
-                console.log(data[0]);
                 evento_model.getByOwner(req.params.idteacher,function(err,evnts){
                     res.render("teacher/teacher_profile", {data: data[0],myEvnt:evnts});
-
                 });
             }
         });        

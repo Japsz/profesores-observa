@@ -1,0 +1,41 @@
+
+<h4 class="blog-comments-title"><%= evnt.attendees.confirmed.length%> Asistentes Confirmados:</h4>
+<% if(evnt.attendees.confirmed.length){
+evnt.attendees.confirmed.map(function(att,i){%>
+<div class="well">
+    <div class="media">
+        <div class="media-left media-middle">
+            <a href="/teacher/teacher_profile/<%= att.idteacher%>" >
+                <img src="<%= att.perfil_image%>" class="media-object" alt="<%= att.username%>" style="width:64px;height:64px" class="img-circle">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading"><%=att.username%></h4>
+            </div>
+        </div>
+    </div>
+</div>
+<%});
+} else {%>
+<div class="col-md-12 well">No hay Confirmados</div>
+<%}%>
+<div class="col-md-12">
+    <h4 class="blog-comments-title"><%= evnt.attendees.maybe.length%> Quizás Asista:</h4>
+</div>
+<% if(evnt.attendees.maybe.length){
+evnt.attendees.maybe.map(function(att,i){%>
+<div class="col-md-4 col-sm-6 col-xs-12 well">
+    <div class="media">
+        <div class="media-left media-middle">
+            <a href="/teacher/teacher_profile/<%= att.idteacher%>">
+                <img src="<%= att.perfil_image%>" class="media-object" style="width:64px;height:64px" alt="<%= att.username%>">
+            </a>
+            <div class="media-body">
+                <h4 class="media-heading"><%=att.username%></h4>
+            </div>
+        </div>
+    </div>
+</div>
+<%});
+} else {%>
+<div class="col-md-12 well">No hay Confirmados</div>
+<%}%>

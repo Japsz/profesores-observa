@@ -1,0 +1,130 @@
+<!-- Filtro -->
+<div class="row">
+    <div class="col-sm-11" style="padding-right: 0">
+        <input type="text" id="filter" class="form-control" placeholder="Buscador de recursos" style="margin: 0; padding-bottom: 0">
+    </div>
+    <div class="col-sm-1" style="padding-left: 0">
+        <div class="input-group-btn">
+            <a href="#" class="btn btn-default btn-lg" onclick="filter()" style="padding: 0; margin: 0">
+                <i class="glyphicon glyphicon-search" style="font-size:30px; color: gray"></i>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="filter_col" class="filter_col">
+    <div class="sidebar-module">
+        <div class="panel panel-default" id="show_image" style="opacity: 0.8">
+            <div class="dropdown">
+                <button class="dropbtn btn" onclick="show_image()">
+                    <h4 class="filter_text" id="msj_show_image" data-toggle="tooltip" data-placement="bottom" style="margin-bottom: 0;">
+                        <img src="/icons/RRCC web-05.png" class="img-rounded filter_img" class="filter_col">
+                    </h4>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="filter_col">
+    <div class="sidebar-module">
+        <div class="panel panel-default">
+            <div class="filter_col2">
+                <div class="dropdown">
+                    <button class="dropbtn btn">
+                        <h4 class="filter_text" style="margin-bottom: 0;">
+                            <img src="/icons/RRCC web-21.png" class="img-rounded filter_img">Tipo
+                        </h4>
+                    </button>
+                    <div class="dropdown-content type">
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Opinión">Columna de Opinión.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Libro/Texto">Libro/Texto.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Imagen">Imagen.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Guía/Prueba">Guía/Prueba.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Conceptual">Mapa Conceptual.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Video">Video.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Presentación">Presentación.</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter_col2">
+                <div class="dropdown">
+                    <button class="dropbtn btn">
+                        <h4 class="filter_text" style="margin-bottom: 0;">
+                            <img src="/icons/RRCC web-22.png" class="img-rounded filter_img">Área
+                        </h4>
+                    </button>
+                    <div class="dropdown-content area">
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Matemática">Matemática.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Lenguaje y Comuncación">Lenguaje y Comuncación.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Historia, Geografía y Ciencias Sociales">Historia, Geografía y Ciencias Sociales.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Física">Física.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Inglés">Inglés.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Biología">Biología.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Química">Química.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Tecnológica">Educación Tecnológica.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Educación Física">Educación Física.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Filosofía y Psicología">Filosofía y Psicología.</a>
+                        <a onclick="select_data(this)" class="filter_tags" data-select="false" data-filter="Orientación y Consejo de Curso">Orientación y Consejo de Curso.</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter_col2">
+                <div class="dropdown">
+                    <button class="dropbtn btn">
+                        <h4 class="filter_text" style="margin-bottom: 0;">
+                            <img src="/icons/RRCC web-23.png" class="img-rounded filter_img">Soporte
+                        </h4>
+                    </button>
+                    <div class="dropdown-content suport">
+                        <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="pdf">PDF.</a>
+                        <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="png gif jpeg jpg">PNG, GIF, JPEG/JPG.</a>
+                        <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="mp4 avi mpg mkv flv mov wmc">MP4, AVI, MPG, MKV, FLV, MOV, WMV.</a>
+                        <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="doc docx">DOCX.</a>
+                        <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="ppt pptx ppsx">PPT/PPTX/PPSX.</a>
+                        <a onclick="select_data(this)" class="filter_suport" data-select="false" data-filter="xlsx xltx">Excel/XLSX/XLTX.</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="filter_col2" style="padding-right: 0">
+                <div class="dropdown">
+                    <button class="dropbtn btn">
+                        <h4 class="filter_text" style="margin-bottom: 0;">
+                            <img src="/icons/RRCC web-26.png" class="img-rounded filter_img">Año
+                        </h4>
+                    </button>
+                    <div class="dropdown-content year">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="filter_col">
+    <div class="sidebar-module">
+        <div class="panel panel-default">
+            <h4 style="margin-bottom: 0; padding-top: 3px; padding-bottom: 5px">
+                <img src="/icons/RRCC web-25.png" onmouseover="change_star(this)" onmouseout="change_star()" class="img-rounded filter_stars" onclick="click_star(this)" id="star1">
+                <img src="/icons/RRCC web-25.png" onmouseover="change_star(this)" onmouseout="change_star()" class="img-rounded filter_stars" onclick="click_star(this)" id="star2">
+                <img src="/icons/RRCC web-25.png" onmouseover="change_star(this)" onmouseout="change_star()" class="img-rounded filter_stars" onclick="click_star(this)" id="star3">
+                <img src="/icons/RRCC web-25.png" onmouseover="change_star(this)" onmouseout="change_star()" class="img-rounded filter_stars" onclick="click_star(this)" id="star4">
+                <img src="/icons/RRCC web-25.png" onmouseover="change_star(this)" onmouseout="change_star()" class="img-rounded filter_stars" onclick="click_star(this)" id="star5">
+            </h4>
+        </div>
+    </div>
+</div>
+<div class="filter_col">
+    <div class="sidebar-module">
+        <div class="panel panel-default">
+            <div class="dropdown">
+                <button class="dropbtn btn" onclick="filter()" style="width: 102 %">
+                    <h4 class="filter_text" style="margin-bottom: 0;">
+                        <img src="/icons/RRCC web-06.png" class="img-rounded filter_img">Filtrar
+                    </h4>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

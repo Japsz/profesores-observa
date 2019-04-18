@@ -1,6 +1,12 @@
 const fs = require('fs');
 const readline = require('readline');
 const {google} = require('googleapis');
+var mysql = require('mysql');
+var config = require('../database/config');
+var model = require('../models/evento_model');
+
+var connection = mysql.createConnection(config);
+connection.connect();
 
 // If modifying these scopes, delete token.json.
 const SCOPES = ['https://www.googleapis.com/auth/calendar','https://www.googleapis.com/auth/calendar.events'];
@@ -75,25 +81,34 @@ function getAccessToken(oAuth2Client, callback) {
  */
 modulo.listEvents = function (obj,callback) {
     calendar.events.list(obj, (err, res) => {
-        if (err) return callback(true,'The API returned an error: ' + err);
-    const events = res.data.items;
-    var lista = [];
-    if (events.length) {
-        events.map(function(event, i){
-            lista.push({
-                "id":event.id,
-                "title": event.summary,
-                "class": "event-success",
-                "url": "/calendar/getEvnt/" + event.id,
-                "start": new Date(event.start.dateTime).getTime().toString(),
-                "end": new Date(event.end.dateTime).getTime().toString()
-            });
-        });
-        callback(null,lista)
-    } else {
-        callback(null,[]);
-    }
-});
+        if(err){
+            callback(true,'The API returned an error: ' + err);
+        } else {
+            const events = res.data.items;
+            var lista = [];
+            if (events.length) {
+                events.map(function(event, i){
+                    if(typeof event.extendedProperties != 'undefined'){
+                        lista.push({
+                            "id":event.id,
+                            "title": event.summary,
+                            "description": event.description,
+                            "class": "event-success",
+                            "url": "/calendar/getEvnt/" + event.id,
+                            "start": new Date(event.start.dateTime).getTime().toString(),
+                            "end": new Date(event.end.dateTime).getTime().toString(),
+                            "status": event.status,
+                            "idteacher": event.extendedProperties.private.idteacher,
+                            "idevent": event.extendedProperties.private.idevent
+                        });
+                    }
+                });
+                callback(null,lista)
+            } else {
+                callback(null,[]);
+            }
+        }
+    });
 };
 /**
  * Insert an event on the user's primary calendar.
@@ -112,6 +127,10 @@ modulo.insertEvnt = function (calendarId,obj,callback) {
             'end': {
                 'dateTime': new Date(obj.end).toISOString(),
                 'timeZone': 'America/Santiago',
+            },
+            'extendedProperties': {
+                'private': {idteacher: obj.idteacher,
+                            idevent: obj.idevent},
             },
             'reminders': {
                 'useDefault': true,
@@ -146,7 +165,7 @@ modulo.updEvnt = function (calendarId,evntId,body,callback) {
     calendar.events.update({
         calendarId: calendarId,
         eventId: evntId,
-        body:body
+        resource:body
     }, function(err, res){
         if (err){
             callback(true,'The API returned an error: ' + err);
