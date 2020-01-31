@@ -298,7 +298,8 @@ router.post('/add', function(req, res) {
         };
         if (!('frontimage' in req.body)){
             console.log("Foto de portada");
-            data.resource[4] = data.files.frontimage.name;
+            var frontimage = new Date().getTime() + '-' + validate(req) + '-' + data.insertId + '-' + data.files.frontimage.name;
+            data.resource[4] = frontimage;
         }
         console.log('Agregando un Recurso');
         resource_model.new_resource(data.resource, function (err, results) {
@@ -359,12 +360,21 @@ router.post('/add', function(req, res) {
                 console.log('agregando archivos');
                 for (key in data.files) {
                     var file = data.files[key];
+
                     extlist.push(getXtension(file.name));
                     //TODO ¿Si ya existe un archivo con ese nombre en la carpeta?
-
-                    file.mv('public/uploaded-files/' + validate(req) + '/' + data.insertId + '/' + file.name);
+                    if(key === 'filename'){
+                        var filename = frontimage;
+                    } else {
+                        var filename = new Date().getTime() + '-' + validate(req) + '-' + data.insertId + '-' + file.name;
+                    }
+                    try{
+                        file.mv('public/uploaded-files/' + filename);
+                    } catch(e){
+                        console.log(e)
+                    }
                     console.log('aqui cago?');
-                    resource_model.new_file([data.insertId, file.name], function (err, results) {
+                    resource_model.new_file([data.insertId, filename], function (err, results) {
                     });
                 }
                 extlist = new Set(extlist);
@@ -424,7 +434,7 @@ router.post('/change_state', function (req, res) {
 // Descargar un archivo en la ruta /idteacher/idresource/file.ext
 router.get('/download/:idteacher/:idresource/:filename', function (req, res) {
     console.log('Pidiendo descarga - '+req.params);
-    res.download('public/uploaded-files/'+req.params.idteacher+'/'+req.params.idresource+'/'+req.params.filename);
+    res.download('public/uploaded-files/' + req.params.filename);
 });
 
 
