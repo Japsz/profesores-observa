@@ -298,7 +298,7 @@ router.post('/add', function(req, res) {
         };
         if (!('frontimage' in req.body)){
             console.log("Foto de portada");
-            var frontimage = new Date().getTime() + '-' + validate(req) + '-' + data.insertId + '-' + data.files.frontimage.name;
+            var frontimage = new Date().getTime() + '-' + validate(req) + '-' + data.files.frontimage.name;
             data.resource[4] = frontimage;
         }
         console.log('Agregando un Recurso');
@@ -363,7 +363,7 @@ router.post('/add', function(req, res) {
 
                     extlist.push(getXtension(file.name));
                     //TODO ¿Si ya existe un archivo con ese nombre en la carpeta?
-                    if(key === 'filename'){
+                    if(key === 'frontimage'){
                         var filename = frontimage;
                     } else {
                         var filename = new Date().getTime() + '-' + validate(req) + '-' + data.insertId + '-' + file.name;
